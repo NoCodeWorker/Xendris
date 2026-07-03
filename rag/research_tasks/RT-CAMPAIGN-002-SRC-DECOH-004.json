@@ -1,0 +1,13 @@
+{
+  "task_id": "RT-CAMPAIGN-002-SRC-DECOH-004",
+  "question": "What benchmark data can provide y_true for a toy or source-backed comparison?",
+  "reason": "Predictive Gain is undefined without y_true or benchmark target data.",
+  "linked_gap_id": "GAP_RT-CAMPAIGN-002-SRC-DECOH-004",
+  "required_source_types": [
+    "PAPER",
+    "BOOK"
+  ],
+  "priority": "P1",
+  "expected_output": "SOURCE_RECORDS",
+  "status": "AWAITING_SOURCE_INGESTION"
+}

@@ -1,0 +1,13 @@
+{
+  "task_id": "RT-CAMPAIGN-002-SRC-DECOH-003",
+  "question": "What source defines experimental visibility thresholds for mesoscopic interferometry?",
+  "reason": "Detectability needs a source-backed epsilon_exp before any physical claim.",
+  "linked_gap_id": "GAP_RT-CAMPAIGN-002-SRC-DECOH-003",
+  "required_source_types": [
+    "PAPER",
+    "BOOK"
+  ],
+  "priority": "P1",
+  "expected_output": "SOURCE_RECORDS",
+  "status": "AWAITING_SOURCE_INGESTION"
+}

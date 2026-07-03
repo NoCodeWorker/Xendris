@@ -1,0 +1,14 @@
+{
+  "task_id": "RT-REQ-SRC-002",
+  "question": "What source satisfies Gravitational radius / Schwarzschild radius for Phygn claims?",
+  "reason": "Ground rg and RS definitions and horizon boundary interpretation.",
+  "linked_gap_id": "REQ-SRC-002",
+  "required_source_types": [
+    "BOOK",
+    "PAPER",
+    "LECTURE_NOTES"
+  ],
+  "priority": "P1",
+  "expected_output": "SOURCE_RECORDS",
+  "status": "AWAITING_SOURCE_INGESTION"
+}

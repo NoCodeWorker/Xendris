@@ -1,0 +1,12 @@
+{
+  "task_id": "RT-REQ-SRC-005",
+  "question": "What source satisfies Mesoscopic matter-wave interferometry for Phygn claims?",
+  "reason": "Ground mass ranges, length scales and visibility context.",
+  "linked_gap_id": "REQ-SRC-005",
+  "required_source_types": [
+    "PAPER"
+  ],
+  "priority": "P1",
+  "expected_output": "SOURCE_RECORDS",
+  "status": "AWAITING_SOURCE_INGESTION"
+}

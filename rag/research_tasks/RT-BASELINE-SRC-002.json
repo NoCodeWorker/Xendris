@@ -1,0 +1,13 @@
+{
+  "task_id": "RT-BASELINE-SRC-002",
+  "question": "What source grounds the environmental decoherence rate Gamma_env for mesoscopic matter-wave systems?",
+  "reason": "PARAMETER_SOURCE_BACKED requires a sourced decay rate.",
+  "linked_gap_id": "GAP_RT-BASELINE-SRC-002",
+  "required_source_types": [
+    "PAPER",
+    "BOOK"
+  ],
+  "priority": "P1",
+  "expected_output": "SOURCE_RECORDS",
+  "status": "AWAITING_SOURCE_INGESTION"
+}

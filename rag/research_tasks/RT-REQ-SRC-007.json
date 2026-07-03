@@ -1,0 +1,12 @@
+{
+  "task_id": "RT-REQ-SRC-007",
+  "question": "What source satisfies Experimental visibility thresholds for Phygn claims?",
+  "reason": "Ground epsilon_exp and detectability threshold interpretation.",
+  "linked_gap_id": "REQ-SRC-007",
+  "required_source_types": [
+    "PAPER"
+  ],
+  "priority": "P1",
+  "expected_output": "SOURCE_RECORDS",
+  "status": "AWAITING_SOURCE_INGESTION"
+}

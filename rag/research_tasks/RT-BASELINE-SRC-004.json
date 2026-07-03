@@ -1,0 +1,13 @@
+{
+  "task_id": "RT-BASELINE-SRC-004",
+  "question": "What mesoscopic nanoparticle interferometry experiment provides visibility data?",
+  "reason": "BASE-SRC-004 required for system mass/scale context.",
+  "linked_gap_id": "GAP_RT-BASELINE-SRC-004",
+  "required_source_types": [
+    "PAPER",
+    "BOOK"
+  ],
+  "priority": "P1",
+  "expected_output": "SOURCE_RECORDS",
+  "status": "AWAITING_SOURCE_INGESTION"
+}

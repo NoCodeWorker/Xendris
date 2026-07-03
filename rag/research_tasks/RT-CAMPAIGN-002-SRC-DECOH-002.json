@@ -1,0 +1,13 @@
+{
+  "task_id": "RT-CAMPAIGN-002-SRC-DECOH-002",
+  "question": "What source grounds environmental decoherence in matter-wave interferometry?",
+  "reason": "CAMPAIGN-002 cannot treat the toy baseline as physical without source support.",
+  "linked_gap_id": "GAP_RT-CAMPAIGN-002-SRC-DECOH-002",
+  "required_source_types": [
+    "PAPER",
+    "BOOK"
+  ],
+  "priority": "P1",
+  "expected_output": "SOURCE_RECORDS",
+  "status": "AWAITING_SOURCE_INGESTION"
+}

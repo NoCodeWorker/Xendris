@@ -1,0 +1,13 @@
+{
+  "task_id": "RT-REQ-SRC-008",
+  "question": "What source satisfies Benchmark or data source for Phygn claims?",
+  "reason": "Ground y_true, benchmark curve and error metric comparison.",
+  "linked_gap_id": "REQ-SRC-008",
+  "required_source_types": [
+    "PAPER",
+    "DATASET"
+  ],
+  "priority": "P1",
+  "expected_output": "SOURCE_RECORDS",
+  "status": "AWAITING_SOURCE_INGESTION"
+}

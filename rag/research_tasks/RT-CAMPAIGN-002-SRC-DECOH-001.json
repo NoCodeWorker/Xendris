@@ -1,0 +1,13 @@
+{
+  "task_id": "RT-CAMPAIGN-002-SRC-DECOH-001",
+  "question": "What source grounds standard decoherence visibility decay for matter-wave systems?",
+  "reason": "CAMPAIGN-002 requires a source-backed baseline before physical interpretation.",
+  "linked_gap_id": "GAP_RT-CAMPAIGN-002-SRC-DECOH-001",
+  "required_source_types": [
+    "PAPER",
+    "BOOK"
+  ],
+  "priority": "P1",
+  "expected_output": "SOURCE_RECORDS",
+  "status": "AWAITING_SOURCE_INGESTION"
+}

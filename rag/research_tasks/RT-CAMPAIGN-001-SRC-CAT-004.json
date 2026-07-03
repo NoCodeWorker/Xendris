@@ -1,0 +1,13 @@
+{
+  "task_id": "RT-CAMPAIGN-001-SRC-CAT-004",
+  "question": "What is the physical grounding for the Compton-Schwarzschild Diagram category?",
+  "reason": "Campaign requires support for Compton-Schwarzschild Diagram.",
+  "linked_gap_id": "GAP_RAG_SRC-CAT-004",
+  "required_source_types": [
+    "PAPER",
+    "BOOK"
+  ],
+  "priority": "P1",
+  "expected_output": "SOURCE_RECORDS",
+  "status": "AWAITING_SOURCE_INGESTION"
+}

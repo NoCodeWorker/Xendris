@@ -1,0 +1,13 @@
+{
+  "task_id": "RT-REQ-SRC-004",
+  "question": "What source satisfies Compton-Schwarzschild related work for Phygn claims?",
+  "reason": "Support novelty discipline and avoid overclaiming related work.",
+  "linked_gap_id": "REQ-SRC-004",
+  "required_source_types": [
+    "PAPER",
+    "BOOK"
+  ],
+  "priority": "P1",
+  "expected_output": "SOURCE_RECORDS",
+  "status": "AWAITING_SOURCE_INGESTION"
+}

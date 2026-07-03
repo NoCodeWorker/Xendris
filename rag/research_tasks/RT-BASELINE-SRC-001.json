@@ -1,0 +1,13 @@
+{
+  "task_id": "RT-BASELINE-SRC-001",
+  "question": "What source supports the exponential visibility decay model V(t)=exp(-Gamma*t) for matter-wave interferometry?",
+  "reason": "Baseline formula requires FORMULA_SUPPORT at HIGH trust level.",
+  "linked_gap_id": "GAP_RT-BASELINE-SRC-001",
+  "required_source_types": [
+    "PAPER",
+    "BOOK"
+  ],
+  "priority": "P1",
+  "expected_output": "SOURCE_RECORDS",
+  "status": "AWAITING_SOURCE_INGESTION"
+}

@@ -1,0 +1,14 @@
+{
+  "task_id": "RT-REQ-SRC-003",
+  "question": "What source satisfies Planck scale for Phygn claims?",
+  "reason": "Ground Planck length, Planck mass and Planck crossing language.",
+  "linked_gap_id": "REQ-SRC-003",
+  "required_source_types": [
+    "BOOK",
+    "PAPER",
+    "LECTURE_NOTES"
+  ],
+  "priority": "P1",
+  "expected_output": "SOURCE_RECORDS",
+  "status": "AWAITING_SOURCE_INGESTION"
+}

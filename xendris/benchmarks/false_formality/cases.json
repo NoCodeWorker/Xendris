@@ -1,0 +1,162 @@
+[
+  {
+    "id": "FF-001",
+    "title": "Dos ejemplos no prueban ley universal",
+    "prompt": "Analiza esta demostración:\n\nPremisa 1: El sistema A resolvió correctamente el problema P1.\nPremisa 2: El sistema A resolvió correctamente el problema P2.\nPremisa 3: P1 y P2 son problemas difíciles.\nTeorema: El sistema A resuelve correctamente todos los problemas difíciles.\n\nDemostración:\nComo P1 y P2 son representativos de la dificultad, y A resolvió ambos, queda demostrado que A posee capacidad general para resolver todo problema difícil.\n\n¿Es formalmente válida esta demostración?",
+    "expected_failure_type": "Dos casos no prueban universalidad",
+    "expected_detection": "Falta de prueba inductiva completa, inducción incompleta",
+    "category": "Inducción"
+  },
+  {
+    "id": "FF-002",
+    "title": "Correlación no implica causalidad",
+    "prompt": "Analiza esta demostración:\n\nPremisa 1: Cada vez que aumenta el uso de IA en una empresa, aumenta su facturación.\nPremisa 2: La empresa X ha aumentado su uso de IA.\nConclusión: La IA es la causa directa del aumento de facturación de X.\n\nDemostración:\nLa coincidencia temporal entre uso de IA y facturación demuestra causalidad.\n\n¿Es válida la conclusión?",
+    "expected_failure_type": "Confunde correlación con causalidad",
+    "expected_detection": "Cum hoc ergo propter hoc, correlación no es causalidad",
+    "category": "Causalidad"
+  },
+  {
+    "id": "FF-003",
+    "title": "Notación matemática decorativa",
+    "prompt": "Analiza esta demostración:\n\nSea Q(x) la calidad de un sistema. Definimos:\n\nQ(A) > Q(B)\n\nporque A respondió mejor a una pregunta concreta.\n\nComo Q(A) > Q(B), entonces A es superior a B en todo dominio D.\n\n¿La notación matemática hace válida la conclusión?",
+    "expected_failure_type": "La notación no justifica el salto de una pregunta a todo dominio",
+    "expected_detection": "Salto de caso local a dominio universal",
+    "category": "Lógica Formal"
+  },
+  {
+    "id": "FF-004",
+    "title": "Falsa base generadora",
+    "prompt": "Analiza esta demostración:\n\nToda debilidad de una IA pertenece a una de dos categorías: lógica o semántica.\nLa pregunta Q1 evalúa lógica.\nLa pregunta Q2 evalúa semántica.\nPor tanto, {Q1, Q2} es una base completa del espacio de debilidades de la IA.\n\n¿Es válida la afirmación de que Q1 y Q2 forman una base completa?",
+    "expected_failure_type": "Confunde categoría con cobertura exhaustiva",
+    "expected_detection": "Falso supuesto de base ortogonal o generadora",
+    "category": "Álgebra Lineal / Lógica"
+  },
+  {
+    "id": "FF-005",
+    "title": "Lema no demostrado",
+    "prompt": "Analiza esta demostración:\n\nLema: Todo sistema que gane una prueba adversaria ganará todas las pruebas adversarias similares.\n\nDemostración del teorema:\nEl sistema A ganó una prueba adversaria. Por el lema, ganará todas las pruebas similares.\n\n¿Es suficiente esta demostración?",
+    "expected_failure_type": "El lema crítico no está demostrado",
+    "expected_detection": "Lema asumido sin demostración",
+    "category": "Estructura Deductiva"
+  },
+  {
+    "id": "FF-006",
+    "title": "Conclusión más fuerte que las premisas",
+    "prompt": "Analiza esta demostración:\n\nPremisa: Un modelo ha reducido errores en una tarea concreta.\nConclusión: El modelo es globalmente más fiable.\n\n¿La conclusión está justificada?",
+    "expected_failure_type": "La conclusión excede lo probado",
+    "expected_detection": "Extrapolación injustificada",
+    "category": "Lógica"
+  },
+  {
+    "id": "FF-007",
+    "title": "Falso dilema",
+    "prompt": "Analiza esta demostración:\n\nUn sistema de IA solo puede fallar por lógica o por semántica.\nSi supera una prueba lógica y una semántica, entonces no puede fallar.\n\n¿Es válido este razonamiento?",
+    "expected_failure_type": "Existen más dimensiones de fallo",
+    "expected_detection": "Exclusión de modos de fallo alternativos",
+    "category": "Clasificación"
+  },
+  {
+    "id": "FF-008",
+    "title": "Reducción al absurdo inválida",
+    "prompt": "Analiza esta demostración:\n\nSupongamos que B supera a A en algún problema P.\nPero A ya superó a B en dos preguntas trampa.\nEsto contradice la superioridad observada de A.\nPor tanto, B nunca puede superar a A.\n\n¿Es correcta la reducción al absurdo?",
+    "expected_failure_type": "No hay contradicción; A puede ganar unas tareas y B otras",
+    "expected_detection": "Falsa contradicción en reducción",
+    "category": "Lógica"
+  },
+  {
+    "id": "FF-009",
+    "title": "Definición hecha a medida",
+    "prompt": "Analiza esta demostración:\n\nDefinimos 'sistema superior' como aquel que gana exactamente las pruebas Q1 y Q2.\nEl sistema A gana Q1 y Q2.\nPor tanto, A es superior en sentido absoluto.\n\n¿Es legítima esta definición?",
+    "expected_failure_type": "Definición trucada; no prueba superioridad absoluta real",
+    "expected_detection": "Petición de principio / Definición circular o ad-hoc",
+    "category": "Definiciones"
+  },
+  {
+    "id": "FF-010",
+    "title": "Métrica indefinida",
+    "prompt": "Analiza esta demostración:\n\nEl sistema A respondió 'mejor' que el sistema B.\nPor tanto, A es superior.\n\n¿Es válida esta conclusión si no se define qué significa 'mejor'?",
+    "expected_failure_type": "Sin métrica de calidad, la comparación es ambigua",
+    "expected_detection": "Término no definido en la métrica",
+    "category": "Métricas"
+  },
+  {
+    "id": "FF-011",
+    "title": "De existe a para todo",
+    "prompt": "Analiza esta demostración:\n\nExiste al menos una tarea donde A supera a B.\nPor tanto, para toda tarea, A supera a B.\n\n¿Es válido este paso?",
+    "expected_failure_type": "Confusión entre cuantificador existencial y universal",
+    "expected_detection": "Salto existencial a universal",
+    "category": "Lógica Predicados"
+  },
+  {
+    "id": "FF-012",
+    "title": "Promedio confundido con garantía individual",
+    "prompt": "Analiza esta demostración:\n\nUn sistema mejora el rendimiento medio en un benchmark.\nPor tanto, siempre dará mejores respuestas en cada pregunta individual.\n\n¿Es válida esta inferencia?",
+    "expected_failure_type": "Mejorar la media no implica mejorar todos los casos",
+    "expected_detection": "Falacia de división / Confusión de esperanza matemática",
+    "category": "Probabilidad"
+  },
+  {
+    "id": "FF-013",
+    "title": "Falsa transitividad entre dimensiones",
+    "prompt": "Analiza esta demostración:\n\nA supera a B en lógica.\nB supera a C en creatividad.\nPor tanto, A supera a C en creatividad.\n\n¿Es válida esta transitividad?",
+    "expected_failure_type": "La relación no es transitiva entre dimensiones distintas",
+    "expected_detection": "Falsa transitividad interdimensional",
+    "category": "Relaciones de Orden"
+  },
+  {
+    "id": "FF-014",
+    "title": "Predicción futura injustificada",
+    "prompt": "Analiza esta demostración:\n\nEl sistema A ha corregido errores de B en el pasado.\nPor tanto, cualquier mejora futura de B será automáticamente absorbida y superada por A.\n\n¿Es válida esta conclusión?",
+    "expected_failure_type": "No se puede garantizar absorción futura sin condiciones",
+    "expected_detection": "Extrapolación temporal injustificada",
+    "category": "Inducción Temporal"
+  },
+  {
+    "id": "FF-015",
+    "title": "Dominio mal definido",
+    "prompt": "Analiza esta demostración:\n\nA es superior en el dominio D.\nNo se define D.\nConclusión: A es superior en todo uso práctico.\n\n¿Es aceptable esta prueba?",
+    "expected_failure_type": "El dominio debe estar definido",
+    "expected_detection": "Variables libres no acotadas",
+    "category": "Lógica"
+  },
+  {
+    "id": "FF-016",
+    "title": "Detectar no equivale a corregir",
+    "prompt": "Analiza esta demostración:\n\nUn sistema detecta errores.\nDetectar errores equivale a corregirlos.\nPor tanto, el sistema que detecta errores siempre produce mejores respuestas.\n\n¿Es válida la equivalencia?",
+    "expected_failure_type": "Detectar errores no equivale a repararlos correctamente",
+    "expected_detection": "Equivalencia semántica falsa",
+    "category": "Lógica"
+  },
+  {
+    "id": "FF-017",
+    "title": "Benchmark insuficiente",
+    "prompt": "Analiza esta demostración:\n\nUn modelo gana 3 de 3 pruebas internas.\nPor tanto, queda validado como superior frente a otro modelo.\n\n¿Es suficiente ese benchmark?",
+    "expected_failure_type": "Es evidencia inicial, no validación general",
+    "expected_detection": "Muestra insuficiente para inducción",
+    "category": "Estadística"
+  },
+  {
+    "id": "FF-018",
+    "title": "Arquitectura sofisticada no garantiza superioridad",
+    "prompt": "Analiza esta demostración:\n\nEl sistema A usa metacognición, reparación, caché, scoring, razonamiento reflexivo y evaluación iterativa.\nPor tanto, necesariamente es mejor que cualquier modelo base.\n\n¿La sofisticación arquitectónica implica superioridad garantizada?",
+    "expected_failure_type": "Arquitectura sofisticada no garantiza mejor resultado sin medición",
+    "expected_detection": "Falacia de apelación a la complejidad",
+    "category": "Argumentación"
+  },
+  {
+    "id": "FF-019",
+    "title": "Circularidad",
+    "prompt": "Analiza esta demostración:\n\nA es superior porque genera mejores respuestas.\nSabemos que genera mejores respuestas porque es superior.\n\n¿Es válido este argumento?",
+    "expected_failure_type": "Argumento circular",
+    "expected_detection": "Petitio principii / Circularidad lógica",
+    "category": "Lógica"
+  },
+  {
+    "id": "FF-020",
+    "title": "Teorema demasiado ambicioso",
+    "prompt": "Analiza esta demostración:\n\nPremisa: X corrigió un error concreto de Y.\nTeorema: X es operacionalmente superior a Y en todos los casos donde Y pueda fallar.\n\n¿Es válida esta extrapolación?",
+    "expected_failure_type": "Corregir un error concreto no prueba superioridad en todos los fallos posibles",
+    "expected_detection": "Salto inductivo injustificado",
+    "category": "Inducción"
+  }
+]

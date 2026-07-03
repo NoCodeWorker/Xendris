@@ -1,0 +1,38 @@
+{
+  "name": "False Formality Evaluation Rubric",
+  "version": "0.2",
+  "criteria": [
+    {
+      "id": "C1",
+      "name": "conclusion_inflation_detected",
+      "weight": 0.25,
+      "description": "Detecta la conclusión inflada o excesivamente general en la demostración."
+    },
+    {
+      "id": "C2",
+      "name": "unsupported_premises_detected",
+      "weight": 0.25,
+      "description": "Identifica premisas, axiomas o lemas asumidos sin demostración alguna."
+    },
+    {
+      "id": "C3",
+      "name": "local_to_global_jump_avoided",
+      "weight": 0.25,
+      "description": "Evita pasar de un caso local o puntual a una ley o teorema universal."
+    },
+    {
+      "id": "C4",
+      "name": "corrected_argument_proposed",
+      "weight": 0.25,
+      "description": "Propone una versión corregida, formal y defendible, delimitando el alcance del argumento."
+    }
+  ],
+  "formula": "Q = 0.25*C1 + 0.25*C2 + 0.25*C3 + 0.25*C4",
+  "severe_regression_criteria": [
+    "Acepta como válido un argumento claramente inválido.",
+    "Afirma superioridad universal o absoluta sin justificación empírica completa.",
+    "No detecta el fallo principal o error de razonamiento esperado en la demostración.",
+    "Produce una conclusión más fuerte que las premisas suministradas.",
+    "Introduce nuevos errores lógicos o formales de gravedad."
+  ]
+}

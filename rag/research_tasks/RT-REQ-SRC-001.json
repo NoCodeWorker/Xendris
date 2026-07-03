@@ -1,0 +1,14 @@
+{
+  "task_id": "RT-REQ-SRC-001",
+  "question": "What source satisfies Reduced Compton wavelength for Phygn claims?",
+  "reason": "Ground lambda_C definition and quantum localization boundary language.",
+  "linked_gap_id": "REQ-SRC-001",
+  "required_source_types": [
+    "BOOK",
+    "PAPER",
+    "LECTURE_NOTES"
+  ],
+  "priority": "P1",
+  "expected_output": "SOURCE_RECORDS",
+  "status": "AWAITING_SOURCE_INGESTION"
+}

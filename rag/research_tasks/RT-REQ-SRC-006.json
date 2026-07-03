@@ -1,0 +1,13 @@
+{
+  "task_id": "RT-REQ-SRC-006",
+  "question": "What source satisfies Environmental decoherence models for Phygn claims?",
+  "reason": "Ground baseline visibility decay and standard decoherence comparison.",
+  "linked_gap_id": "REQ-SRC-006",
+  "required_source_types": [
+    "PAPER",
+    "BOOK"
+  ],
+  "priority": "P1",
+  "expected_output": "SOURCE_RECORDS",
+  "status": "AWAITING_SOURCE_INGESTION"
+}
