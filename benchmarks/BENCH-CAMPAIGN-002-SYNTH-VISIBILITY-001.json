@@ -1,0 +1,50 @@
+{
+  "dataset_id": "BENCH-CAMPAIGN-002-SYNTH-VISIBILITY-001",
+  "name": "Synthetic CAMPAIGN-002 visibility benchmark",
+  "observable": "visibility_loss",
+  "t": [
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+    5.0,
+    6.0,
+    7.0,
+    8.0,
+    9.0,
+    10.0
+  ],
+  "y_true": [
+    1.0,
+    0.965,
+    0.9299999999999999,
+    0.895,
+    0.86,
+    0.825,
+    0.79,
+    0.755,
+    0.72,
+    0.6849999999999999,
+    0.6499999999999999
+  ],
+  "provenance_type": "SYNTHETIC",
+  "source_ids": [],
+  "generation_method": "deterministic linear synthetic visibility curve for engine validation",
+  "parameters": {
+    "slope": 0.035
+  },
+  "uncertainty": null,
+  "epsilon_exp": 1e-6,
+  "allowed_uses": [
+    "engine validation",
+    "SyntheticGain calculation"
+  ],
+  "forbidden_uses": [
+    "physical PredictiveGain",
+    "experimental evidence",
+    "Frontera C validation"
+  ],
+  "extraction_notes": null,
+  "units": null
+}

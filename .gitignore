@@ -55,6 +55,7 @@ out/
 # Generated scientific outputs retained locally unless explicitly curated
 data/
 reports/
+**/outputs/
 frontend/.next/
 frontend/node_modules/
 frontend/.env*
