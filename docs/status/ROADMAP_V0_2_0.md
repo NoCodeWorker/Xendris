@@ -15,6 +15,7 @@ Definir `v0.2.0` como la primera versión funcional orientada a framework públi
 - Quickstart added and published.
 - Package version aligned to `0.2.0`.
 - Response Contract defined and published.
+- Initial response contract core types implemented.
 
 ## Non-goals
 
@@ -28,7 +29,7 @@ Definir `v0.2.0` como la primera versión funcional orientada a framework públi
 
 `xendris.core.response_contract`
 
-Implementación mínima no intrusiva del contrato transversal de respuesta. Debe ser una capa pura de tipos, estructuras y helpers de clasificación, sin llamadas a modelos y sin modificar el comportamiento existente.
+Implementación mínima no intrusiva del contrato transversal de respuesta. La primera capa ya existe como tipos puros, estructuras de assessment y helpers conservadores superficiales, sin llamadas a modelos y sin modificar el comportamiento existente.
 
 Alcance inicial:
 

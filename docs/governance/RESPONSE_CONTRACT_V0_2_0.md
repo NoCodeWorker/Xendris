@@ -178,6 +178,14 @@ This is a high-stakes domain. A useful answer can explain general concepts and d
 
 ## Implementation notes
 
+Initial pure implementation:
+
+```txt
+xendris.core.response_contract
+```
+
+The initial implementation provides enums, claim assessment structures, response-contract assessment structures, `make_claim`, and conservative surface-level helpers. It does not call models, perform retrieval, rewrite responses, validate factual truth, or replace human review.
+
 Future implementation may include:
 
 - response preflight

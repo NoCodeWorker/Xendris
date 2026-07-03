@@ -1,105 +1,147 @@
-from xendris.core.response_contract import (
-    ClaimType,
-    ConfidenceLevel,
-    DomainValidity,
-    ResponseContractAssessment,
-    ResponseMode,
-    assess_response_contract,
-    classify_claim_text,
-    detect_domain_validity,
-    estimate_confidence,
-)
+import xendris.core.response_contract as rc
 
 
-def test_response_contract_imports_are_pure():
-    assert ClaimType.OBSERVED.value == "OBSERVED"
-    assert ConfidenceLevel.MEDIUM.value == "MEDIUM"
-    assert ResponseMode.PRACTICAL.value == "PRACTICAL"
-    assert DomainValidity.GENERAL.value == "GENERAL"
+def test_public_imports_are_exposed():
+    assert rc.ClaimType.OBSERVED.value == "OBSERVED"
+    assert rc.ConfidenceLevel.CALIBRATED.value == "CALIBRATED"
+    assert rc.ResponseMode.RIGOROUS.value == "RIGOROUS"
+    assert rc.DomainValidity.CONTEXT_DEPENDENT.value == "CONTEXT_DEPENDENT"
+    assert rc.ClaimAssessment is not None
+    assert rc.ResponseContractAssessment is not None
+    assert rc.make_claim is not None
 
 
-def test_claim_text_classification_is_conservative():
-    assert classify_claim_text("This was measured in the source data.") == ClaimType.OBSERVED
-    assert classify_claim_text("This suggests a possible effect.") == ClaimType.INFERENCE
-    assert classify_claim_text("") == ClaimType.UNVERIFIED
+def test_enum_values_match_response_contract_v0_2_0():
+    assert [item.value for item in rc.ClaimType] == [
+        "OBSERVED",
+        "DERIVED",
+        "STANDARD_KNOWLEDGE",
+        "INFERENCE",
+        "SPECULATION",
+        "UNVERIFIED",
+    ]
+    assert [item.value for item in rc.ConfidenceLevel] == [
+        "LOW",
+        "MEDIUM",
+        "HIGH",
+        "CALIBRATED",
+        "UNKNOWN",
+    ]
+    assert [item.value for item in rc.ResponseMode] == [
+        "FAST",
+        "STANDARD",
+        "RIGOROUS",
+        "AUDIT",
+    ]
+    assert [item.value for item in rc.DomainValidity] == [
+        "GENERAL",
+        "LOCAL",
+        "CONTEXT_DEPENDENT",
+        "EXPERIMENTAL",
+        "UNKNOWN",
+    ]
 
 
-def test_domain_validity_detects_sensitive_domains():
-    assert detect_domain_validity("general answer") == DomainValidity.GENERAL
-    assert detect_domain_validity("medical advice requires current verification") == DomainValidity.SENSITIVE_DOMAIN
-    assert detect_domain_validity("result holds under these assumptions") == DomainValidity.ASSUMPTION_BOUND
-
-
-def test_assessment_marks_absolute_language_as_overclaiming_risk():
-    assessment = assess_response_contract("This is always guaranteed and proven.")
-
-    assert assessment.non_overclaiming is False
-    assert assessment.has_overclaim_risk is True
-    assert assessment.is_conservative() is False
-    assert assessment.confidence_level == ConfidenceLevel.LOW
-    assert "absolute_language_detected" in assessment.notes
-    assert assessment.to_dict()["claim_type"] == ClaimType.UNVERIFIED.value
-
-
-def test_assessment_keeps_response_content_unchanged_by_design():
-    text = "Under these assumptions, this suggests a useful practical next step."
-    assessment = assess_response_contract(text, domain="programming")
-
-    assert assessment.claim_type == ClaimType.INFERENCE
-    assert assessment.domain_validity == DomainValidity.ASSUMPTION_BOUND
-    assert assessment.response_mode == ResponseMode.PRACTICAL
-
-
-def test_speculation_with_high_confidence_is_not_conservative():
-    assessment = ResponseContractAssessment(
-        claim_type=ClaimType.SPECULATION,
-        confidence_level=ConfidenceLevel.HIGH,
-        response_mode=ResponseMode.RIGOROUS,
-        domain_validity=DomainValidity.DOMAIN_SPECIFIC,
-        non_overclaiming=True,
-        limits_stated=True,
-        uncertainty_marked=True,
+def test_make_claim_creates_claim_assessment():
+    claim = rc.make_claim(
+        text="E = mc² is the rest-energy relation.",
+        claim_type=rc.ClaimType.STANDARD_KNOWLEDGE,
+        confidence=rc.ConfidenceLevel.CALIBRATED,
+        domain_validity=rc.DomainValidity.CONTEXT_DEPENDENT,
     )
 
-    assert assessment.is_conservative() is False
+    assert isinstance(claim, rc.ClaimAssessment)
+    assert claim.text == "E = mc² is the rest-energy relation."
+    assert claim.claim_type == rc.ClaimType.STANDARD_KNOWLEDGE
+    assert claim.confidence == rc.ConfidenceLevel.CALIBRATED
+    assert claim.domain_validity == rc.DomainValidity.CONTEXT_DEPENDENT
 
 
-def test_unverified_with_high_confidence_is_not_conservative():
-    assessment = ResponseContractAssessment(
-        claim_type=ClaimType.UNVERIFIED,
-        confidence_level=ConfidenceLevel.HIGH,
-        response_mode=ResponseMode.DIRECT,
-        domain_validity=DomainValidity.GENERAL,
-        non_overclaiming=True,
-        limits_stated=True,
-        uncertainty_marked=True,
+def test_required_usage_example_is_conservative():
+    claim = rc.make_claim(
+        text="E = mc² is the rest-energy relation.",
+        claim_type=rc.ClaimType.STANDARD_KNOWLEDGE,
+        confidence=rc.ConfidenceLevel.CALIBRATED,
+        domain_validity=rc.DomainValidity.CONTEXT_DEPENDENT,
     )
 
-    assert assessment.is_conservative() is False
+    assessment = rc.ResponseContractAssessment(
+        mode=rc.ResponseMode.RIGOROUS,
+        claims=(claim,),
+        has_domain_limits=True,
+        has_uncertainty_marker=True,
+        has_overclaim_risk=False,
+    )
+
+    assert assessment.is_conservative() is True
 
 
-def test_explicit_overclaim_risk_is_not_conservative():
-    assessment = ResponseContractAssessment(
-        claim_type=ClaimType.STANDARD_KNOWLEDGE,
-        confidence_level=ConfidenceLevel.MEDIUM,
-        response_mode=ResponseMode.PRACTICAL,
-        domain_validity=DomainValidity.GENERAL,
-        non_overclaiming=True,
-        limits_stated=True,
-        uncertainty_marked=True,
+def test_has_overclaim_risk_is_not_conservative():
+    assessment = rc.ResponseContractAssessment(
+        mode=rc.ResponseMode.STANDARD,
         has_overclaim_risk=True,
     )
 
     assert assessment.is_conservative() is False
 
 
-def test_helpers_do_not_emit_high_confidence():
+def test_speculation_with_high_confidence_is_not_conservative():
+    claim = rc.make_claim(
+        text="This speculative statement is certain.",
+        claim_type=rc.ClaimType.SPECULATION,
+        confidence=rc.ConfidenceLevel.HIGH,
+    )
+    assessment = rc.ResponseContractAssessment(
+        mode=rc.ResponseMode.AUDIT,
+        claims=(claim,),
+    )
+
+    assert assessment.is_conservative() is False
+
+
+def test_unverified_with_high_confidence_is_not_conservative():
+    claim = rc.make_claim(
+        text="This unverified statement is certain.",
+        claim_type=rc.ClaimType.UNVERIFIED,
+        confidence=rc.ConfidenceLevel.HIGH,
+    )
+    assessment = rc.ResponseContractAssessment(
+        mode=rc.ResponseMode.FAST,
+        claims=(claim,),
+    )
+
+    assert assessment.is_conservative() is False
+
+
+def test_surface_helpers_are_conservative_and_do_not_validate_truth():
+    assert rc.classify_claim_text("This was measured locally.") == rc.ClaimType.OBSERVED
+    assert rc.classify_claim_text("This suggests a limited next step.") == rc.ClaimType.INFERENCE
+    assert rc.classify_claim_text("") == rc.ClaimType.UNVERIFIED
+    assert rc.detect_domain_validity("under these assumptions") == rc.DomainValidity.CONTEXT_DEPENDENT
+    assert rc.detect_domain_validity("experimental pilot") == rc.DomainValidity.EXPERIMENTAL
+
+
+def test_helpers_do_not_emit_high_confidence_aggressively():
     samples = [
         "",
         "This is always guaranteed and proven.",
         "Under these assumptions, this suggests a limited conclusion.",
-        "A plain practical response with several words but no evidence validation.",
+        "A plain practical response without evidence validation.",
     ]
 
-    assert all(estimate_confidence(sample) != ConfidenceLevel.HIGH for sample in samples)
-    assert assess_response_contract("Measured result under these assumptions.").confidence_level != ConfidenceLevel.HIGH
+    assert all(rc.estimate_confidence(sample) != rc.ConfidenceLevel.HIGH for sample in samples)
+    assert rc.assess_response_contract("Measured result under these assumptions.").claims[0].confidence != rc.ConfidenceLevel.HIGH
+
+
+def test_assess_response_contract_reports_surface_signals_only():
+    assessment = rc.assess_response_contract(
+        "Under these assumptions, this suggests a context dependent answer.",
+        mode=rc.ResponseMode.RIGOROUS,
+    )
+
+    assert assessment.mode == rc.ResponseMode.RIGOROUS
+    assert assessment.has_uncertainty_marker is True
+    assert assessment.has_domain_limits is True
+    assert assessment.has_overclaim_risk is False
+    assert assessment.is_conservative() is True
+    assert assessment.claims[0].claim_type == rc.ClaimType.INFERENCE

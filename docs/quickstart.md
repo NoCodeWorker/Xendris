@@ -86,6 +86,31 @@ from xendris.core.rag import (
 
 This layer is a registry/audit helper surface. It does not make raw sources into evidence and does not create scientific validation by itself.
 
+## Response Contract Example
+
+`xendris.core.response_contract` exposes the first pure response-governance primitives for v0.2.0. It does not call models, modify responses, or validate factual truth.
+
+```python
+import xendris.core.response_contract as rc
+
+claim = rc.make_claim(
+    text="E = mc² is the rest-energy relation.",
+    claim_type=rc.ClaimType.STANDARD_KNOWLEDGE,
+    confidence=rc.ConfidenceLevel.CALIBRATED,
+    domain_validity=rc.DomainValidity.CONTEXT_DEPENDENT,
+)
+
+assessment = rc.ResponseContractAssessment(
+    mode=rc.ResponseMode.RIGOROUS,
+    claims=(claim,),
+    has_domain_limits=True,
+    has_uncertainty_marker=True,
+    has_overclaim_risk=False,
+)
+
+assert assessment.is_conservative() is True
+```
+
 ## Experimental Namespaces
 
 The following namespaces remain importable by direct path for backward compatibility, but are not stable public API for v0.2.0:
