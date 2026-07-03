@@ -1,0 +1,68 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.ruff_cache/
+.mypy_cache/
+
+# Database
+*.db
+*.sqlite3
+
+# Local logs and runtime outputs
+*.log
+.api-server.*.log
+
+# Lean/Lake local build cache
+.lake/
+
+# Node / frontend build outputs
+node_modules/
+.next/
+out/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Generated scientific outputs retained locally unless explicitly curated
+data/
+reports/
+frontend/.next/
+frontend/node_modules/
+frontend/.env*
+frontend/.xendris-*.log
+
+# Local vendor copies for sandboxed IDE analyzer
+/fastapi/
+/pydantic/
+/numpy/
+/pytest/
+/scipy/
