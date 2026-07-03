@@ -272,12 +272,12 @@ Recommended stable surface details:
 Stable candidate:
 
 - package import
-- version metadata, after version alignment
+- version metadata aligned to `0.2.0`
 - documented namespace map
 
 Action required before release:
 
-- Decide whether `__version__` should be aligned to `0.2.0`.
+- Keep `__version__` aligned to `0.2.0`.
 - Reduce or document `__all__` so experimental namespaces are not accidentally treated as stable.
 
 ### `xendris.frontera_c`
@@ -345,7 +345,7 @@ Command executed:
 Result:
 
 ```txt
-IMPORT_OK 0.3.0
+IMPORT_OK 0.2.0
 ```
 
 Validated imports:

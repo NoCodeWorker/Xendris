@@ -157,6 +157,6 @@ This quickstart does not claim:
 
 It only documents the minimal reproducible import and validation path for Xendris v0.2.0.
 
-## Next Step
+## Package Metadata
 
-Before tagging a v0.2.0 release, review package metadata alignment in `pyproject.toml` and confirm whether its version should match `xendris.__version__`.
+`pyproject.toml` and `xendris.__version__` are expected to remain aligned for the v0.2.0 line.

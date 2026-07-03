@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "xendris"
-version = "0.3.0"
+version = "0.2.0"
 description = "Xendris framework with Phyng scientific engine compatibility"
 readme = "README.md"
 requires-python = ">=3.11"
