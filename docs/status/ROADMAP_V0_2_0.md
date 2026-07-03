@@ -9,6 +9,13 @@
 
 Definir `v0.2.0` como la primera versión funcional orientada a framework público, manteniendo `phyng` como motor científico interno/legacy.
 
+## Progress
+
+- Minimal public API defined and published.
+- Quickstart added and published.
+- Package version aligned to `0.2.0`.
+- Response Contract defined and published.
+
 ## Non-goals
 
 - No renombrar todavía `phyng/`
@@ -16,6 +23,28 @@ Definir `v0.2.0` como la primera versión funcional orientada a framework públi
 - No introducir claims científicas nuevas
 - No añadir outputs generados al repositorio
 - No romper compatibilidad hacia atrás
+
+## Next implementation candidate
+
+`xendris.core.response_contract`
+
+Implementación mínima no intrusiva del contrato transversal de respuesta. Debe ser una capa pura de tipos, estructuras y helpers de clasificación, sin llamadas a modelos y sin modificar el comportamiento existente.
+
+Alcance inicial:
+
+- `ClaimType`
+- `ConfidenceLevel`
+- `ResponseMode`
+- `DomainValidity`
+- `ResponseContractAssessment`
+- Helpers puros para clasificar o representar claims.
+
+Esta implementación no debe:
+
+- Llamar a modelos.
+- Imponer reescritura automática todavía.
+- Modificar respuestas existentes.
+- Romper compatibilidad.
 
 ## Proposed scope
 
