@@ -12,8 +12,8 @@ function riskFromScore(score: number, hasErrorWording: boolean): XendrisEvaluati
 
 export function evaluateWithMockHeuristics(responseText: string): XendrisEvaluationResult {
   const normalized = responseText.trim()
-  const lower = normalized.toLowerCase()
   const flags: string[] = []
+
   const improvementHints: string[] = []
 
   const hasCodeBlock = /```[\s\S]*?```/.test(normalized)

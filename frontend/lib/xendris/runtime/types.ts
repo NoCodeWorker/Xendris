@@ -25,4 +25,16 @@ export type ExecutionSummary = {
     repaired: boolean
     repairStrategy?: string
   }
+  timings?: {
+    validationMs?: number
+    intentMs?: number
+    promptMs?: number
+    cacheMs?: number
+    providerMs?: number
+    evaluationMs?: number
+    epistemicMs?: number
+    controllerMs?: number
+    repairMs?: number
+    totalMs: number
+  }
 }

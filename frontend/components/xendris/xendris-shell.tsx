@@ -1,7 +1,13 @@
 "use client"
+/* eslint-disable react-hooks/set-state-in-effect */
+
 
 import * as React from "react"
+import Link from "next/link"
+import { Pencil, Trash2 } from "lucide-react"
 import { ThemeToggle } from "src/components/theme-toggle"
+
+
 import { ChatPanel } from "src/components/xendris/chat-panel"
 import { cn } from "src/lib/utils"
 import type { XendrisConversation } from "src/lib/xendris/types"
@@ -150,40 +156,46 @@ export function XendrisShell() {
   }
 
   return (
-    <main className="flex min-h-screen bg-background text-foreground">
-      <aside className="hidden w-72 shrink-0 border-r bg-muted/35 p-3 lg:flex lg:flex-col">
-        <a
+    <main className="flex h-screen w-screen overflow-hidden bg-background text-foreground">
+      <aside className="hidden w-80 shrink-0 border-r bg-muted/25 p-4 lg:flex lg:flex-col">
+        <Link
           href="/"
-          className="flex h-11 items-center rounded-xl px-3 text-sm font-semibold tracking-tight hover:bg-background"
+          className="flex h-12 items-center gap-2 rounded-xl px-3 text-base font-bold tracking-tight transition-colors hover:bg-muted"
         >
-          Xendris AI
-        </a>
+          <div className="flex size-7 items-center justify-center rounded-lg bg-primary text-xs font-black text-primary-foreground shadow-sm">
+            X
+          </div>
+          <span>Xendris AI</span>
+        </Link>
 
         <button
           type="button"
           onClick={handleNewConversation}
           disabled={isGenerating}
-          className="mt-3 flex h-10 w-full items-center justify-between rounded-xl border bg-background px-3 text-left text-sm font-medium shadow-sm transition-colors hover:bg-muted"
+          className="mt-4 flex h-11 w-full items-center justify-between rounded-xl border bg-background px-4 text-left text-sm font-semibold shadow-sm transition-all hover:bg-muted hover:border-primary/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 disabled:opacity-50"
         >
           <span>Nueva conversación</span>
-          <span className="text-lg leading-none text-muted-foreground">+</span>
+          <span className="text-xl leading-none text-muted-foreground font-light">+</span>
         </button>
 
-        <nav className="mt-6 min-h-0 flex-1 space-y-1 overflow-y-auto">
+        <nav className="mt-6 min-h-0 flex-1 space-y-1.5 overflow-y-auto">
           {conversations.map((conversation) => (
             <div
               key={conversation.id}
               className={cn(
-                "group flex min-h-10 w-full items-center gap-1 rounded-lg px-2 py-1 transition-colors",
+                "group relative flex h-11 w-full items-center gap-1.5 rounded-xl pl-4 pr-3 py-1 transition-all duration-150 border",
                 conversation.id === activeConversation?.id
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:bg-background hover:text-foreground"
+                  ? "bg-background text-foreground shadow-xs border-border/80 font-semibold"
+                  : "text-muted-foreground hover:bg-background/50 hover:text-foreground border-transparent"
               )}
             >
+              {conversation.id === activeConversation?.id && (
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r bg-primary" />
+              )}
               <button
                 type="button"
                 onClick={() => setActiveConversationId(conversation.id)}
-                className="min-w-0 flex-1 truncate px-1 text-left text-sm"
+                className="min-w-0 flex-1 truncate px-1 text-left text-sm font-medium"
               >
                 {conversation.title}
               </button>
@@ -191,55 +203,61 @@ export function XendrisShell() {
                 type="button"
                 disabled={isGenerating}
                 onClick={() => handleRenameConversation(conversation)}
-                className="rounded-md px-1.5 py-1 text-xs text-muted-foreground opacity-0 transition-opacity hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-30 group-hover:opacity-100"
+                className="rounded-lg p-1.5 text-muted-foreground opacity-0 hover:bg-muted hover:text-foreground transition-all duration-150 disabled:pointer-events-none disabled:opacity-30 group-hover:opacity-100"
+                aria-label="Renombrar conversación"
               >
-                Renombrar
+                <Pencil className="size-3.5" />
               </button>
               <button
                 type="button"
                 disabled={isGenerating}
                 onClick={() => handleDeleteConversation(conversation)}
-                className="rounded-md px-1.5 py-1 text-xs text-muted-foreground opacity-0 transition-opacity hover:bg-destructive/10 hover:text-destructive disabled:pointer-events-none disabled:opacity-30 group-hover:opacity-100"
+                className="rounded-lg p-1.5 text-muted-foreground opacity-0 hover:bg-destructive/15 hover:text-destructive transition-all duration-150 disabled:pointer-events-none disabled:opacity-30 group-hover:opacity-100"
+                aria-label="Eliminar conversación"
               >
-                Eliminar
+                <Trash2 className="size-3.5" />
               </button>
             </div>
           ))}
         </nav>
 
-        <div className="mt-3 rounded-xl border bg-background/70 p-3">
-          <p className="text-xs font-medium text-foreground">Modo adaptativo</p>
-          <p className="mt-1 text-xs leading-5 text-muted-foreground">
+        <div className="mt-3 rounded-xl border bg-background/70 p-3 shadow-xs">
+          <p className="text-xs font-semibold text-foreground">Modo adaptativo</p>
+          <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
             Xendris decide el modo cognitivo internamente en cada mensaje.
           </p>
         </div>
       </aside>
 
-      <section className="flex min-h-screen min-w-0 flex-1 flex-col">
-        <header className="flex h-14 shrink-0 items-center justify-between border-b px-4 lg:px-6">
-          <div className="min-w-0">
-            <p className="truncate text-sm font-medium">
-              {activeConversation?.title ?? EMPTY_TITLE}
-            </p>
-            <p className="hidden text-xs text-muted-foreground sm:block">
-              Interfaz experimental de Xendris AI
-            </p>
+      <section className="flex h-full min-w-0 flex-1 flex-col overflow-hidden">
+        <header className="flex h-14 shrink-0 items-center justify-between border-b bg-background/55 backdrop-blur-md px-6">
+          <div className="min-w-0 flex items-center gap-2.5">
+            <span className="inline-block size-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+            <div>
+              <p className="truncate text-sm font-semibold tracking-tight text-foreground">
+                {activeConversation?.title ?? EMPTY_TITLE}
+              </p>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <ThemeToggle className="hidden sm:inline-flex" />
-            <button
-              type="button"
-              onClick={handleClearActiveConversation}
-              disabled={isGenerating || !activeConversation || activeConversation.messages.length === 0}
-              className="rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-40"
-            >
-              Vaciar
-            </button>
+          <div className="flex items-center gap-3">
+            <ThemeToggle className="scale-90" />
+            {activeConversation && activeConversation.messages.length > 0 ? (
+              <button
+                type="button"
+                onClick={handleClearActiveConversation}
+                disabled={isGenerating}
+                className="flex items-center gap-1.5 h-9 rounded-xl px-3 text-xs font-medium text-muted-foreground/80 hover:bg-muted hover:text-foreground transition-all disabled:opacity-40 disabled:pointer-events-none"
+                aria-label="Vaciar conversación"
+              >
+                <Trash2 className="size-3.5 shrink-0" />
+                <span>Vaciar</span>
+              </button>
+            ) : null}
             <button
               type="button"
               onClick={handleNewConversation}
               disabled={isGenerating}
-              className="rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:pointer-events-none disabled:opacity-40 lg:hidden"
+              className="flex items-center gap-1.5 h-9 rounded-xl border px-3 text-xs font-semibold text-muted-foreground hover:bg-muted hover:text-foreground transition-all shadow-xs disabled:opacity-40 lg:hidden"
             >
               Nueva
             </button>

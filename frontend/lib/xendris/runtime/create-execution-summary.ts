@@ -15,6 +15,7 @@ type CreateExecutionSummaryInput = {
   evaluation?: XendrisEvaluationResult
   controllerDecision?: AnswerControllerDecision
   repair?: XendrisRepairMetadata
+  timings?: ExecutionSummary["timings"]
 }
 
 export function createExecutionSummary(input: CreateExecutionSummaryInput): ExecutionSummary {
@@ -47,5 +48,6 @@ export function createExecutionSummary(input: CreateExecutionSummaryInput): Exec
           repairStrategy: input.repair.repairStrategy,
         }
       : undefined,
+    timings: input.timings,
   }
 }

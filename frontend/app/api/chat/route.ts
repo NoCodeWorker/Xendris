@@ -7,6 +7,8 @@ import {
 } from "src/lib/xendris/cache/memory-cache"
 import { decideAnswerAction } from "src/lib/xendris/controller/answer-controller"
 import { evaluateResponse } from "src/lib/xendris/evaluation/evaluate-response"
+import { evaluateEpistemicSafety } from "src/lib/xendris/epistemic/epistemic-evaluator"
+import { detectLanguage } from "src/lib/xendris/language/detect-language"
 import { routeIntent } from "src/lib/xendris/intent-router"
 import { selectModelProvider } from "src/lib/xendris/model-provider"
 import { XendrisProviderError } from "src/lib/xendris/providers/types"
@@ -40,6 +42,8 @@ export async function POST(request: Request) {
   const startedAt = new Date()
   let body: unknown
 
+  // 1. Validation
+  const valStart = performance.now()
   try {
     body = await request.json()
   } catch {
@@ -59,10 +63,23 @@ export async function POST(request: Request) {
   if (provider !== undefined && !isProviderName(provider)) {
     return errorResponse("INVALID_PROVIDER", '"provider" must be "mock" or "deepseek".')
   }
+  const validationMs = Math.round(performance.now() - valStart)
 
+  const detectedLanguage = detectLanguage(message)
+
+  // 2. Intent Routing
+  const intentStart = performance.now()
   const route = routeIntent(message)
-  const systemPrompt = getSystemPrompt(route.intent)
+  const intentMs = Math.round(performance.now() - intentStart)
+
+  // 3. Prompt Configuration
+  const promptStart = performance.now()
+  const systemPrompt = getSystemPrompt(route.intent, detectedLanguage)
   const selectedProvider = selectModelProvider(provider ?? process.env.XENDRIS_MODEL_PROVIDER)
+  const promptMs = Math.round(performance.now() - promptStart)
+
+  // 4. Cache Check
+  const cacheStart = performance.now()
   const cacheTtlMs = getMemoryCacheTtlMs()
   const cacheKey = createCacheKey({
     message,
@@ -72,9 +89,11 @@ export async function POST(request: Request) {
     systemPromptId: systemPrompt.id,
   })
   const cachedResponse = getMemoryCacheEntry(cacheKey)
+  const cacheMs = Math.round(performance.now() - cacheStart)
 
   if (cachedResponse) {
     const completedAt = new Date()
+    const totalMs = Math.round(completedAt.getTime() - startedAt.getTime())
     const executionSummary = createExecutionSummary({
       endpoint: "/api/chat",
       intent: cachedResponse.detectedIntent,
@@ -86,6 +105,13 @@ export async function POST(request: Request) {
       evaluation: cachedResponse.evaluation,
       controllerDecision: cachedResponse.controllerDecision,
       repair: cachedResponse.repair,
+      timings: {
+        validationMs,
+        intentMs,
+        promptMs,
+        cacheMs,
+        totalMs,
+      },
     })
 
     return NextResponse.json<XendrisChatSuccessResponse>({
@@ -97,9 +123,12 @@ export async function POST(request: Request) {
         ttlMs: cacheTtlMs,
       },
       executionSummary,
+      detectedLanguage: cachedResponse.detectedLanguage ?? detectedLanguage,
     })
   }
 
+  // 5. Provider Execution
+  const providerStart = performance.now()
   let modelResponse
 
   try {
@@ -117,21 +146,55 @@ export async function POST(request: Request) {
 
     return errorResponse("PROVIDER_REQUEST_FAILED", "Model provider request failed.", 502)
   }
+  const providerMs = Math.round(performance.now() - providerStart)
 
   const responseRoute = {
     ...route,
     cognitiveMode: systemPrompt.cognitiveMode,
     systemPromptId: systemPrompt.id,
   }
+
+  // 6. Evaluation
+  const evalStart = performance.now()
   const evaluation = evaluateResponse(modelResponse.content)
-  const controllerDecision = decideAnswerAction(evaluation)
-  const repair = repairResponse(modelResponse.content, controllerDecision)
+  const evaluationMs = Math.round(performance.now() - evalStart)
+
+  // 7. Epistemic Safety
+  const epistemicStart = performance.now()
+  const epistemicEvaluation = evaluateEpistemicSafety(message, modelResponse.content)
+  const epistemicMs = Math.round(performance.now() - epistemicStart)
+
+  // 8. Controller Decision
+  const controllerStart = performance.now()
+  const controllerDecision = decideAnswerAction(evaluation, epistemicEvaluation)
+  const controllerMs = Math.round(performance.now() - controllerStart)
+
+  // 9. Repair Loop
+  const repairStart = performance.now()
+  const repair = repairResponse(message, modelResponse.content, controllerDecision, epistemicEvaluation)
   const repairMetadata = {
     repaired: repair.repaired,
     repairReason: repair.repairReason,
     repairStrategy: repair.repairStrategy,
   }
+  const repairMs = Math.round(performance.now() - repairStart)
+
   const completedAt = new Date()
+  const totalMs = Math.round(completedAt.getTime() - startedAt.getTime())
+
+  const timings = {
+    validationMs,
+    intentMs,
+    promptMs,
+    cacheMs,
+    providerMs,
+    evaluationMs,
+    epistemicMs,
+    controllerMs,
+    repairMs,
+    totalMs,
+  }
+
   const executionSummary = createExecutionSummary({
     endpoint: "/api/chat",
     intent: route.intent,
@@ -143,7 +206,9 @@ export async function POST(request: Request) {
     evaluation,
     controllerDecision,
     repair: repairMetadata,
+    timings,
   })
+
   const cacheMetadata = {
     hit: false,
     key: cacheKey,
@@ -162,10 +227,12 @@ export async function POST(request: Request) {
     cached: modelResponse.cached,
     cache: cacheMetadata,
     evaluation,
+    epistemicEvaluation,
     controllerDecision,
     repair: repairMetadata,
     executionSummary,
     route: responseRoute,
+    detectedLanguage,
   }
 
   setMemoryCacheEntry(cacheKey, successResponse, cacheTtlMs)

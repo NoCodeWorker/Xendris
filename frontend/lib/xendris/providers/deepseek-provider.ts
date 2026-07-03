@@ -6,8 +6,19 @@ import type {
 import { XendrisProviderError } from "src/lib/xendris/providers/types"
 
 const DEEPSEEK_BASE_URL = "https://api.deepseek.com"
-const DEEPSEEK_TIMEOUT_MS = 30_000
 const DEFAULT_DEEPSEEK_MODEL = "deepseek-v4-flash"
+
+function getDeepSeekTimeoutMs(): number {
+  const envVal = process.env.DEEPSEEK_TIMEOUT_MS
+  if (envVal === undefined) {
+    return 30000
+  }
+  const parsed = parseInt(envVal, 10)
+  if (isNaN(parsed)) {
+    return 30000
+  }
+  return Math.min(120000, Math.max(5000, parsed))
+}
 
 type DeepSeekChatCompletionResponse = {
   choices?: Array<{
@@ -34,7 +45,8 @@ export const deepseekProvider: XendrisModelProvider = {
 
     const startedAt = performance.now()
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), DEEPSEEK_TIMEOUT_MS)
+    const timeoutMs = getDeepSeekTimeoutMs()
+    const timeout = setTimeout(() => controller.abort(), timeoutMs)
 
     try {
       const response = await fetch(`${DEEPSEEK_BASE_URL}/chat/completions`, {

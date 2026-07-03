@@ -3,6 +3,7 @@ import type { AnswerControllerDecision } from "src/lib/xendris/controller/types"
 import type { XendrisCacheMetadata } from "src/lib/xendris/cache/types"
 import type { XendrisRepairMetadata } from "src/lib/xendris/repair/types"
 import type { ExecutionSummary } from "src/lib/xendris/runtime/types"
+import type { EpistemicEvaluation } from "src/lib/xendris/epistemic/types"
 
 export type XendrisIntent =
   | "general"
@@ -30,9 +31,11 @@ export type XendrisMessage = {
     pending?: boolean
     cache?: XendrisCacheMetadata
     evaluation?: XendrisEvaluationResult
+    epistemicEvaluation?: EpistemicEvaluation
     controllerDecision?: AnswerControllerDecision
     repair?: XendrisRepairMetadata
     executionSummary?: ExecutionSummary
+    detectedLanguage?: "es" | "en"
   }
 }
 

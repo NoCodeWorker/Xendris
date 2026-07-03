@@ -39,6 +39,15 @@ function createSystemPrompt(intent: XendrisIntent): XendrisSystemPrompt {
   }
 }
 
-export function getSystemPrompt(intent: XendrisIntent) {
-  return XENDRIS_SYSTEM_PROMPTS[intent]
+export function getSystemPrompt(intent: XendrisIntent, lang: "es" | "en" = "es") {
+  const basePrompt = XENDRIS_SYSTEM_PROMPTS[intent]
+  const langRule =
+    lang === "es"
+      ? "Responde en español natural, claro y técnico cuando el usuario escriba en español. Respond in the same language as the user's message unless the user explicitly asks for another language."
+      : "Respond in natural, clear, and technical English when the user writes in English. Respond in the same language as the user's message unless the user explicitly asks for another language."
+
+  return {
+    ...basePrompt,
+    prompt: `${basePrompt.prompt}\n\nLanguage Directive:\n${langRule}`,
+  }
 }

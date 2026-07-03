@@ -1,10 +1,13 @@
 "use client"
+/* eslint-disable react-hooks/set-state-in-effect */
+
 
 import * as React from "react"
+import { ArrowUp, Copy, Check } from "lucide-react"
 import { Button } from "src/components/ui/button"
-import { Textarea } from "src/components/ui/textarea"
-import { AgentStatus } from "src/components/xendris/agent-status"
 import { DevRuntimeStatus } from "src/components/xendris/dev-runtime-status"
+
+
 import { MarkdownMessage } from "src/components/xendris/markdown-message"
 import { cn } from "src/lib/utils"
 import type {
@@ -115,10 +118,6 @@ export function ChatPanel({
         message.metadata?.model &&
         !message.metadata.pending
     )?.metadata
-  const providerLabel =
-    lastAssistantMetadata?.provider && lastAssistantMetadata.model
-      ? `${lastAssistantMetadata.provider} / ${lastAssistantMetadata.model}`
-      : "mock / xendris-mock-v0"
 
   React.useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
@@ -412,21 +411,54 @@ export function ChatPanel({
 
   return (
     <section className="flex min-h-0 flex-1 flex-col bg-background">
-      <div className="flex-1 overflow-y-auto px-4 py-8">
+      <div className="flex-1 overflow-y-auto pt-6 pb-4 md:pt-8 md:pb-6">
         {messages.length === 0 ? (
-          <div className="mx-auto flex min-h-[58vh] max-w-2xl flex-col items-center justify-center text-center">
-            <div className="mb-6 flex size-12 items-center justify-center rounded-2xl border bg-muted text-lg font-semibold">
+          <div className="mx-auto flex min-h-[58vh] max-w-3xl flex-col items-center justify-center text-center px-8">
+            <div className="mb-7 flex size-12 items-center justify-center rounded-2xl bg-[oklch(0.26_0.018_107.4)] text-lg font-black text-white shadow-md border border-[oklch(0.35_0.025_107.4)]">
               X
             </div>
-            <h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+            <h1 className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
               ¿En qué trabajamos hoy?
             </h1>
             <p className="mt-4 max-w-xl text-base leading-7 text-muted-foreground">
               Escribe una petición y Xendris elegirá internamente el modo cognitivo adecuado.
             </p>
+            <div className="mt-10 grid gap-3 sm:grid-cols-3 max-w-2xl w-full">
+              {[
+                {
+                  label: "Analizar candidato v4.7",
+                  description: "Revisar accesibilidad de PHI",
+                  prompt: "Analiza la accesibilidad y y_true para el candidato v4.7 PHI",
+                },
+                {
+                  label: "Verificar matriz cognitiva",
+                  description: "Revisar reglas de decisión",
+                  prompt: "Verifica la matriz de decisión cognitiva y mapeo de estados",
+                },
+                {
+                  label: "Ejecutar screening PHI",
+                  description: "Ejecutar campaña en phyng",
+                  prompt: "Ejecuta la campaña de screening de accesibilidad PHI",
+                },
+              ].map((chip, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setInput(chip.prompt)}
+                  className="flex flex-col items-start gap-1 rounded-2xl border bg-muted/10 p-4 text-left transition-all hover:bg-muted/20 hover:border-primary/25 hover:shadow-xs group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+                >
+                  <span className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
+                    {chip.label}
+                  </span>
+                  <span className="text-[11px] text-muted-foreground leading-normal">
+                    {chip.description}
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
         ) : (
-          <div className="mx-auto flex max-w-3xl flex-col gap-7">
+          <div className="mx-auto flex w-full max-w-[1180px] flex-col gap-6 px-8">
             {messages.map((message) => (
               <article
                 key={message.id}
@@ -436,25 +468,28 @@ export function ChatPanel({
                 )}
               >
                 {message.role === "assistant" ? (
-                  <div className="mt-1 flex size-8 shrink-0 items-center justify-center rounded-full border bg-muted text-xs font-semibold">
+                  <div className="mt-1 flex size-8 shrink-0 items-center justify-center rounded-full bg-[oklch(0.92_0.005_107.4)] border border-[oklch(0.85_0.01_107.4)] text-[oklch(0.20_0.012_107.4)] dark:bg-[oklch(0.20_0.012_107.4)] dark:border-[oklch(0.25_0.015_107.4)] dark:text-white text-[11px] font-black shadow-sm select-none">
                     X
                   </div>
                 ) : null}
                 <div
                   className={cn(
-                    "max-w-[82%] px-4 py-3 text-sm leading-6",
+                    "px-5 py-4 text-sm leading-6 transition-all duration-200",
                     message.role === "user"
-                      ? "whitespace-pre-line rounded-3xl bg-primary text-primary-foreground"
-                      : "rounded-2xl text-foreground"
+                      ? "chat-bubble-user whitespace-pre-line max-w-[74%]"
+                      : "chat-bubble-assistant max-w-[82%]"
                   )}
                 >
+                  <p className="mb-2 text-xs font-semibold opacity-70">
+                    {message.role === "user" ? "Tú" : "Xendris"}
+                  </p>
                   {message.role === "assistant" && message.metadata?.pending ? (
-                    <div className="flex items-center gap-3 text-muted-foreground">
+                    <div className="flex items-center gap-3 opacity-90">
                       <span>{message.content}</span>
                       <span className="flex items-center gap-1" aria-hidden="true">
-                        <span className="size-1.5 animate-pulse rounded-full bg-muted-foreground/70" />
-                        <span className="size-1.5 animate-pulse rounded-full bg-muted-foreground/70 [animation-delay:120ms]" />
-                        <span className="size-1.5 animate-pulse rounded-full bg-muted-foreground/70 [animation-delay:240ms]" />
+                        <span className="size-1.5 animate-pulse rounded-full bg-current opacity-70" />
+                        <span className="size-1.5 animate-pulse rounded-full bg-current opacity-70 [animation-delay:120ms]" />
+                        <span className="size-1.5 animate-pulse rounded-full bg-current opacity-70 [animation-delay:240ms]" />
                       </span>
                     </div>
                   ) : message.role === "assistant" ? (
@@ -462,25 +497,31 @@ export function ChatPanel({
                   ) : (
                     <p>{message.content}</p>
                   )}
-                  {message.role === "assistant" && message.metadata?.detectedIntent ? (
-                    <p className="mt-3 border-t pt-2 text-xs text-muted-foreground">
-                      Intent: {message.metadata.detectedIntent}
-                    </p>
-                  ) : null}
                   {message.role === "assistant" && !message.metadata?.pending ? (
-                    <div className="mt-3 flex items-center gap-2 border-t pt-2">
+                    <div className="mt-3 flex items-center gap-2 border-t border-current/15 pt-2">
                       <button
                         type="button"
+                        aria-label="Copiar respuesta de Xendris"
                         onClick={() => void handleCopyMessage(message)}
-                        className="rounded-md px-1.5 py-1 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                        className="flex items-center gap-1.5 rounded-md px-2 py-1 text-xs opacity-75 transition-all hover:bg-current/10 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current/25"
                       >
-                        {copiedMessageId === message.id ? "Copiado" : "Copiar"}
+                        {copiedMessageId === message.id ? (
+                          <>
+                            <Check className="size-3.5" />
+                            <span>Copiado</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="size-3.5" />
+                            <span>Copiar</span>
+                          </>
+                        )}
                       </button>
                     </div>
                   ) : null}
                 </div>
                 {message.role === "user" ? (
-                  <div className="mt-1 flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
+                  <div className="mt-1 flex size-8 shrink-0 items-center justify-center rounded-full bg-[oklch(0.90_0.015_107.4)] border border-[oklch(0.80_0.02_107.4)] text-[oklch(0.25_0.018_107.4)] dark:bg-[oklch(0.26_0.018_107.4)] dark:border-[oklch(0.35_0.025_107.4)] dark:text-white text-[10px] font-bold shadow-sm select-none">
                     Tú
                   </div>
                 ) : null}
@@ -491,11 +532,10 @@ export function ChatPanel({
         )}
       </div>
 
-      <div className="sticky bottom-0 bg-background/95 px-4 pb-5 pt-3 backdrop-blur">
-        <div className="mx-auto max-w-3xl space-y-3">
-          <AgentStatus route={route} providerLabel={providerLabel} />
+      <div className="sticky bottom-0 border-t bg-background/90 px-4 pb-5 pt-4 backdrop-blur-xl">
+        <div className="mx-auto w-full max-w-[1180px] px-8">
           {DEV_TOOLS_ENABLED ? (
-            <>
+            <div className="mb-3 flex flex-col gap-3">
               <DevRuntimeStatus
                 selectedProvider={selectedProvider}
                 streamingEnabled={STREAMING_ENABLED}
@@ -520,26 +560,36 @@ export function ChatPanel({
                   </select>
                 </label>
               </div>
-            </>
+            </div>
           ) : null}
           <form
-            className="rounded-3xl border bg-card p-2 shadow-lg shadow-black/5 focus-within:ring-3 focus-within:ring-ring/20"
+            className="rounded-[1.75rem] border border-border bg-card p-3 shadow-md transition-all duration-200 focus-within:border-primary/45 focus-within:ring-4 focus-within:ring-primary/10"
             onSubmit={handleSubmit}
           >
-            <Textarea
+            <label className="sr-only" htmlFor="xendris-composer">
+              Mensaje para Xendris
+            </label>
+            <textarea
+              id="xendris-composer"
               value={input}
               onChange={(event) => setInput(event.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Pregunta, pega código o describe el siguiente paso..."
               rows={1}
-              className="max-h-44 min-h-12 resize-none border-0 bg-transparent px-4 py-3 text-[15px] shadow-none focus-visible:ring-0"
+              className="w-full field-sizing-content max-h-44 min-h-[64px] resize-none border-0 bg-transparent px-4 py-3 text-[15px] leading-7 shadow-none placeholder:text-muted-foreground/75 outline-none focus:outline-none focus:ring-0 focus:border-0 focus-visible:ring-0"
             />
-            <div className="flex items-center justify-between gap-3 px-2 pb-1">
-              <p className="pl-2 text-xs text-muted-foreground">
+            <div className="flex flex-col gap-3 px-2 pb-1 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-muted-foreground">
                 Enter para enviar. Shift+Enter para nueva línea.
               </p>
-              <Button className="h-9 rounded-full px-4" type="submit" disabled={isSending || !input.trim()}>
-                {isSending ? "Enviando..." : "Enviar"}
+              <Button
+                className="h-10 rounded-full pl-5 pr-4 sm:min-w-24 flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-all"
+                type="submit"
+                disabled={isSending || !input.trim()}
+                aria-label="Enviar mensaje"
+              >
+                <span>{isSending ? "Enviando" : "Enviar"}</span>
+                <ArrowUp className="size-4 shrink-0" />
               </Button>
             </div>
           </form>

@@ -4,6 +4,7 @@ import type { XendrisCacheMetadata } from "src/lib/xendris/cache/types"
 import type { XendrisEvaluationResult } from "src/lib/xendris/evaluation/types"
 import type { XendrisRepairMetadata } from "src/lib/xendris/repair/types"
 import type { ExecutionSummary } from "src/lib/xendris/runtime/types"
+import type { EpistemicEvaluation } from "src/lib/xendris/epistemic/types"
 
 export type XendrisApiError = {
   code: string
@@ -27,10 +28,12 @@ export type XendrisChatSuccessResponse = {
   cached?: boolean
   cache?: XendrisCacheMetadata
   evaluation?: XendrisEvaluationResult
+  epistemicEvaluation?: EpistemicEvaluation
   controllerDecision?: AnswerControllerDecision
   repair?: XendrisRepairMetadata
   executionSummary?: ExecutionSummary
   route: IntentRoute
+  detectedLanguage?: "es" | "en"
 }
 
 export type XendrisChatErrorResponse = {

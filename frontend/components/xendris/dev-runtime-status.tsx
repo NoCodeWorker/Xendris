@@ -88,11 +88,21 @@ export function DevRuntimeStatus({
           value={lastMetadata?.executionSummary?.id ?? "none"}
         />
         <RuntimeRow
-          label="Latency"
+          label="Provider latency"
           value={
-            lastMetadata?.executionSummary
-              ? `${lastMetadata.executionSummary.latencyMs} ms`
+            lastMetadata?.executionSummary?.timings?.providerMs !== undefined
+              ? `${lastMetadata.executionSummary.timings.providerMs} ms`
               : "none"
+          }
+        />
+        <RuntimeRow
+          label="Total latency"
+          value={
+            lastMetadata?.executionSummary?.timings?.totalMs !== undefined
+              ? `${lastMetadata.executionSummary.timings.totalMs} ms`
+              : lastMetadata?.executionSummary
+                ? `${lastMetadata.executionSummary.latencyMs} ms`
+                : "none"
           }
         />
         <RuntimeRow
@@ -106,6 +116,38 @@ export function DevRuntimeStatus({
         <RuntimeRow
           label="Cache key"
           value={lastMetadata?.cache ? `${lastMetadata.cache.key.slice(0, 10)}...` : "none"}
+        />
+        <RuntimeRow
+          label="Epistemic risk"
+          value={lastMetadata?.epistemicEvaluation?.riskLevel ?? "none"}
+        />
+        <RuntimeRow
+          label="Overconfidence"
+          value={
+            lastMetadata?.epistemicEvaluation
+              ? lastMetadata.epistemicEvaluation.overconfidenceScore.toFixed(2)
+              : "none"
+          }
+        />
+        <RuntimeRow
+          label="Unsupported certainty"
+          value={
+            lastMetadata?.epistemicEvaluation
+              ? (lastMetadata.epistemicEvaluation.unsupportedCertainty ? "yes" : "no")
+              : "none"
+          }
+        />
+        <RuntimeRow
+          label="False premise risk"
+          value={
+            lastMetadata?.epistemicEvaluation
+              ? (lastMetadata.epistemicEvaluation.falsePremiseRisk ? "yes" : "no")
+              : "none"
+          }
+        />
+        <RuntimeRow
+          label="Detected language"
+          value={lastMetadata?.detectedLanguage ?? "none"}
         />
       </div>
     </section>

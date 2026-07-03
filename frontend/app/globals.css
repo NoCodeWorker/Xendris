@@ -130,3 +130,36 @@
     @apply font-sans;
   }
 }
+
+/* Custom premium Chat Bubbles with theme-aware olive styling and organic border-radius */
+.chat-bubble-user {
+  background-color: oklch(0.965 0.006 107.4) !important;
+  color: oklch(0.228 0.013 107.4) !important;
+  border: 1px solid oklch(0.89 0.01 107.4) !important;
+  border-radius: 1.5rem 0.375rem 1.5rem 1.5rem !important;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.02) !important;
+}
+
+.dark .chat-bubble-user {
+  background-color: oklch(0.26 0.018 107.4) !important;
+  color: oklch(0.988 0.003 106.5) !important;
+  border: 1px solid oklch(0.35 0.025 107.4) !important;
+  border-radius: 1.5rem 0.375rem 1.5rem 1.5rem !important;
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.25) !important;
+}
+
+.chat-bubble-assistant {
+  background-color: oklch(0.982 0.003 107.4) !important;
+  color: oklch(0.18 0.006 107.1) !important;
+  border: 1px solid oklch(0.93 0.005 107.4) !important;
+  border-radius: 0.375rem 1.5rem 1.5rem 1.5rem !important;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.01) !important;
+}
+
+.dark .chat-bubble-assistant {
+  background-color: oklch(0.18 0.01 107.4) !important;
+  color: oklch(0.93 0.005 106.5) !important;
+  border: 1px solid oklch(0.24 0.015 107.4) !important;
+  border-radius: 0.375rem 1.5rem 1.5rem 1.5rem !important;
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2) !important;
+}

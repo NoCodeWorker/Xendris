@@ -1,4 +1,6 @@
 "use client"
+/* eslint-disable react-hooks/set-state-in-effect */
+
 
 import * as React from "react"
 import { MoonIcon, SunIcon } from "lucide-react"
