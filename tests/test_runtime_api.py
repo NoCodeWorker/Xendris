@@ -1,8 +1,14 @@
-"""Integration tests for the Xendris Runtime API (Hito D)."""
+"""Integration tests for the Xendris Runtime API (Hito D + E)."""
 import os
+import tempfile
 import uuid
 
+_tmp_wallet = tempfile.mkdtemp(prefix="xendris_wallet_")
+_tmp_usage = tempfile.mkdtemp(prefix="xendris_usage_")
+
 os.environ["XENDRIS_API_KEY"] = "test-key-123"
+os.environ["XENDRIS_WALLET_DIR"] = _tmp_wallet
+os.environ["XENDRIS_USAGE_DIR"] = _tmp_usage
 
 from fastapi.testclient import TestClient
 from xendris.runtime_api import app
@@ -185,3 +191,101 @@ def test_execute_high_risk():
     assert r.status_code == 200
     data = r.json()
     assert data["decision"] in ("APPROVED", "APPROVED_WITH_LIMITATIONS", "BLOCKED", "ERROR")
+
+
+# ── Wallet / Billing tests (Hito E) ────────────────────────────────────
+
+def test_wallet_topup():
+    r = client.post("/v1/wallet/topup", headers=headers, json={
+        "tenant_id": "wallet-test-t1",
+        "amount": "100.00",
+    })
+    assert r.status_code == 200
+    data = r.json()
+    assert data["tenant_id"] == "wallet-test-t1"
+    assert data["new_balance"] == "100.00"
+    assert data["transaction_id"] is not None
+
+
+def test_wallet_topup_multiple():
+    client.post("/v1/wallet/topup", headers=headers, json={
+        "tenant_id": "wallet-test-t2",
+        "amount": "50.00",
+    })
+    r = client.post("/v1/wallet/topup", headers=headers, json={
+        "tenant_id": "wallet-test-t2",
+        "amount": "25.00",
+    })
+    assert r.status_code == 200
+    assert r.json()["new_balance"] == "75.00"
+
+
+def test_wallet_balance():
+    client.post("/v1/wallet/topup", headers=headers, json={
+        "tenant_id": "wallet-test-t3",
+        "amount": "200.00",
+    })
+    r = client.get("/v1/wallet/balance?tenant_id=wallet-test-t3", headers=headers)
+    assert r.status_code == 200
+    data = r.json()
+    assert data["balance"] == "200.00"
+    assert data["currency"] == "USD"
+    assert float(data["hard_cap"]) > 0
+    assert float(data["daily_limit"]) > 0
+
+
+def test_wallet_not_found():
+    r = client.get("/v1/wallet/balance?tenant_id=nonexistent-wallet", headers=headers)
+    assert r.status_code == 404
+
+
+def test_wallet_history():
+    client.post("/v1/wallet/topup", headers=headers, json={
+        "tenant_id": "wallet-test-t4",
+        "amount": "10.00",
+    })
+    client.post("/v1/wallet/topup", headers=headers, json={
+        "tenant_id": "wallet-test-t4",
+        "amount": "20.00",
+    })
+    r = client.get("/v1/wallet/history?tenant_id=wallet-test-t4&limit=10", headers=headers)
+    assert r.status_code == 200
+    data = r.json()
+    assert len(data["transactions"]) == 2
+    assert data["transactions"][0]["type"] == "CREDIT"
+
+
+def test_wallet_topup_custom_tenant():
+    r = client.post("/v1/wallet/topup", headers=headers, json={
+        "tenant_id": "custom-tenant-abc",
+        "amount": "500.00",
+        "description": "Initial top-up",
+    })
+    assert r.status_code == 200
+    assert r.json()["new_balance"] == "500.00"
+
+    r = client.get("/v1/wallet/balance?tenant_id=custom-tenant-abc", headers=headers)
+    assert r.json()["balance"] == "500.00"
+
+
+def test_usage_query_empty():
+    r = client.get("/v1/usage?tenant_id=nonexistent-usage", headers=headers)
+    assert r.status_code == 200
+    assert r.json() == []
+
+
+def test_wallet_topup_large_amount():
+    r = client.post("/v1/wallet/topup", headers=headers, json={
+        "tenant_id": "wallet-test-large",
+        "amount": "9999.99",
+    })
+    assert r.status_code == 200
+    assert r.json()["new_balance"] == "9999.99"
+
+
+def test_wallet_unauthorized():
+    r = client.post("/v1/wallet/topup", json={
+        "tenant_id": "no-auth",
+        "amount": "10.00",
+    })
+    assert r.status_code == 401

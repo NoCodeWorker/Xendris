@@ -2,11 +2,14 @@
 Xendris Runtime API — Trust-routed AI inference gateway.
 
 Endpoints:
-    GET  /v1/health             — Health check
-    POST /v1/runtime/execute    — Full runtime: select → call → gate → respond
-    POST /v1/claims/evaluate    — Evaluate existing output claims (no model call)
-    POST /v1/routes/select      — Model selection only (no execution)
-    GET  /v1/ledger/{run_id}    — Retrieve trust ledger for a run
+    GET   /v1/health                — Health check
+    POST  /v1/runtime/execute       — Full runtime: select → call → gate → respond
+    POST  /v1/claims/evaluate       — Evaluate existing output claims (no model call)
+    POST  /v1/routes/select         — Model selection only (no execution)
+    GET   /v1/ledger/{run_id}       — Retrieve trust ledger for a run
+    POST  /v1/wallet/topup          — Simulated wallet top-up
+    GET   /v1/wallet/balance        — Get wallet balance
+    GET   /v1/usage                 — Query usage records
 """
 
 from __future__ import annotations
@@ -16,6 +19,8 @@ import os
 import secrets
 import time
 import uuid
+from datetime import datetime
+from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
@@ -41,6 +46,11 @@ from xendris.core.router.risk_policy import RiskPolicy
 from xendris.core.local.context import LocalContext
 from xendris.core.sectors.sector import EpistemicSector
 from xendris.core.trust.types import ClaimType, RiskLevel
+from xendris.core.wallet import (
+    WalletStore, BudgetPolicy, BalanceCheckGate, MarginCalculator,
+    TenantWallet, WalletTransaction,
+)
+from xendris.core.usage import UsageMeter, UsageRecord, ProviderCostRecord, UsageQuery
 
 # ── App setup ──────────────────────────────────────────────────────────
 
@@ -49,6 +59,13 @@ LEDGER_DIR.mkdir(parents=True, exist_ok=True)
 
 # In-memory ledger storage (per run_id)
 _ledgers: dict[str, "TrustLedgerWriter"] = {}
+
+# Wallet & usage stores
+_wallet_store = WalletStore(os.getenv("XENDRIS_WALLET_DIR", "data/wallets"))
+_usage_meter = UsageMeter(os.getenv("XENDRIS_USAGE_DIR", "data/usage"))
+_budget_policy = BudgetPolicy(_wallet_store)
+_balance_gate = BalanceCheckGate(_wallet_store)
+_margin_calc = MarginCalculator()
 
 app = FastAPI(
     title="Xendris Runtime API",
@@ -167,6 +184,49 @@ class HealthResponse(BaseModel):
     status: str
     version: str
     uptime_s: float
+
+
+# ── Wallet / Usage models ───────────────────────────────────────────────
+
+class TopupRequest(BaseModel):
+    tenant_id: str
+    amount: str = Field(..., description="Amount as decimal string, e.g. '50.00'")
+    description: str = ""
+
+
+class TopupResponse(BaseModel):
+    tenant_id: str
+    new_balance: str
+    transaction_id: str
+
+
+class BalanceResponse(BaseModel):
+    tenant_id: str
+    balance: str
+    currency: str
+    hard_cap: str
+    daily_limit: str
+    monthly_limit: str
+
+
+class UsageQueryRequest(BaseModel):
+    tenant_id: str
+    start_date: str | None = None
+    end_date: str | None = None
+    project_id: str | None = None
+    model_id: str | None = None
+
+
+class UsageRecordResponse(BaseModel):
+    usage_id: str
+    tenant_id: str
+    model_id: str
+    provider: str
+    input_tokens: int
+    output_tokens: int
+    provider_cost: str
+    xendris_cost: str
+    timestamp: str
 
 
 # ── Helpers ────────────────────────────────────────────────────────────
@@ -458,3 +518,76 @@ def ledger_get(run_id: str) -> dict:
         "record_count": len(writer._records),
         "records": [r.to_dict() if hasattr(r, "to_dict") else r for r in writer._records],
     }
+
+
+# ── Wallet / Usage endpoints ──────────────────────────────────────────
+
+@app.post("/v1/wallet/topup", response_model=TopupResponse)
+def wallet_topup(req: TopupRequest) -> TopupResponse:
+    amount = Decimal(req.amount)
+    wallet = _wallet_store.get_wallet(req.tenant_id)
+    if wallet is None:
+        wallet = _wallet_store.create_wallet(req.tenant_id)
+    wallet, tx = _wallet_store.credit(req.tenant_id, amount, req.description)
+    return TopupResponse(
+        tenant_id=req.tenant_id,
+        new_balance=str(wallet.balance),
+        transaction_id=tx.transaction_id,
+    )
+
+
+@app.get("/v1/wallet/balance", response_model=BalanceResponse)
+def wallet_balance(tenant_id: str) -> BalanceResponse:
+    wallet = _wallet_store.get_wallet(tenant_id)
+    if wallet is None:
+        raise HTTPException(status_code=404, detail=f"Wallet not found: {tenant_id}")
+    return BalanceResponse(
+        tenant_id=wallet.tenant_id,
+        balance=str(wallet.balance),
+        currency=wallet.currency,
+        hard_cap=str(wallet.hard_cap),
+        daily_limit=str(wallet.daily_limit),
+        monthly_limit=str(wallet.monthly_limit),
+    )
+
+
+@app.get("/v1/wallet/history")
+def wallet_history(tenant_id: str, limit: int = 50) -> dict:
+    txs = _wallet_store.get_transactions(tenant_id, limit)
+    return {
+        "tenant_id": tenant_id,
+        "transactions": [
+            {
+                "transaction_id": tx.transaction_id,
+                "type": tx.transaction_type,
+                "amount": str(tx.amount),
+                "description": tx.description,
+                "timestamp": tx.timestamp.isoformat(),
+            }
+            for tx in txs
+        ],
+    }
+
+
+@app.get("/v1/usage", response_model=list[UsageRecordResponse])
+def usage_query(tenant_id: str, start_date: str | None = None, end_date: str | None = None) -> list[UsageRecordResponse]:
+    q = UsageQuery(tenant_id=tenant_id)
+    if start_date:
+        q.start_date = datetime.fromisoformat(start_date)
+    if end_date:
+        q.end_date = datetime.fromisoformat(end_date)
+    records = _usage_meter.query_usage(q)
+    return [
+        UsageRecordResponse(
+            usage_id=r.usage_id,
+            tenant_id=r.tenant_id,
+            model_id=r.model_id,
+            provider=r.provider,
+            input_tokens=r.input_tokens,
+            output_tokens=r.output_tokens,
+            provider_cost=str(r.provider_cost),
+            xendris_cost=str(r.xendris_cost),
+            timestamp=r.timestamp.isoformat(),
+        )
+        for r in records
+    ]
