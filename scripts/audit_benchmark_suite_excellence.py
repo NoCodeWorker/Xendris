@@ -45,10 +45,10 @@ def main(argv: list[str] | None = None) -> int:
         [audit_summary_file(path, docs_dir) for path in summary_paths],
         quarantine_paths,
     )
-    payload = build_suite_audit(records)
-
     output_json = Path(args.output_json)
     output_md = Path(args.output_md)
+    payload = build_suite_audit(records)
+    payload = preserve_generated_timestamp_if_materially_unchanged(payload, output_json)
     output_json.parent.mkdir(parents=True, exist_ok=True)
     output_md.parent.mkdir(parents=True, exist_ok=True)
     output_json.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True), encoding="utf-8")
@@ -171,6 +171,30 @@ def build_suite_audit(records: list[dict[str, Any]]) -> dict[str, Any]:
         "quarantined_rejected_count": len(quarantined_rejected),
         "records": records,
     }
+
+
+def preserve_generated_timestamp_if_materially_unchanged(
+    payload: dict[str, Any],
+    output_json: Path,
+) -> dict[str, Any]:
+    """Keep tracked audit outputs stable when only the timestamp would change."""
+    if not output_json.exists():
+        return payload
+    try:
+        existing = json.loads(output_json.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return payload
+    if _without_generated_at(existing) == _without_generated_at(payload):
+        updated = dict(payload)
+        updated["generated_at_utc"] = existing.get("generated_at_utc", payload["generated_at_utc"])
+        return updated
+    return payload
+
+
+def _without_generated_at(payload: dict[str, Any]) -> dict[str, Any]:
+    comparable = dict(payload)
+    comparable.pop("generated_at_utc", None)
+    return comparable
 
 
 def render_markdown(payload: dict[str, Any]) -> str:
