@@ -1,0 +1,26 @@
+{
+  "admitted": [
+    {
+      "blocker_count": 0,
+      "decision": "READY_FOR_INTERPRETATION",
+      "reason": "Ready for careful interpretation.",
+      "report_path": null,
+      "status": "ADMITTED",
+      "summary_path": "runs/real_deepseek_trust_traps_v0_1_7507d5f1_summary.json",
+      "warning_count": 0
+    },
+    {
+      "blocker_count": 0,
+      "decision": "READY_FOR_INTERPRETATION",
+      "reason": "Ready for careful interpretation.",
+      "report_path": "docs/benchmarks/RUN_DEEPSEEK_VS_XENDRIS_PROGRAMMING_RELIABILITY_V0_1_2026_07_04.md",
+      "status": "ADMITTED",
+      "summary_path": "runs/deepseek_vs_xendris_programming_reliability_v0_1_2026_07_04_summary.json",
+      "warning_count": 0
+    }
+  ],
+  "admitted_count": 2,
+  "rejected": [],
+  "rejected_count": 0,
+  "total_count": 2
+}

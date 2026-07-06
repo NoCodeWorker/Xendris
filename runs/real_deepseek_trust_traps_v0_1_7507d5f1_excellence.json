@@ -1,0 +1,93 @@
+{
+  "blockers": [
+    {
+      "code": "missing_dataset_hash",
+      "message": "Dataset hash is required.",
+      "severity": "BLOCKER"
+    },
+    {
+      "code": "missing_dataset_version_or_name",
+      "message": "Dataset name or dataset version is required.",
+      "severity": "BLOCKER"
+    },
+    {
+      "code": "missing_no_universal_superiority_warning",
+      "message": "Report must include a clear no-universal-superiority warning.",
+      "severity": "BLOCKER"
+    },
+    {
+      "code": "missing_limitations_section",
+      "message": "Report must include a limitations section.",
+      "severity": "BLOCKER"
+    }
+  ],
+  "decision": "BLOCKED_FOR_INTERPRETATION",
+  "has_blockers": true,
+  "has_warnings": true,
+  "is_ready": false,
+  "issues": [
+    {
+      "code": "missing_dataset_hash",
+      "message": "Dataset hash is required.",
+      "severity": "BLOCKER"
+    },
+    {
+      "code": "missing_dataset_version_or_name",
+      "message": "Dataset name or dataset version is required.",
+      "severity": "BLOCKER"
+    },
+    {
+      "code": "missing_no_universal_superiority_warning",
+      "message": "Report must include a clear no-universal-superiority warning.",
+      "severity": "BLOCKER"
+    },
+    {
+      "code": "missing_limitations_section",
+      "message": "Report must include a limitations section.",
+      "severity": "BLOCKER"
+    },
+    {
+      "code": "missing_dataset_hash_algorithm",
+      "message": "Dataset hash algorithm is not disclosed.",
+      "severity": "WARNING"
+    },
+    {
+      "code": "missing_run_date",
+      "message": "Run date is not disclosed.",
+      "severity": "WARNING"
+    },
+    {
+      "code": "missing_external_data_disclosure",
+      "message": "External data disclosure policy is not documented.",
+      "severity": "WARNING"
+    },
+    {
+      "code": "missing_pricing_assumptions",
+      "message": "Pricing assumptions are not documented.",
+      "severity": "WARNING"
+    }
+  ],
+  "notes": [],
+  "warnings": [
+    {
+      "code": "missing_dataset_hash_algorithm",
+      "message": "Dataset hash algorithm is not disclosed.",
+      "severity": "WARNING"
+    },
+    {
+      "code": "missing_run_date",
+      "message": "Run date is not disclosed.",
+      "severity": "WARNING"
+    },
+    {
+      "code": "missing_external_data_disclosure",
+      "message": "External data disclosure policy is not documented.",
+      "severity": "WARNING"
+    },
+    {
+      "code": "missing_pricing_assumptions",
+      "message": "Pricing assumptions are not documented.",
+      "severity": "WARNING"
+    }
+  ]
+}

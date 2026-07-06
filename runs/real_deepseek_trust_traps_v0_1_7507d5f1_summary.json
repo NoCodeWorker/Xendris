@@ -1,0 +1,33 @@
+{
+  "total_samples": 100,
+  "xendris_wins": 90,
+  "deepseek_wins": 0,
+  "ties": 10,
+  "average_deepseek_score": 0.1,
+  "average_xendris_score": 0.976,
+  "average_delta": 0.876,
+  "xendris_win_rate": 0.9,
+  "deepseek_win_rate": 0.0,
+  "tie_rate": 0.1,
+  "average_latency_deepseek_ms": 4685.87,
+  "average_latency_xendris_ms": 9564.32,
+  "latency_overhead_ms": 4878.45,
+  "total_cost_deepseek_usd": 0.009163,
+  "total_cost_xendris_usd": 0.009435,
+  "cost_overhead_usd": 0.000272,
+  "xendris_exclusion_rate": 0.9,
+  "xendris_human_review_rate": 0.15,
+  "cost_per_valid_answer_deepseek": 9.2e-05,
+  "cost_per_valid_answer_xendris": 0.000944,
+  "metadata": {
+    "run_id": "7507d5f1",
+    "run_started_at": "2026-07-06T15:18:34.293171+00:00Z",
+    "execution_mode": "real-provider",
+    "provider": "deepseek",
+    "model": "deepseek-chat",
+    "temperature": 0.0,
+    "max_tokens": 1024,
+    "xendris_version": "0.2.0",
+    "python_version": "3.11.9"
+  }
+}

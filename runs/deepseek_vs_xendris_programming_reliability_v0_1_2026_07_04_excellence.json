@@ -6,22 +6,12 @@
   "is_ready": true,
   "issues": [
     {
-      "code": "dry_run_result",
-      "message": "Execution mode is dry-run; provider performance is not measured.",
-      "severity": "NOTE"
-    },
-    {
       "code": "closed_dataset",
       "message": "Artifact describes a closed dataset.",
       "severity": "NOTE"
     }
   ],
   "notes": [
-    {
-      "code": "dry_run_result",
-      "message": "Execution mode is dry-run; provider performance is not measured.",
-      "severity": "NOTE"
-    },
     {
       "code": "closed_dataset",
       "message": "Artifact describes a closed dataset.",

@@ -1,0 +1,231 @@
+{
+  "blocked_count": 0,
+  "generated_at_utc": "2026-07-06T11:50:57.767499+00:00",
+  "generated_at_utc": "2026-07-06T11:50:42.139126+00:00",
+  "quarantined_rejected_count": 3,
+  "ready_count": 2,
+  "records": [
+    {
+      "blocker_count": 0,
+      "decision": "READY_FOR_INTERPRETATION",
+      "has_blockers": false,
+      "is_quarantined_historical": false,
+      "is_ready": true,
+      "issues": [
+        {
+          "code": "dry_run_result",
+          "message": "Execution mode is dry-run; provider performance is not measured.",
+          "severity": "NOTE"
+        },
+        {
+          "code": "closed_dataset",
+          "message": "Artifact describes a closed dataset.",
+          "severity": "NOTE"
+        }
+      ],
+      "note_count": 2,
+      "report_path": "docs\\benchmarks\\RUN_DEEPSEEK_VS_XENDRIS_PROGRAMMING_RELIABILITY_V0_1_2026_07_04.md",
+      "summary_path": "runs\\deepseek_vs_xendris_programming_reliability_v0_1_2026_07_04_summary.json",
+      "warning_count": 0
+    },
+    {
+      "blocker_count": 1,
+      "decision": "BLOCKED_FOR_INTERPRETATION",
+      "has_blockers": true,
+      "is_quarantined_historical": true,
+      "is_ready": false,
+      "issues": [
+        {
+          "code": "dry_run_result",
+          "message": "Execution mode is dry-run; provider performance is not measured.",
+          "severity": "NOTE"
+        },
+        {
+          "code": "dry_run_report_claims_real_provider_performance",
+          "message": "Dry-run report suggests real provider performance.",
+          "severity": "BLOCKER"
+        },
+        {
+          "code": "missing_dataset_hash_algorithm",
+          "message": "Dataset hash algorithm is not disclosed.",
+          "severity": "WARNING"
+        },
+        {
+          "code": "missing_run_date",
+          "message": "Run date is not disclosed.",
+          "severity": "WARNING"
+        },
+        {
+          "code": "missing_external_data_disclosure",
+          "message": "External data disclosure policy is not documented.",
+          "severity": "WARNING"
+        },
+        {
+          "code": "missing_pricing_assumptions",
+          "message": "Pricing assumptions are not documented.",
+          "severity": "WARNING"
+        }
+      ],
+      "note_count": 1,
+      "report_path": "docs\\benchmarks\\RUN_DEEPSEEK_VS_XENDRIS_TRUST_TRAPS_V0_1_2026_07_04.md",
+      "summary_path": "runs\\deepseek_vs_xendris_trust_traps_v0_1_2026_07_04_summary.json",
+      "warning_count": 4
+    },
+    {
+      "blocker_count": 4,
+      "decision": "BLOCKED_FOR_INTERPRETATION",
+      "has_blockers": true,
+      "is_quarantined_historical": true,
+      "is_ready": false,
+      "issues": [
+        {
+          "code": "missing_dataset_hash",
+          "message": "Dataset hash is required.",
+          "severity": "BLOCKER"
+        },
+        {
+          "code": "missing_model_name_or_system_names",
+          "message": "Model name or comparable system names are required.",
+          "severity": "BLOCKER"
+        },
+        {
+          "code": "missing_no_universal_superiority_warning",
+          "message": "Report must include a clear no-universal-superiority warning.",
+          "severity": "BLOCKER"
+        },
+        {
+          "code": "missing_limitations_section",
+          "message": "Report must include a limitations section.",
+          "severity": "BLOCKER"
+        },
+        {
+          "code": "dry_run_result",
+          "message": "Execution mode is dry-run; provider performance is not measured.",
+          "severity": "NOTE"
+        },
+        {
+          "code": "missing_temperature",
+          "message": "Temperature is not disclosed.",
+          "severity": "WARNING"
+        },
+        {
+          "code": "missing_max_tokens",
+          "message": "Max token limit is not disclosed.",
+          "severity": "WARNING"
+        },
+        {
+          "code": "missing_xendris_version",
+          "message": "Xendris version is not disclosed.",
+          "severity": "WARNING"
+        },
+        {
+          "code": "missing_python_version",
+          "message": "Python version is not disclosed.",
+          "severity": "WARNING"
+        },
+        {
+          "code": "missing_dataset_hash_algorithm",
+          "message": "Dataset hash algorithm is not disclosed.",
+          "severity": "WARNING"
+        },
+        {
+          "code": "missing_run_date",
+          "message": "Run date is not disclosed.",
+          "severity": "WARNING"
+        },
+        {
+          "code": "missing_provider_disclosure",
+          "message": "Provider is not disclosed.",
+          "severity": "WARNING"
+        },
+        {
+          "code": "missing_external_data_disclosure",
+          "message": "External data disclosure policy is not documented.",
+          "severity": "WARNING"
+        },
+        {
+          "code": "missing_pricing_assumptions",
+          "message": "Pricing assumptions are not documented.",
+          "severity": "WARNING"
+        }
+      ],
+      "note_count": 1,
+      "report_path": "docs\\benchmarks\\RUN_DEEPSEEK_VS_XENDRIS_TRUST_TRAPS_V0_1_2026_07_04_V2.md",
+      "summary_path": "runs\\deepseek_vs_xendris_trust_traps_v0_1_2026_07_04_v2_summary.json",
+      "warning_count": 9
+    },
+    {
+      "blocker_count": 1,
+      "decision": "BLOCKED_FOR_INTERPRETATION",
+      "has_blockers": true,
+      "is_quarantined_historical": true,
+      "is_ready": false,
+      "issues": [
+        {
+          "code": "dry_run_result",
+          "message": "Execution mode is dry-run; provider performance is not measured.",
+          "severity": "NOTE"
+        },
+        {
+          "code": "dry_run_report_claims_real_provider_performance",
+          "message": "Dry-run report suggests real provider performance.",
+          "severity": "BLOCKER"
+        },
+        {
+          "code": "missing_dataset_hash_algorithm",
+          "message": "Dataset hash algorithm is not disclosed.",
+          "severity": "WARNING"
+        },
+        {
+          "code": "missing_run_date",
+          "message": "Run date is not disclosed.",
+          "severity": "WARNING"
+        },
+        {
+          "code": "missing_external_data_disclosure",
+          "message": "External data disclosure policy is not documented.",
+          "severity": "WARNING"
+        },
+        {
+          "code": "missing_pricing_assumptions",
+          "message": "Pricing assumptions are not documented.",
+          "severity": "WARNING"
+        }
+      ],
+      "note_count": 1,
+      "report_path": "docs\\benchmarks\\RUN_DEEPSEEK_VS_XENDRIS_TRUST_TRAPS_V0_1.md.template",
+      "summary_path": "runs\\deepseek_vs_xendris_trust_traps_v0_1_summary.json",
+      "warning_count": 4
+    },
+    {
+      "blocker_count": 0,
+      "decision": "READY_FOR_INTERPRETATION",
+      "has_blockers": false,
+      "is_quarantined_historical": true,
+      "is_ready": true,
+      "issues": [
+        {
+          "code": "dry_run_result",
+          "message": "Execution mode is dry-run; provider performance is not measured.",
+          "severity": "NOTE"
+        },
+        {
+          "code": "benchmark_local_only",
+          "message": "Report limits interpretation to the benchmark context.",
+          "severity": "NOTE"
+        },
+        {
+          "code": "closed_dataset",
+          "message": "Artifact describes a closed dataset.",
+          "severity": "NOTE"
+        }
+      ],
+      "note_count": 3,
+      "report_path": "runs\\trust_excellence_check\\deepseek_vs_xendris_trust_traps_v0_1_report.md",
+      "summary_path": "runs\\trust_excellence_check\\deepseek_vs_xendris_trust_traps_v0_1_summary.json",
+      "warning_count": 0
+    }
+  ],
+  "summary_count": 5,
+  "warning_count": 0
+}
