@@ -1,0 +1,66 @@
+# Ejecución: DeepSeek Base vs Xendris + DeepSeek (v0.1)
+
+Este documento detalla la plantilla de informe y la configuración recomendada para ejecutar y registrar la corrida comparativa real entre DeepSeek base y Xendris sobre las 100 muestras de **Trust Traps Dataset v0.1**.
+
+## Propósito
+
+Auditar de forma cuantitativa el impacto de la compuerta cognitiva de Xendris sobre el modelo base DeepSeek, midiendo de manera objetiva los scores lógicos obtenidos, las latencias adicionales de procesamiento, los costes estimados de llamadas de API (Tokens/USD), y las decisiones correctas de exclusión frente a las trampas.
+
+---
+
+## Configuración Exacta de Ejecución
+
+Para garantizar la reproducibilidad, la corrida debe realizarse bajo los siguientes parámetros estables:
+
+* **Modelo Base**: `deepseek-chat` (DeepSeek V3)
+* **Temperature**: `0.0`
+* **Top_p**: `1.0`
+* **Max Tokens**: `1024`
+* **Timeout por Muestra**: `95` segundos
+* **Streaming**: Desactivado
+* **Version de Xendris**: `v0.4.5`
+* **Dataset**: `Trust Traps Dataset v0.1`
+
+---
+
+## Tabla Resumen de Métricas (Plantilla de Resultados)
+
+| Métrica | DeepSeek Base | Xendris + DeepSeek | Overhead / Delta |
+| :--- | :---: | :---: | :---: |
+| **Puntuación Media (Rúbrica)** | `{avg_score_ds}` | `{avg_score_xe}` | `+{delta_score}` |
+| **Victorias / Empates / Derrotas** | `{wins_ds}` | `{wins_xe}` / `{ties}` | — |
+| **Tasa de Acierto (Win Rate %)** | `{win_rate_ds}%` | `{win_rate_xe}%` | — |
+| **Latencia Promedio (ms)** | `{avg_latency_ds} ms` | `{avg_latency_xe} ms` | `{overhead_latency} ms` |
+| **Coste Total Estimado (USD)** | `${tot_cost_ds}` | `${tot_cost_xe}` | `${overhead_cost}` |
+| **Coste por Respuesta Válida (USD)**| `${cost_per_valid_ds}` | `${cost_per_valid_xe}` | — |
+| **Tasa de Exclusión (Exclusion Rate %)**| `0.0%` | `{exclusion_rate_xe}%` | — |
+| **Tasa de Revisión Humana (%)** | `0.0%` | `{human_review_rate_xe}%` | — |
+
+---
+
+## Interpretación y Análisis
+
+* **Victorias de Xendris**: Se registran cuando Xendris excluye de forma limpia y determinista una trampa (obteniendo un score de `1.0`), mientras que DeepSeek base aprueba la muestra o escala erróneamente a revisión humana (obteniendo score inferior).
+* **Coste por Respuesta Válida**: Penaliza los fallos silenciosos dividiendo el coste total de API entre las respuestas que efectivamente pasaron la compuerta de scoring (`scoring_allowed = True`).
+* **Overhead Temporal**: Representa los milisegundos consumidos localmente por las llamadas y evaluaciones de claims del Trust Kernel de Xendris.
+
+---
+
+## Limitaciones y Advertencia Expresa
+
+> [!IMPORTANT]
+> **Advertencia de No Superioridad Universal**: Este resultado no demuestra superioridad universal ni general de Xendris. Solo mide la mejora de precisión lógica en decisiones operativas bajo el dataset específico **Trust Traps v0.1** y bajo esta configuración de hiperparámetros. Xendris actúa como una capa protectora sobre el modelo base y no reemplaza las capacidades de generación generalista de este.
+
+---
+
+## Comandos de Ejecución y Validación
+
+Para realizar la corrida real (requiere `DEEPSEEK_API_KEY` en el entorno):
+```powershell
+python scripts/run_deepseek_vs_xendris_trust_traps.py
+```
+
+Para realizar una validación offline (dry-run/mock):
+```powershell
+python scripts/run_deepseek_vs_xendris_trust_traps.py --dry-run
+```

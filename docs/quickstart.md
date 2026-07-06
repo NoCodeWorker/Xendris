@@ -145,7 +145,7 @@ Full Python suite:
 Current latest local validation for the v0.2.0 API boundary:
 
 ```txt
-1070 passed, 4 warnings
+1446 passed, 4 warnings
 ```
 
 ## Lean Status

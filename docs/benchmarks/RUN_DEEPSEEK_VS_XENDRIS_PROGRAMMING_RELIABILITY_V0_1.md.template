@@ -1,0 +1,82 @@
+# DeepSeek Base vs Xendris+DeepSeek - Programming Reliability v0.1
+
+Date: YYYY-MM-DD
+
+## Purpose
+
+Measure programming reliability under a closed dataset with executable tests,
+contract preservation, basic security checks, and production-overclaim control.
+
+## Configuration
+
+| Field | Value |
+|---|---|
+| Execution mode | `dry-run` or `real-provider` |
+| Provider | `mock` or `deepseek` |
+| Model | `MODEL_NAME` |
+| Temperature | `0.0` |
+| Top p | `1` |
+| Max tokens | `2048` |
+| Sample timeout | `2.0 s` |
+| Dataset hash | `SHA256` |
+| Xendris version | `VERSION` |
+| Python version | `VERSION` |
+
+## No Universal Superiority Warning
+
+This run is valid only for Programming Reliability v0.1 under the listed
+configuration. It does not imply universal programming superiority.
+
+## Programming Reliability vs Production Claims
+
+Passing benchmark-owned tests means the output satisfied this local dataset and
+sandbox. It does not prove production readiness, security completeness,
+operational robustness, or real-world performance.
+
+## Global Results
+
+| Metric | Value |
+|---|---:|
+| Total samples | TBD |
+| DeepSeek average score | TBD |
+| Xendris average score | TBD |
+| Average delta | TBD |
+| Xendris wins | TBD |
+| DeepSeek wins | TBD |
+| Ties | TBD |
+
+## Category Results
+
+| Category | DeepSeek score | Xendris score | Delta |
+|---|---:|---:|---:|
+| `bug_fixing` | TBD | TBD | TBD |
+| `unit_tests` | TBD | TBD | TBD |
+| `refactor_safety` | TBD | TBD | TBD |
+| `edge_cases` | TBD | TBD | TBD |
+| `security_basics` | TBD | TBD | TBD |
+| `performance` | TBD | TBD | TBD |
+| `api_contracts` | TBD | TBD | TBD |
+| `normal_control` | TBD | TBD | TBD |
+
+## Costs
+
+Document estimated provider cost and cost per correct solution.
+
+## Latency
+
+Document average latency per system.
+
+## Limitations
+
+- Closed dataset.
+- Narrow sandbox.
+- Tests do not prove full correctness.
+- Results do not imply production readiness.
+- Results do not imply universal superiority.
+
+## Next Steps
+
+- Run real-provider mode only with explicit approval to send dataset prompts to
+  the external provider.
+- Add multi-model comparisons.
+- Expand language coverage after Python baseline is stable.

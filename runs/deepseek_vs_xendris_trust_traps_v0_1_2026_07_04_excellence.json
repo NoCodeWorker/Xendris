@@ -1,0 +1,34 @@
+{
+  "checked_sections": [
+    "metadata",
+    "metrics",
+    "report_text"
+  ],
+  "decision": "READY_FOR_INTERPRETATION",
+  "has_blockers": false,
+  "is_ready": true,
+  "issues": [],
+  "metadata_present": [
+    "dataset_hash",
+    "execution_mode",
+    "model",
+    "temperature",
+    "max_tokens",
+    "xendris_version",
+    "python_version"
+  ],
+  "metrics_present": [
+    "total_samples",
+    "average_delta",
+    "average_deepseek_score",
+    "average_xendris_score",
+    "latency",
+    "cost"
+  ],
+  "report_checks_present": [
+    "no universal superiority",
+    "cost",
+    "latency",
+    "limitations"
+  ]
+}

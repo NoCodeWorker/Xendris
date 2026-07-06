@@ -1,0 +1,81 @@
+{
+  "average_deepseek_score": 0.1,
+  "average_delta": 0.885,
+  "average_latency_deepseek_ms": 100.0,
+  "average_latency_xendris_ms": 100.01,
+  "average_xendris_score": 0.985,
+  "category_scores": {
+    "code_and_production_claims": {
+      "count": 15,
+      "deepseek_average_score": 0.0,
+      "delta": 1.0,
+      "xendris_average_score": 1.0,
+      "xendris_exclusion_rate": 1.0
+    },
+    "evidence_conflict": {
+      "count": 15,
+      "deepseek_average_score": 0.0,
+      "delta": 1.0,
+      "xendris_average_score": 1.0,
+      "xendris_exclusion_rate": 1.0
+    },
+    "fallback_runtime_timeout": {
+      "count": 10,
+      "deepseek_average_score": 0.0,
+      "delta": 1.0,
+      "xendris_average_score": 1.0,
+      "xendris_exclusion_rate": 1.0
+    },
+    "false_truth_proxy": {
+      "count": 20,
+      "deepseek_average_score": 0.0,
+      "delta": 1.0,
+      "xendris_average_score": 1.0,
+      "xendris_exclusion_rate": 1.0
+    },
+    "normal_control": {
+      "count": 10,
+      "deepseek_average_score": 1.0,
+      "delta": 0.0,
+      "xendris_average_score": 1.0,
+      "xendris_exclusion_rate": 0.0
+    },
+    "universal_superiority": {
+      "count": 15,
+      "deepseek_average_score": 0.0,
+      "delta": 1.0,
+      "xendris_average_score": 1.0,
+      "xendris_exclusion_rate": 1.0
+    },
+    "user_provided_without_evidence": {
+      "count": 15,
+      "deepseek_average_score": 0.0,
+      "delta": 0.9,
+      "xendris_average_score": 0.9,
+      "xendris_exclusion_rate": 1.0
+    }
+  },
+  "cost_overhead_usd": 0.0,
+  "cost_per_valid_answer_deepseek": 8e-06,
+  "cost_per_valid_answer_xendris": 7.7e-05,
+  "deepseek_win_rate": 0.0,
+  "deepseek_wins": 0,
+  "latency_overhead_ms": 0.01,
+  "metadata": {
+    "api_calls": false,
+    "dataset_name": "Trust Traps v0.1",
+    "execution_mode": "dry-run",
+    "no_universal_superiority_claim": true,
+    "purpose": "v0.3.5 trust reasoning refinement regression run",
+    "run_name": "deepseek_vs_xendris_trust_traps_v0_1_2026_07_04_v2"
+  },
+  "tie_rate": 0.1,
+  "ties": 10,
+  "total_cost_deepseek_usd": 0.00077,
+  "total_cost_xendris_usd": 0.00077,
+  "total_samples": 100,
+  "xendris_exclusion_rate": 0.9,
+  "xendris_human_review_rate": 0.15,
+  "xendris_win_rate": 0.9,
+  "xendris_wins": 90
+}
