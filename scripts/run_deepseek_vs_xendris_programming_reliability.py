@@ -69,7 +69,11 @@ class ProgrammingDeepSeekCallable:
         self.xendris_mode = xendris_mode
 
     def __call__(self, sample: ProgrammingSample, config: Mapping[str, Any] | None = None) -> dict[str, Any]:
-        prompt = _compose_programming_prompt(sample, xendris_mode=self.xendris_mode)
+        prompt = _compose_programming_prompt(
+            sample,
+            xendris_mode=self.xendris_mode,
+            calibration_audit=(config or {}).get("calibration_audit") if self.xendris_mode else None,
+        )
         benchmark_sample = BenchmarkSample(
             sample_id=sample.sample_id,
             prompt=prompt,
@@ -295,6 +299,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max-tokens", type=int, default=2048)
     parser.add_argument("--timeout", type=float, default=95.0)
     parser.add_argument("--sample-timeout", type=float, default=2.0)
+    parser.add_argument(
+        "--experimental-calibration",
+        action="store_true",
+        help="Enable experimental benchmark-aware intervention calibration for the Xendris path.",
+    )
     args = parser.parse_args(argv)
 
     samples = load_programming_reliability_v0_1()
@@ -326,6 +335,14 @@ def main(argv: list[str] | None = None) -> int:
         provider = "deepseek"
 
     config = {"timeout_seconds": args.sample_timeout}
+    xendris_config = {**config, "system_name": "xendris_deepseek"}
+    if args.experimental_calibration:
+        xendris_config.update(
+            {
+                "experimental_calibration": True,
+                "calibration_execution_mode": "CODE_SANDBOX",
+            }
+        )
     deepseek_results = run_programming_benchmark(
         samples,
         deepseek_callable,
@@ -334,7 +351,7 @@ def main(argv: list[str] | None = None) -> int:
     xendris_results = run_programming_benchmark(
         samples,
         xendris_callable,
-        {**config, "system_name": "xendris_deepseek"},
+        xendris_config,
     )
     metadata = {
         "dataset_name": "Programming Reliability v0.1",
@@ -355,6 +372,7 @@ def main(argv: list[str] | None = None) -> int:
         "provider_timeout_seconds": args.timeout,
         "run_date": started_at[:10],
         "sample_timeout_seconds": args.sample_timeout,
+        "experimental_calibration": args.experimental_calibration,
         "started_at_utc": started_at,
         "dataset_hash": compute_file_hash(dataset_path),
         "xendris_version": _xendris_version(),
@@ -384,7 +402,12 @@ def main(argv: list[str] | None = None) -> int:
     return 0
 
 
-def _compose_programming_prompt(sample: ProgrammingSample, *, xendris_mode: bool) -> str:
+def _compose_programming_prompt(
+    sample: ProgrammingSample,
+    *,
+    xendris_mode: bool,
+    calibration_audit: Mapping[str, Any] | None = None,
+) -> str:
     instructions = [
         sample.prompt,
         "Return only the final Python code in one fenced code block.",
@@ -399,11 +422,35 @@ def _compose_programming_prompt(sample: ProgrammingSample, *, xendris_mode: bool
                 "Handle edge cases and keep the API contract stable.",
             ]
         )
+    if xendris_mode and calibration_audit:
+        instructions.extend(_calibration_prompt_instructions(calibration_audit))
     if sample.starter_code:
         instructions.append("Starter code:\n" + sample.starter_code)
     if sample.expected_behavior:
         instructions.append("Expected behavior:\n" + sample.expected_behavior)
     return "\n\n".join(instructions)
+
+
+def _calibration_prompt_instructions(calibration_audit: Mapping[str, Any]) -> list[str]:
+    """Translate experimental calibration policy into conservative prompt constraints."""
+    instructions = ["Experimental calibration constraints:"]
+    if calibration_audit.get("preserve_signature"):
+        instructions.append("- Preserve the exact public function name and signature.")
+    if calibration_audit.get("allow_extra_imports") is False:
+        instructions.append("- Do not add imports unless the starter code already requires them.")
+    if calibration_audit.get("allow_runtime_type_checks") is False:
+        instructions.append("- Do not add runtime type-checking wrappers.")
+    if calibration_audit.get("allow_test_framework_imports") is False:
+        instructions.append("- Do not use pytest or framework-specific test imports.")
+    if calibration_audit.get("prefer_minimal_patch"):
+        instructions.append("- Prefer the smallest patch that satisfies the benchmark-owned tests.")
+    if calibration_audit.get("category") == "UNIT_TESTS":
+        instructions.append("- Prefer plain assert-based tests over framework fixtures.")
+    if calibration_audit.get("category") == "EDGE_CASES":
+        instructions.append("- Add simple boundary handling without import-heavy abstractions.")
+    if calibration_audit.get("require_security_scan"):
+        instructions.append("- Avoid unsafe eval, exec, subprocess, network, and broad filesystem access.")
+    return instructions
 
 
 def _correct_code_for_sample(sample: ProgrammingSample) -> str:

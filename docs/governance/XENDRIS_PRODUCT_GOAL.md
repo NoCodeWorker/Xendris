@@ -273,6 +273,9 @@ steps, or code transformations merely because they look safer in the abstract.
 Intervention strength must be calibrated to the domain, category, execution
 mode, and measured harm/benefit.
 
+Xendris must calibrate intervention intensity by domain, category and execution
+mode.
+
 ## Adaptive Council Policy
 
 More tokens do not imply more certainty.

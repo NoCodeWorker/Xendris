@@ -10,6 +10,12 @@ from pathlib import Path
 import time
 from typing import Any, Callable, Mapping, Sequence
 
+from xendris.core.calibration import (
+    ExecutionMode,
+    InterventionLevel,
+    ProgrammingInterventionPolicy,
+)
+
 from .sandbox import (
     contract_preserved,
     extract_python_code,
@@ -51,12 +57,19 @@ def run_programming_benchmark(
     config = config or {}
     timeout = float(config.get("timeout_seconds", 2.0))
     system_name = str(config.get("system_name", "model"))
+    calibration_enabled = _calibration_enabled(config)
     results: list[ProgrammingRunResult] = []
 
     for sample in samples:
+        calibration_audit = _calibration_audit(sample, config) if calibration_enabled else None
+        callable_config: Mapping[str, Any] = (
+            {**config, "calibration_audit": calibration_audit}
+            if calibration_audit is not None
+            else config
+        )
         started = time.perf_counter()
         try:
-            raw = _call_model(model_callable, sample, config)
+            raw = _call_model(model_callable, sample, callable_config)
         except Exception as exc:  # noqa: BLE001 - benchmark isolates callable failures.
             raw = {
                 "answer": "",
@@ -66,7 +79,7 @@ def run_programming_benchmark(
                 "estimated_cost_usd": 0.0,
             }
         latency_ms = float(raw.get("latency_ms") or ((time.perf_counter() - started) * 1000.0))
-        result = _build_result(sample, raw, system_name, timeout, latency_ms)
+        result = _build_result(sample, raw, system_name, timeout, latency_ms, calibration_audit)
         results.append(result)
     return results
 
@@ -88,6 +101,7 @@ def summarize_programming_results(
             production_overclaim_rate=0.0,
             cost_per_correct_solution=None,
             score_by_category={},
+            calibration_metrics=None,
         )
 
     by_category: dict[str, list[ProgrammingRunResult]] = defaultdict(list)
@@ -116,6 +130,7 @@ def summarize_programming_results(
             category: round(sum(result.score for result in items) / len(items), 4)
             for category, items in sorted(by_category.items())
         },
+        calibration_metrics=_summarize_calibration_metrics(results),
     )
 
 
@@ -125,6 +140,7 @@ def _build_result(
     default_system_name: str,
     timeout: float,
     latency_ms: float,
+    calibration_audit: Mapping[str, object] | None = None,
 ) -> ProgrammingRunResult:
     answer = str(raw.get("answer", ""))
     extracted_code = raw.get("extracted_code") or extract_python_code(answer)
@@ -158,6 +174,7 @@ def _build_result(
         latency_ms=round(latency_ms, 4),
         estimated_cost_usd=float(raw.get("estimated_cost_usd", 0.0) or 0.0),
         fingerprint="",
+        calibration_audit=calibration_audit,
     )
     score = score_programming_result(provisional, sample)
     fingerprint = _fingerprint(provisional, score)
@@ -189,6 +206,7 @@ def _derive_reason(
 def _fingerprint(result: ProgrammingRunResult, score: float) -> str:
     payload = {
         "answer": result.answer,
+        "calibration_audit": result.calibration_audit,
         "decision": result.decision,
         "extracted_code": result.extracted_code,
         "reason": result.reason,
@@ -198,6 +216,73 @@ def _fingerprint(result: ProgrammingRunResult, score: float) -> str:
     }
     encoded = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(encoded.encode("utf-8")).hexdigest()[:16]
+
+
+def _calibration_enabled(config: Mapping[str, Any]) -> bool:
+    return bool(config.get("experimental_calibration") or config.get("use_intervention_calibration"))
+
+
+def _calibration_audit(sample: ProgrammingSample, config: Mapping[str, Any]) -> dict[str, object]:
+    mode = _calibration_execution_mode(config)
+    audit = ProgrammingInterventionPolicy().audit(sample.category, mode)
+    payload = audit.to_dict()
+    decision = payload["decision"]
+    return {
+        "calibration_enabled": True,
+        "domain": decision["domain"],
+        "category": decision["category"],
+        "execution_mode": decision["execution_mode"],
+        "intervention_level": decision["intervention_level"],
+        "preserve_signature": decision["preserve_signature"],
+        "allow_extra_imports": decision["allow_extra_imports"],
+        "allow_runtime_type_checks": decision["allow_runtime_type_checks"],
+        "allow_test_framework_imports": decision["allow_test_framework_imports"],
+        "prefer_minimal_patch": decision["prefer_minimal_patch"],
+        "require_security_scan": decision["require_security_scan"],
+        "rationale": decision["rationale"],
+        "warnings": decision["warnings"],
+    }
+
+
+def _calibration_execution_mode(config: Mapping[str, Any]) -> ExecutionMode:
+    raw = config.get("calibration_execution_mode") or config.get("execution_mode")
+    if raw is None:
+        return ExecutionMode.CODE_SANDBOX
+    normalized = str(raw).strip().upper().replace("-", "_")
+    try:
+        return ExecutionMode(normalized)
+    except ValueError:
+        try:
+            return ExecutionMode[normalized]
+        except KeyError:
+            return ExecutionMode.CODE_SANDBOX
+
+
+def _summarize_calibration_metrics(results: Sequence[ProgrammingRunResult]) -> dict[str, int] | None:
+    audits = [result.calibration_audit for result in results if result.calibration_audit]
+    if not audits:
+        return None
+
+    def count_level(level: InterventionLevel) -> int:
+        return sum(audit.get("intervention_level") == level.value for audit in audits)
+
+    return {
+        "calibrated_samples": len(audits),
+        "minimal_intervention_samples": count_level(InterventionLevel.MINIMAL),
+        "moderate_intervention_samples": count_level(InterventionLevel.MODERATE),
+        "strong_intervention_samples": count_level(InterventionLevel.STRONG),
+        "import_restricted_samples": sum(audit.get("allow_extra_imports") is False for audit in audits),
+        "signature_preservation_required_samples": sum(
+            audit.get("preserve_signature") is True for audit in audits
+        ),
+        "test_framework_import_restricted_samples": sum(
+            audit.get("allow_test_framework_imports") is False for audit in audits
+        ),
+        "security_false_positive_warning_samples": sum(
+            any("false-positive" in str(warning) for warning in audit.get("warnings", []))
+            for audit in audits
+        ),
+    }
 
 
 def _call_model(

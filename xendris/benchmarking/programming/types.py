@@ -50,10 +50,14 @@ class ProgrammingRunResult:
     latency_ms: float
     estimated_cost_usd: float
     fingerprint: str
+    calibration_audit: Mapping[str, object] | None = None
 
     def to_dict(self) -> dict[str, object]:
         """Return a JSON-compatible representation."""
-        return asdict(self)
+        payload = asdict(self)
+        if self.calibration_audit is None:
+            payload.pop("calibration_audit", None)
+        return payload
 
 
 @dataclass(frozen=True)
@@ -70,7 +74,11 @@ class ProgrammingBenchmarkSummary:
     production_overclaim_rate: float
     cost_per_correct_solution: float | None
     score_by_category: dict[str, float]
+    calibration_metrics: Mapping[str, int] | None = None
 
     def to_dict(self) -> dict[str, object]:
         """Return a JSON-compatible representation."""
-        return asdict(self)
+        payload = asdict(self)
+        if self.calibration_metrics is None:
+            payload.pop("calibration_metrics", None)
+        return payload

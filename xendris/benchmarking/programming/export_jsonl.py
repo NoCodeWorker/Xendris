@@ -46,6 +46,7 @@ def read_programming_results_jsonl(path: str | Path) -> list[ProgrammingRunResul
                     latency_ms=item["latency_ms"],
                     estimated_cost_usd=item["estimated_cost_usd"],
                     fingerprint=item["fingerprint"],
+                    calibration_audit=item.get("calibration_audit"),
                 )
             )
     return results
