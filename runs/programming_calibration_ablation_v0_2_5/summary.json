@@ -1,0 +1,229 @@
+{
+  "answers": {
+    "api_contracts_improved": true,
+    "edge_cases_preserved": true,
+    "import_failures_reduced": true,
+    "overengineering_failures_reduced": true,
+    "unit_tests_improved": true
+  },
+  "category_breakdown": {
+    "api_contracts": {
+      "deepseek_base": 1.0,
+      "xendris_calibrated": 1.0,
+      "xendris_uncalibrated": 0.0
+    },
+    "bug_fixing": {
+      "deepseek_base": 1.0,
+      "xendris_calibrated": 1.0,
+      "xendris_uncalibrated": 1.0
+    },
+    "edge_cases": {
+      "deepseek_base": 1.0,
+      "xendris_calibrated": 1.0,
+      "xendris_uncalibrated": 1.0
+    },
+    "normal_control": {
+      "deepseek_base": 1.0,
+      "xendris_calibrated": 1.0,
+      "xendris_uncalibrated": 1.0
+    },
+    "performance": {
+      "deepseek_base": 1.0,
+      "xendris_calibrated": 1.0,
+      "xendris_uncalibrated": 1.0
+    },
+    "refactor_safety": {
+      "deepseek_base": 1.0,
+      "xendris_calibrated": 1.0,
+      "xendris_uncalibrated": 1.0
+    },
+    "security_basics": {
+      "deepseek_base": 0.0,
+      "xendris_calibrated": 1.0,
+      "xendris_uncalibrated": 0.0
+    },
+    "unit_tests": {
+      "deepseek_base": 1.0,
+      "xendris_calibrated": 1.0,
+      "xendris_uncalibrated": 0.0
+    }
+  },
+  "category_deltas": {
+    "api_contracts": {
+      "calibrated_vs_base": 0.0,
+      "calibrated_vs_uncalibrated": 1.0,
+      "uncalibrated_vs_base": -1.0
+    },
+    "bug_fixing": {
+      "calibrated_vs_base": 0.0,
+      "calibrated_vs_uncalibrated": 0.0,
+      "uncalibrated_vs_base": 0.0
+    },
+    "edge_cases": {
+      "calibrated_vs_base": 0.0,
+      "calibrated_vs_uncalibrated": 0.0,
+      "uncalibrated_vs_base": 0.0
+    },
+    "normal_control": {
+      "calibrated_vs_base": 0.0,
+      "calibrated_vs_uncalibrated": 0.0,
+      "uncalibrated_vs_base": 0.0
+    },
+    "performance": {
+      "calibrated_vs_base": 0.0,
+      "calibrated_vs_uncalibrated": 0.0,
+      "uncalibrated_vs_base": 0.0
+    },
+    "refactor_safety": {
+      "calibrated_vs_base": 0.0,
+      "calibrated_vs_uncalibrated": 0.0,
+      "uncalibrated_vs_base": 0.0
+    },
+    "security_basics": {
+      "calibrated_vs_base": 1.0,
+      "calibrated_vs_uncalibrated": 1.0,
+      "uncalibrated_vs_base": 0.0
+    },
+    "unit_tests": {
+      "calibrated_vs_base": 0.0,
+      "calibrated_vs_uncalibrated": 1.0,
+      "uncalibrated_vs_base": -1.0
+    }
+  },
+  "evidence_gate": {
+    "blockers": [],
+    "has_blockers": false,
+    "issues": [],
+    "notes": [],
+    "status": "ADMITTED_EXPERIMENTAL_ANALYSIS",
+    "warnings": []
+  },
+  "limitations": [
+    "Dry-run only.",
+    "Mock provider behavior is deterministic and cannot prove real-provider performance.",
+    "Closed Programming Reliability v0.1 dataset only.",
+    "Experimental calibration evidence does not imply global programming improvement."
+  ],
+  "metadata": {
+    "dataset_hash": "b882cc5558c284ccb16dcc9bf9e39ea76aedab6bdcbe47185ea55de53e78776c",
+    "dataset_hash_algorithm": "sha256",
+    "dataset_name": "Programming Reliability v0.1",
+    "dataset_version": "0.1",
+    "execution_mode": "dry-run",
+    "experimental_calibration_variant_disclosed": true,
+    "external_data_disclosure": "No external provider call; deterministic local dry-run only.",
+    "historical_artifacts_overwritten": false,
+    "pricing_assumptions": "Costs are deterministic placeholders and not billing records.",
+    "provider_mode": "mock",
+    "python_version": "3.11.9",
+    "run_date": "2026-07-06",
+    "xendris_version": "0.2.0"
+  },
+  "score_deltas": {
+    "calibrated_vs_base": 0.1,
+    "calibrated_vs_uncalibrated": 0.35,
+    "uncalibrated_vs_base": -0.25
+  },
+  "scores": {
+    "deepseek_base": 0.9,
+    "xendris_calibrated": 1.0,
+    "xendris_uncalibrated": 0.65
+  },
+  "systems": {
+    "deepseek_base": {
+      "average_score": 0.9,
+      "contract_preserved_count": 100,
+      "cost_per_correct_solution": 0.00011111,
+      "estimated_cost_usd": 0.01,
+      "exclusion_rate": 0.1,
+      "import_failure_count": 0,
+      "latency_average_ms": 100.0,
+      "overengineering_failure_count": 10,
+      "production_overclaim_rate": 0.0,
+      "runtime_error_count": 0,
+      "score_by_category": {
+        "api_contracts": 1.0,
+        "bug_fixing": 1.0,
+        "edge_cases": 1.0,
+        "normal_control": 1.0,
+        "performance": 1.0,
+        "refactor_safety": 1.0,
+        "security_basics": 0.0,
+        "unit_tests": 1.0
+      },
+      "security_risk_count": 10,
+      "tests_passed_count": 90,
+      "total_samples": 100
+    },
+    "xendris_calibrated": {
+      "average_score": 1.0,
+      "calibration_metrics": {
+        "calibrated_samples": 100,
+        "import_restricted_samples": 100,
+        "minimal_intervention_samples": 75,
+        "moderate_intervention_samples": 25,
+        "security_false_positive_warning_samples": 10,
+        "signature_preservation_required_samples": 100,
+        "strong_intervention_samples": 0,
+        "test_framework_import_restricted_samples": 100
+      },
+      "contract_preserved_count": 100,
+      "cost_per_correct_solution": 0.00012,
+      "estimated_cost_usd": 0.012,
+      "exclusion_rate": 0.0,
+      "import_failure_count": 0,
+      "latency_average_ms": 108.0,
+      "overengineering_failure_count": 0,
+      "production_overclaim_rate": 0.0,
+      "runtime_error_count": 0,
+      "score_by_category": {
+        "api_contracts": 1.0,
+        "bug_fixing": 1.0,
+        "edge_cases": 1.0,
+        "normal_control": 1.0,
+        "performance": 1.0,
+        "refactor_safety": 1.0,
+        "security_basics": 1.0,
+        "unit_tests": 1.0
+      },
+      "security_risk_count": 0,
+      "tests_passed_count": 100,
+      "total_samples": 100
+    },
+    "xendris_uncalibrated": {
+      "average_score": 0.65,
+      "contract_preserved_count": 100,
+      "cost_per_correct_solution": 0.00018462,
+      "estimated_cost_usd": 0.012,
+      "exclusion_rate": 0.35,
+      "import_failure_count": 25,
+      "latency_average_ms": 110.0,
+      "overengineering_failure_count": 35,
+      "production_overclaim_rate": 0.0,
+      "runtime_error_count": 25,
+      "score_by_category": {
+        "api_contracts": 0.0,
+        "bug_fixing": 1.0,
+        "edge_cases": 1.0,
+        "normal_control": 1.0,
+        "performance": 1.0,
+        "refactor_safety": 1.0,
+        "security_basics": 0.0,
+        "unit_tests": 0.0
+      },
+      "security_risk_count": 10,
+      "tests_passed_count": 65,
+      "total_samples": 100
+    }
+  },
+  "total_samples": 100,
+  "variants": [
+    "deepseek_base",
+    "xendris_uncalibrated",
+    "xendris_calibrated"
+  ],
+  "warnings": [
+    "No universal superiority is implied.",
+    "No real-provider performance is measured."
+  ]
+}

@@ -29,6 +29,11 @@ from .excellence_gate import (
     BenchmarkExcellenceIssueSeverity,
     assess_benchmark_excellence,
 )
+from .calibration_ablation_gate import (
+    CalibrationAblationGateAssessment,
+    CalibrationAblationGateIssue,
+    assess_programming_calibration_ablation,
+)
 from .evidence_registry import (
     BenchmarkEvidenceRecord,
     BenchmarkEvidenceRegistry,
@@ -50,12 +55,15 @@ __all__ = [
     "BenchmarkEvidenceRecord",
     "BenchmarkEvidenceRegistry",
     "BenchmarkSample",
+    "CalibrationAblationGateAssessment",
+    "CalibrationAblationGateIssue",
     "FrontierGapComparison",
     "FrontierGapSystemResult",
     "SystemRunResult",
     "ABComparisonResult",
     "ABRunSummary",
     "assess_benchmark_excellence",
+    "assess_programming_calibration_ablation",
     "build_benchmark_evidence_registry",
     "compute_ablation_fingerprint",
     "compute_frontier_gap",
