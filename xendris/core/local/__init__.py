@@ -20,6 +20,10 @@ class LocalContext(str, Enum):
     FINANCE = "FINANCE"
     CREATIVE = "CREATIVE"
     CUSTOMER = "CUSTOMER"
+    BENCHMARK = "BENCHMARK"
+    PRODUCTION = "PRODUCTION"
+    DOCUMENTATION = "DOCUMENTATION"
+    LATENCY = "LATENCY"
 
 
 __all__ = ["LocalContext"]

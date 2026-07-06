@@ -16,6 +16,10 @@ class EvidenceBridgeType(str, Enum):
     EXACT = "EXACT"
     DERIVED = "DERIVED"
     CROSS_DOMAIN = "CROSS_DOMAIN"
+    BENCHMARK_ARTIFACT = "BENCHMARK_ARTIFACT"
+    DEPLOYMENT_LOG = "DEPLOYMENT_LOG"
+    HUMAN_REVIEW = "HUMAN_REVIEW"
+    TEST_RESULT = "TEST_RESULT"
 
 
 class EvidenceBridge:
@@ -28,6 +32,16 @@ class EvidenceBridge:
 class ContaminationGuard:
     @staticmethod
     def check(source_claim: Any, target_context: Any) -> Any:
+        from xendris.core.boundary.evidence_bridge import BoundaryDecision
+        return BoundaryDecision(decision="ALLOW", reason="STUB")
+
+    def assess_transition(
+        self,
+        source_claim: Any = None,
+        target_context: Any = None,
+        requested_target_claim_type: Any = None,
+        evidence_bridge: Any = None,
+    ) -> Any:
         from xendris.core.boundary.evidence_bridge import BoundaryDecision
         return BoundaryDecision(decision="ALLOW", reason="STUB")
 

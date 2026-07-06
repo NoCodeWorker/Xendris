@@ -15,6 +15,7 @@ from xendris.core.boundary import EvidenceBridge, EvidenceBridgeType  # noqa: F4
 class BoundaryDecision:
     decision: str = "ALLOW"
     reason: str = "STUB"
+    allowed: bool = True
     required_evidence: tuple = field(default_factory=tuple)
     risk_level: str = "LOW"
 
