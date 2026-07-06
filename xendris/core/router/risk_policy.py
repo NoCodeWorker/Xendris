@@ -53,16 +53,17 @@ class RiskPolicy:
         # 4. Gating determinations
         gates = list(model.required_gates)
 
-        if request.local_context == LocalContext.PRODUCTION:
+        ctx_str = request.local_context.name if hasattr(request.local_context, "name") else str(request.local_context).upper()
+        if ctx_str in ("PRODUCTION", "LAW", "FINANCE", "MEDICINE"):
             if "Production Evidence Gate" not in gates:
                 gates.append("Production Evidence Gate")
-        elif request.local_context == LocalContext.BENCHMARK:
+        elif ctx_str in ("BENCHMARK", "SCIENCE"):
             if "Benchmark Gate" not in gates:
                 gates.append("Benchmark Gate")
 
         # Stricter sectors
-        strict_sectors = (EpistemicSector.POLICY, EpistemicSector.FACTUAL)
-        if request.epistemic_sector in strict_sectors:
+        sec_str = request.epistemic_sector.name if hasattr(request.epistemic_sector, "name") else str(request.epistemic_sector).upper()
+        if sec_str in ("POLICY",) or request.epistemic_sector == EpistemicSector.FACTUAL:
             if "Strict Evidence Gate" not in gates:
                 gates.append("Strict Evidence Gate")
 

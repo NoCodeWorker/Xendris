@@ -9,7 +9,6 @@ from xendris.core.router.cost_policy import CostPolicy
 from xendris.core.router.risk_policy import RiskPolicy
 from xendris.core.fingerprints.model_fingerprint import ModelEpistemicFingerprint
 from xendris.core.fingerprints.metrics import FingerprintMetric
-from xendris.core.local.context import LocalContext
 from xendris.core.sectors.sector import EpistemicSector
 from xendris.core.trust.types import ClaimType, RiskLevel
 
@@ -101,7 +100,8 @@ class MultiModelSelector:
 
             # Apply hard filters based on request context/sector/risk
             # A. Benchmark claim: avoid high universalization/overgeneralization models
-            if request.local_context == LocalContext.BENCHMARK or request.epistemic_sector == EpistemicSector.BENCHMARK:
+            ctx_str = request.local_context.name if hasattr(request.local_context, "name") else str(request.local_context).upper()
+            if ctx_str in ("BENCHMARK", "SCIENCE") or request.epistemic_sector == EpistemicSector.BENCHMARK:
                 if has_fingerprints and (univ_rate >= 0.10 or over_rate >= 0.10):
                     rejected_models.append(model.model_id)
                     continue
@@ -109,7 +109,7 @@ class MultiModelSelector:
                     gates = tuple(list(gates) + ["Benchmark Gate"])
 
             # B. Production/Code claim: require code support, low production_overclaim_rate
-            if request.local_context == LocalContext.PRODUCTION or request.requires_code:
+            if ctx_str in ("PRODUCTION", "LAW", "FINANCE", "MEDICINE") or request.requires_code:
                 if request.requires_code and not model.supports_code:
                     rejected_models.append(model.model_id)
                     continue
@@ -128,7 +128,8 @@ class MultiModelSelector:
                     gates = tuple(list(gates) + ["Strict Evidence Gate"])
 
             # D. Strict Gate requirements for specific sectors
-            if request.epistemic_sector in (EpistemicSector.BENCHMARK, EpistemicSector.FACTUAL, EpistemicSector.POLICY):
+            sec_str2 = request.epistemic_sector.name if hasattr(request.epistemic_sector, "name") else str(request.epistemic_sector).upper()
+            if sec_str2 in ("BENCHMARK", "POLICY") or request.epistemic_sector == EpistemicSector.FACTUAL:
                 if "Strict Safety Fence" not in gates:
                     gates = tuple(list(gates) + ["Strict Safety Fence"])
 
