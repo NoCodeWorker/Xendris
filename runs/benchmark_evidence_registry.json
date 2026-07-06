@@ -47,8 +47,17 @@
       "status": "REJECTED",
       "summary_path": "runs\\deepseek_vs_xendris_trust_traps_v0_1_summary.json",
       "warning_count": 4
+    },
+    {
+      "blocker_count": 4,
+      "decision": "BLOCKED_FOR_INTERPRETATION",
+      "reason": "missing_dataset_hash",
+      "report_path": null,
+      "status": "REJECTED",
+      "summary_path": "runs\\real_deepseek_trust_traps_v0_1_7507d5f1_summary.json",
+      "warning_count": 4
     }
   ],
-  "rejected_count": 3,
-  "total_count": 5
+  "rejected_count": 4,
+  "total_count": 6
 }

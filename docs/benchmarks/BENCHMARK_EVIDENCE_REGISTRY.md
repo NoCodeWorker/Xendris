@@ -4,9 +4,9 @@
 
 | Metric | Value |
 |---|---:|
-| Total artifacts reviewed | 5 |
+| Total artifacts reviewed | 6 |
 | Admitted | 2 |
-| Rejected | 3 |
+| Rejected | 4 |
 
 ## Admitted Artifacts
 
@@ -28,6 +28,7 @@ strong evidence until remediated and re-audited.
 | `runs\deepseek_vs_xendris_trust_traps_v0_1_2026_07_04_summary.json` | `BLOCKED_FOR_INTERPRETATION` | 1 | 4 | dry_run_report_claims_real_provider_performance |
 | `runs\deepseek_vs_xendris_trust_traps_v0_1_2026_07_04_v2_summary.json` | `BLOCKED_FOR_INTERPRETATION` | 4 | 9 | missing_dataset_hash |
 | `runs\deepseek_vs_xendris_trust_traps_v0_1_summary.json` | `BLOCKED_FOR_INTERPRETATION` | 1 | 4 | dry_run_report_claims_real_provider_performance |
+| `runs\real_deepseek_trust_traps_v0_1_7507d5f1_summary.json` | `BLOCKED_FOR_INTERPRETATION` | 4 | 4 | missing_dataset_hash |
 
 ## Interpretation
 

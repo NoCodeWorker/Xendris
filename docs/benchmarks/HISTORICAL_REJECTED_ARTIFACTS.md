@@ -15,6 +15,7 @@ quality claims, or universal-superiority claims.
 | `runs/deepseek_vs_xendris_trust_traps_v0_1_2026_07_04_summary.json` | `dry_run_report_claims_real_provider_performance` | yes | `runs/trust_excellence_check/deepseek_vs_xendris_trust_traps_v0_1_summary.json` | historical only; not admitted evidence; not valid for public claims |
 | `runs/deepseek_vs_xendris_trust_traps_v0_1_2026_07_04_v2_summary.json` | `missing_dataset_hash` | yes | `runs/trust_excellence_check/deepseek_vs_xendris_trust_traps_v0_1_summary.json` | historical only; not admitted evidence; not valid for public claims |
 | `runs/deepseek_vs_xendris_trust_traps_v0_1_summary.json` | `dry_run_report_claims_real_provider_performance` | yes | `runs/trust_excellence_check/deepseek_vs_xendris_trust_traps_v0_1_summary.json` | historical only; not admitted evidence; not valid for public claims |
+| `runs/real_deepseek_trust_traps_v0_1_7507d5f1_summary.json` | `missing_dataset_hash` | no | none | historical only; not admitted evidence; not valid for public claims |
 
 ## Interpretation
 
