@@ -20,3 +20,5 @@ Stable importability does not imply scientific validation.
 
 __version__ = "0.2.0"
 __all__ = ["frontera_c"]
+
+from . import frontera_c  # noqa: F401, E402 — make frontera_c importable
