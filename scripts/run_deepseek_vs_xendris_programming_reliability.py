@@ -46,11 +46,17 @@ def compute_file_hash(path: str | Path) -> str:
 def output_paths(output_dir: str | Path, run_basename: str = RUN_BASENAME) -> dict[str, Path]:
     """Return canonical output paths for the programming A/B run."""
     out = Path(output_dir)
+    canonical_runs_dir = (ROOT / "runs").resolve()
+    report_path = (
+        ROOT / "docs" / "benchmarks" / "RUN_DEEPSEEK_VS_XENDRIS_PROGRAMMING_RELIABILITY_V0_1_2026_07_04.md"
+        if out.resolve() == canonical_runs_dir
+        else out / "RUN_DEEPSEEK_VS_XENDRIS_PROGRAMMING_RELIABILITY_V0_1_2026_07_04.md"
+    )
     return {
         "jsonl": out / f"{run_basename}.jsonl",
         "summary": out / f"{run_basename}_summary.json",
         "excellence": out / f"{run_basename}_excellence.json",
-        "report": ROOT / "docs" / "benchmarks" / f"RUN_DEEPSEEK_VS_XENDRIS_PROGRAMMING_RELIABILITY_V0_1_2026_07_04.md",
+        "report": report_path,
     }
 
 

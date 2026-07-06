@@ -16,7 +16,12 @@ class BoundaryDecision:
     decision: str = "ALLOW"
     reason: str = "STUB"
     allowed: bool = True
+    source_context: Any = None
+    target_context: Any = None
+    requested_target_claim_type: Any = None
     required_evidence: tuple = field(default_factory=tuple)
+    limitations: tuple = field(default_factory=tuple)
+    audit_tags: tuple = field(default_factory=tuple)
     risk_level: str = "LOW"
 
 

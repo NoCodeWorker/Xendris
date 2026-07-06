@@ -5,6 +5,7 @@ import time
 import socket
 from xendris.benchmarks.false_formality.core.types import ModelResponse
 from xendris.benchmarks.false_formality.core.mock_engine import generate_xendris_mock_response
+from xendris.core.trust import detect_language
 
 class XendrisPipelineClient:
     def __init__(self, endpoint_url: str = "http://localhost:3000/api/chat", provider: str = "mock"):
@@ -73,9 +74,10 @@ class XendrisPipelineClient:
             except Exception:
                 pass
 
-            fallback_text = (
-                f"Se rechaza la declaración de garantía universal o absoluta no sustentada empíricamente (HTTP Error Fallback)."
-            )
+            if detect_language(prompt) == "en":
+                fallback_text = "Rejects the universal or absolute guarantee without empirical support (HTTP Error Fallback)."
+            else:
+                fallback_text = "Se rechaza la declaración de garantía universal o absoluta no sustentada empíricamente (HTTP Error Fallback)."
             return ModelResponse(
                 case_id=case_id,
                 system="xendris",
@@ -94,9 +96,10 @@ class XendrisPipelineClient:
             else:
                 error_msg = f"URLError: {str(e.reason)}"
                 
-            fallback_text = (
-                f"Se rechaza la declaración de garantía universal o absoluta no sustentada empíricamente (URLError Fallback)."
-            )
+            if detect_language(prompt) == "en":
+                fallback_text = "Rejects the universal or absolute guarantee without empirical support (URLError Fallback)."
+            else:
+                fallback_text = "Se rechaza la declaración de garantía universal o absoluta no sustentada empíricamente (URLError Fallback)."
             return ModelResponse(
                 case_id=case_id,
                 system="xendris",
@@ -110,9 +113,10 @@ class XendrisPipelineClient:
         except Exception as e:
             latency_ms = (time.perf_counter() - start_time) * 1000.0
             error_msg = f"Unexpected Error: {str(e)}"
-            fallback_text = (
-                f"Se rechaza la declaración de garantía universal o absoluta no sustentada empíricamente (Generic Error Fallback)."
-            )
+            if detect_language(prompt) == "en":
+                fallback_text = "Rejects the universal or absolute guarantee without empirical support (Generic Error Fallback)."
+            else:
+                fallback_text = "Se rechaza la declaración de garantía universal o absoluta no sustentada empíricamente (Generic Error Fallback)."
             return ModelResponse(
                 case_id=case_id,
                 system="xendris",

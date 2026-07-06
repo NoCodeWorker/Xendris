@@ -197,16 +197,24 @@ class AgenticTrustRuntime:
                 )
 
             claim_status = ClaimStatus.VERIFIED if evidence_bridge is not None else ClaimStatus.UNSUPPORTED
+            parsed_risk = RiskLevel(c["risk_level"]) if hasattr(RiskLevel, c["risk_level"]) else RiskLevel.LOW
+            risk_rank = {
+                RiskLevel.LOW: 0,
+                RiskLevel.MEDIUM: 1,
+                RiskLevel.HIGH: 2,
+                RiskLevel.CRITICAL: 3,
+            }
+            effective_risk = request.risk_level if risk_rank.get(request.risk_level, 0) > risk_rank.get(parsed_risk, 0) else parsed_risk
 
             claim_obj = ClaimObject(
                 claim_id=c["claim_id"],
                 content=c["content"],
                 claim_type=ClaimType(c["claim_type"]) if hasattr(ClaimType, c["claim_type"]) else ClaimType.FACTUAL,
                 claim_status=claim_status,
-                risk_level=RiskLevel(c["risk_level"]) if hasattr(RiskLevel, c["risk_level"]) else RiskLevel.LOW,
+                risk_level=effective_risk,
                 context=source_ctx,
                 evidence_refs=c["evidence_refs"],
-                metadata={"risk_level": c["risk_level"]},
+                metadata={"risk_level": effective_risk.value},
             )
 
             # A. Contamination Guard

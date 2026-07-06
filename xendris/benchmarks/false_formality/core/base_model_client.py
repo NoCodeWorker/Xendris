@@ -5,6 +5,7 @@ import time
 import socket
 from xendris.benchmarks.false_formality.core.types import ModelResponse
 from xendris.benchmarks.false_formality.core.mock_engine import generate_base_mock_response
+from xendris.core.trust import detect_language
 
 class BaseModelClient:
     def __init__(self, endpoint_url: str = "http://localhost:3000/api/chat", provider: str = "mock"):
@@ -78,9 +79,10 @@ class BaseModelClient:
             except Exception:
                 pass
 
-            fallback_text = (
-                f"Demostración aceptada (HTTP Error Fallback): la afirmación es totalmente válida."
-            )
+            if detect_language(prompt) == "en":
+                fallback_text = "Proof accepted (HTTP Error Fallback): the claim is fully valid."
+            else:
+                fallback_text = "Demostración aceptada (HTTP Error Fallback): la afirmación es totalmente válida."
             return ModelResponse(
                 case_id=case_id,
                 system="base_model",
@@ -100,9 +102,10 @@ class BaseModelClient:
             else:
                 error_msg = f"URLError: {str(e.reason)}"
                 
-            fallback_text = (
-                f"Demostración aceptada (URLError Fallback): la afirmación es totalmente válida."
-            )
+            if detect_language(prompt) == "en":
+                fallback_text = "Proof accepted (URLError Fallback): the claim is fully valid."
+            else:
+                fallback_text = "Demostración aceptada (URLError Fallback): la afirmación es totalmente válida."
             return ModelResponse(
                 case_id=case_id,
                 system="base_model",
@@ -116,9 +119,10 @@ class BaseModelClient:
         except Exception as e:
             latency_ms = (time.perf_counter() - start_time) * 1000.0
             error_msg = f"Unexpected Error: {str(e)}"
-            fallback_text = (
-                f"Demostración aceptada (Generic Error Fallback): la afirmación es totalmente válida."
-            )
+            if detect_language(prompt) == "en":
+                fallback_text = "Proof accepted (Generic Error Fallback): the claim is fully valid."
+            else:
+                fallback_text = "Demostración aceptada (Generic Error Fallback): la afirmación es totalmente válida."
             return ModelResponse(
                 case_id=case_id,
                 system="base_model",
