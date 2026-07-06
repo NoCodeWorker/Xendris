@@ -56,6 +56,12 @@ out/
 data/
 reports/
 **/outputs/
+benchmark_output/
+runs/local/
+runs/tmp/
+runs/**/scratch/
+runs/**/*.tmp
+runs/**/*.log
 frontend/.next/
 frontend/node_modules/
 frontend/.env*

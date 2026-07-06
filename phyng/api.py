@@ -304,3 +304,130 @@ def get_default_decoherence_model_comparison():
 def run_custom_decoherence_model_comparison(campaign_input: Campaign002Input):
     """Run CAMPAIGN-002 with explicit toy comparison parameters."""
     return run_campaign_002_decoherence_model_comparison(Path("."), campaign_input)
+
+
+# ── Xendris v1.2 Visual Trust API ─────────────────────────────────────────
+
+class XendrisEvaluateRequest(BaseModel):
+    user_input: str
+    request_id: Optional[str] = None
+    local_context: Optional[str] = "PRODUCTION"
+    epistemic_sector: Optional[str] = "FACTUAL"
+    claim_type: Optional[str] = "FACTUAL"
+    risk_level: Optional[str] = "LOW"
+    model_id: Optional[str] = "gpt-4"
+    provider: Optional[str] = "openai"
+
+
+@app.post("/api/xendris/evaluate")
+def evaluate_xendris_trust(req: XendrisEvaluateRequest):
+    """Evaluate a user prompt through Xendris Agentic Trust Runtime and Sandbox."""
+    from xendris.core.local.context import LocalContext
+    from xendris.core.sectors.sector import EpistemicSector
+    from xendris.core.trust.types import ClaimType, RiskLevel
+    from xendris.core.router.model_registry import ModelRegistry, ModelCapabilityProfile
+    from xendris.core.runtime import (
+        RuntimeRequest,
+        AgenticTrustRuntime,
+        ProviderAdapter,
+        ProviderAdapterSandbox,
+    )
+
+    # 1. Resolve Enums safely
+    ctx = LocalContext[req.local_context.upper()] if req.local_context.upper() in LocalContext.__members__ else LocalContext.PRODUCTION
+    sector = EpistemicSector[req.epistemic_sector.upper()] if req.epistemic_sector.upper() in EpistemicSector.__members__ else EpistemicSector.FACTUAL
+    ctype = ClaimType[req.claim_type.upper()] if req.claim_type.upper() in ClaimType.__members__ else ClaimType.FACTUAL
+    risk = RiskLevel[req.risk_level.upper()] if req.risk_level.upper() in RiskLevel.__members__ else RiskLevel.LOW
+
+    # 2. Build Model Registry with profiles
+    registry = ModelRegistry()
+    registry.register_model(ModelCapabilityProfile(
+        model_id=req.model_id,
+        provider=req.provider,
+        supported_contexts=("PRODUCTION", "BENCHMARK"),
+        supported_sectors=("FACTUAL", "PRODUCTION"),
+        max_risk_level=RiskLevel.CRITICAL,
+        cost_per_1k_input_tokens=0.03,
+        cost_per_1k_output_tokens=0.06,
+        expected_latency_ms=1000,
+        supports_tools=True,
+        supports_code=True,
+        supports_json=True,
+        supports_long_context=True,
+        required_gates=(),
+    ))
+
+    # 3. Setup Provider Adapter and Sandbox
+    adapter = ProviderAdapter(req.model_id, req.provider)
+    sandbox = ProviderAdapterSandbox(adapter)
+
+    # Determine mock URL
+    url = f"https://api.{req.provider}.com/v1/chat/completions" if req.provider != "openai" else "https://api.openai.com/v1/chat/completions"
+    if req.provider == "anthropic":
+        url = "https://api.anthropic.com/v1/messages"
+    elif req.provider == "deepseek":
+        url = "https://api.deepseek.com/v1/chat/completions"
+
+    # Inject mock content based on rules
+    lower_input = req.user_input.lower()
+    if "limit" in lower_input:
+        content = f"CLAIM: Standard factual response to: {req.user_input}\nLIMITATION: Evaluation scoped to sandbox cost rates.\nCLAIM_TYPE: FACTUAL\nSECTOR: FACTUAL\nCONTEXT: PRODUCTION\nEVIDENCE: deploy log is green"
+    elif "block" in lower_input:
+        content = f"CLAIM: Unsupported claim to: {req.user_input}\nCLAIM_TYPE: FACTUAL\nSECTOR: FACTUAL\nCONTEXT: PRODUCTION"
+    else:
+        content = f"CLAIM: Standard factual response to: {req.user_input}\nCLAIM_TYPE: FACTUAL\nSECTOR: FACTUAL\nCONTEXT: PRODUCTION\nEVIDENCE: deploy log is green"
+
+    # Register standard response json
+    if req.provider in ("openai", "deepseek"):
+        mock_payload = {
+            "choices": [{
+                "message": {
+                    "role": "assistant",
+                    "content": content
+                }
+            }]
+        }
+    elif req.provider == "anthropic":
+        mock_payload = {
+            "content": [{
+                "type": "text",
+                "text": content
+            }]
+        }
+    else:
+        mock_payload = {
+            "text": content
+        }
+
+    sandbox.register_mock(url, req.user_input, 200, mock_payload)
+
+    # 4. Instantiate and execute Runtime
+    runtime_req = RuntimeRequest(
+        request_id=req.request_id or "REQ-API",
+        user_input=req.user_input,
+        user_intent="GENERAL_CHAT",
+        local_context=ctx,
+        epistemic_sector=sector,
+        claim_type=ctype,
+        risk_level=risk,
+    )
+
+    runtime = AgenticTrustRuntime(registry, {req.model_id: adapter})
+    response = runtime.execute(runtime_req, f"RUN-{runtime_req.request_id}")
+
+    # Attach Sandbox Audits to the JSON payload for visual consumption
+    res_dict = {
+        "response_id": response.response_id,
+        "request_id": response.request_id,
+        "decision": response.decision,
+        "final_content": response.final_content,
+        "selected_model_id": response.selected_model_id,
+        "provider": response.provider,
+        "limitations": response.limitations,
+        "ledger_record_ids": response.ledger_record_ids,
+        "human_review_required": response.human_review_required,
+        "blocked": response.blocked,
+        "reason": response.reason,
+        "sandbox_audits": [a.to_dict() for a in sandbox.audits],
+    }
+    return res_dict

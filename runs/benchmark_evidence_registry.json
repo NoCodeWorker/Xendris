@@ -1,0 +1,54 @@
+{
+  "admitted": [
+    {
+      "blocker_count": 0,
+      "decision": "READY_FOR_INTERPRETATION",
+      "reason": "Ready for careful interpretation.",
+      "report_path": "docs\\benchmarks\\RUN_DEEPSEEK_VS_XENDRIS_PROGRAMMING_RELIABILITY_V0_1_2026_07_04.md",
+      "status": "ADMITTED",
+      "summary_path": "runs\\deepseek_vs_xendris_programming_reliability_v0_1_2026_07_04_summary.json",
+      "warning_count": 0
+    },
+    {
+      "blocker_count": 0,
+      "decision": "READY_FOR_INTERPRETATION",
+      "reason": "Ready for careful interpretation.",
+      "report_path": "runs\\trust_excellence_check\\deepseek_vs_xendris_trust_traps_v0_1_report.md",
+      "status": "ADMITTED",
+      "summary_path": "runs\\trust_excellence_check\\deepseek_vs_xendris_trust_traps_v0_1_summary.json",
+      "warning_count": 0
+    }
+  ],
+  "admitted_count": 2,
+  "rejected": [
+    {
+      "blocker_count": 1,
+      "decision": "BLOCKED_FOR_INTERPRETATION",
+      "reason": "dry_run_report_claims_real_provider_performance",
+      "report_path": "docs\\benchmarks\\RUN_DEEPSEEK_VS_XENDRIS_TRUST_TRAPS_V0_1_2026_07_04.md",
+      "status": "REJECTED",
+      "summary_path": "runs\\deepseek_vs_xendris_trust_traps_v0_1_2026_07_04_summary.json",
+      "warning_count": 4
+    },
+    {
+      "blocker_count": 4,
+      "decision": "BLOCKED_FOR_INTERPRETATION",
+      "reason": "missing_dataset_hash",
+      "report_path": "docs\\benchmarks\\RUN_DEEPSEEK_VS_XENDRIS_TRUST_TRAPS_V0_1_2026_07_04_V2.md",
+      "status": "REJECTED",
+      "summary_path": "runs\\deepseek_vs_xendris_trust_traps_v0_1_2026_07_04_v2_summary.json",
+      "warning_count": 9
+    },
+    {
+      "blocker_count": 1,
+      "decision": "BLOCKED_FOR_INTERPRETATION",
+      "reason": "dry_run_report_claims_real_provider_performance",
+      "report_path": "docs\\benchmarks\\RUN_DEEPSEEK_VS_XENDRIS_TRUST_TRAPS_V0_1.md.template",
+      "status": "REJECTED",
+      "summary_path": "runs\\deepseek_vs_xendris_trust_traps_v0_1_summary.json",
+      "warning_count": 4
+    }
+  ],
+  "rejected_count": 3,
+  "total_count": 5
+}
