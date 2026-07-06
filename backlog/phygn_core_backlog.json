@@ -1,1 +1,1144 @@
-[]
+[
+  {
+    "task_id": "A-01",
+    "title": "Implementar Historical Artifact Quarantine Policy",
+    "task_type": "POLICY",
+    "priority": "P0",
+    "status": "TODO",
+    "blocked_by": [],
+    "acceptance_criteria": [
+      "Política documentada en docs/policies/",
+      "Define qué es historical, rejected, quarantined, superseded",
+      "Define qué artefactos pueden/citan ser evidence",
+      "Integrada con release gate"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "A-02",
+    "title": "Crear manifest de artefactos rechazados",
+    "task_type": "DATA",
+    "priority": "P0",
+    "status": "TODO",
+    "blocked_by": ["A-01"],
+    "acceptance_criteria": [
+      "Manifest JSON en rag/citations/ o data/audits/",
+      "Cada artefacto tiene status: REJECTED, QUARANTINED_HISTORICAL, SUPERSEDED",
+      "Razón de rechazo documentada"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "A-03",
+    "title": "Ejecutar suite audit distinguiendo historical rejected vs active blocker",
+    "task_type": "AUDIT",
+    "priority": "P0",
+    "status": "TODO",
+    "blocked_by": ["A-02"],
+    "acceptance_criteria": [
+      "Script audit separa rejected históricos (non-blocking) de active blockers",
+      "Reporte generado con conteos",
+      "Cero active blockers"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "A-04",
+    "title": "Crear release_gate_v0_2_2",
+    "task_type": "SCRIPT",
+    "priority": "P0",
+    "status": "TODO",
+    "blocked_by": ["A-03"],
+    "acceptance_criteria": [
+      "scripts/release_gate_v0_2_2.py existe",
+      "Chequea: unsafe citations = 0, active blockers = 0, working tree clean",
+      "Output: PASS / WARNINGS_PRESENT / BLOCKED"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "A-05",
+    "title": "Fix whitespace warning en phyng/api.py",
+    "task_type": "FIX",
+    "priority": "P0",
+    "status": "TODO",
+    "blocked_by": [],
+    "acceptance_criteria": [
+      "Whitespace issue corregido o warning explícito documentado",
+      "Release gate no bloquea por esto"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "A-06",
+    "title": "Limpiar working tree",
+    "task_type": "CLEANUP",
+    "priority": "P0",
+    "status": "TODO",
+    "blocked_by": ["A-01"],
+    "acceptance_criteria": [
+      "git status limpio (solo archivos intencionales)",
+      "Outputs generados en cuarentena o ignorados",
+      ".gitignore actualizado"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "A-07",
+    "title": "Tag release v0.2.2",
+    "task_type": "RELEASE",
+    "priority": "P0",
+    "status": "TODO",
+    "blocked_by": ["A-04", "A-05", "A-06"],
+    "acceptance_criteria": [
+      "Release gate: PASS o WARNINGS_PRESENT",
+      "Tag v0.2.2 creado",
+      "Release notes generadas"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "A-08",
+    "title": "Verificar exit criteria del hito A",
+    "task_type": "VERIFY",
+    "priority": "P0",
+    "status": "TODO",
+    "blocked_by": ["A-07"],
+    "acceptance_criteria": [
+      "release gate PASS o WARNINGS_PRESENT",
+      "unsafe rejected citations = 0",
+      "active benchmark blockers = 0"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "B-01",
+    "title": "Auditar xendris.benchmarking",
+    "task_type": "AUDIT",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["A-07"],
+    "acceptance_criteria": [
+      "Reporte de todos los símbolos exportados",
+      "Clasificación: stable/experimental/private",
+      "Dependencias internas documentadas"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "B-02",
+    "title": "Auditar xendris.core.trust",
+    "task_type": "AUDIT",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["A-07"],
+    "acceptance_criteria": [
+      "Reporte de todos los símbolos exportados",
+      "Clasificación: stable/experimental/private",
+      "Dependencias internas documentadas"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "B-03",
+    "title": "Clasificar runtime/router/fingerprint/ledger restantes",
+    "task_type": "AUDIT",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["B-01", "B-02"],
+    "acceptance_criteria": [
+      "runtime, router, fingerprints, ledger, algebra, boundary, local, sectors, representations clasificados",
+      "Cada módulo tiene clasificación explícita en __init__.py"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "B-04",
+    "title": "Definir deprecation policy",
+    "task_type": "POLICY",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["B-03"],
+    "acceptance_criteria": [
+      "Documento en docs/policies/api_deprecation.md",
+      "Timeline: deprecation warning hasta removal",
+      "Versiones semánticas"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "B-05",
+    "title": "Escribir public import tests",
+    "task_type": "TEST",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["B-03"],
+    "acceptance_criteria": [
+      "tests/test_public_imports.py",
+      "Verifica que imports estables funcionan",
+      "Verifica que imports experimentales advierten",
+      "Verifica que imports privados fallan"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "B-06",
+    "title": "Publicar API surface spec",
+    "task_type": "DOCS",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["B-05"],
+    "acceptance_criteria": [
+      "docs/api/public_api_surface.md",
+      "Lista completa de símbolos públicos",
+      "Ejemplos de uso para cada módulo estable"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "B-07",
+    "title": "Deprecar o poblar namespaces vacíos",
+    "task_type": "CLEANUP",
+    "priority": "P2",
+    "status": "TODO",
+    "blocked_by": ["B-03"],
+    "acceptance_criteria": [
+      "xendris.models, xendris.benchmarks, xendris.prompts, xendris.outputs, xendris.scripts",
+      "Tienen contenido útil o deprecation warning explícito"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "C-01",
+    "title": "Real-provider Trust Traps execution",
+    "task_type": "BENCHMARK",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["A-07"],
+    "acceptance_criteria": [
+      "Script ejecuta Trust Traps contra OpenAI, Anthropic, DeepSeek",
+      "Resultados guardados en JSONL",
+      "Misma metodología que dry-run"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "C-02",
+    "title": "Real-provider Programming Reliability execution",
+    "task_type": "BENCHMARK",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["A-07"],
+    "acceptance_criteria": [
+      "Script ejecuta Programming Reliability contra proveedores",
+      "Resultados guardados en JSONL"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "C-03",
+    "title": "Implementar provider disclosure gate",
+    "task_type": "GATE",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["C-01"],
+    "acceptance_criteria": [
+      "Cada reporte incluye proveedor, versión API, fecha",
+      "Gate bloquea publicación sin disclosure"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "C-04",
+    "title": "Implementar cost disclosure gate",
+    "task_type": "GATE",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["C-01"],
+    "acceptance_criteria": [
+      "Cada reporte incluye coste por ejecución",
+      "Coste por token, por request, total"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "C-05",
+    "title": "Implementar latency disclosure gate",
+    "task_type": "GATE",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["C-01"],
+    "acceptance_criteria": [
+      "Cada reporte incluye latencia promedio, p50, p95",
+      "Modo dry-run vs real provider"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "C-06",
+    "title": "Dry-run vs real-provider comparison analysis",
+    "task_type": "ANALYSIS",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["C-01", "C-02"],
+    "acceptance_criteria": [
+      "Reporte comparativo: misma métrica, distinto entorno",
+      "Delta documentado",
+      "Interpretación permitida/prohibida"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "C-07",
+    "title": "Evidence registry admission",
+    "task_type": "DATA",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["C-03", "C-04", "C-05"],
+    "acceptance_criteria": [
+      "Artefactos clasificados como ADMITTED/REJECTED/QUARANTINED",
+      "Registry actualizado"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "C-08",
+    "title": "Publicar benchmark report conservador",
+    "task_type": "REPORT",
+    "priority": "P2",
+    "status": "TODO",
+    "blocked_by": ["C-07"],
+    "acceptance_criteria": [
+      "Reporte público con limitaciones explícitas",
+      "Sin claims de superioridad universal",
+      "Provider, cost, latency disclosure presente"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "D-01",
+    "title": "Crear FastAPI service para Xendris Runtime",
+    "task_type": "INFRA",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["B-03"],
+    "acceptance_criteria": [
+      "Servicio FastAPI standalone o extensión de phyng.api.py",
+      "Configurable por env vars",
+      "Health endpoint básico"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "D-02",
+    "title": "Implementar API key authentication middleware",
+    "task_type": "SECURITY",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-01"],
+    "acceptance_criteria": [
+      "Middleware de API key",
+      "Keys almacenadas (hash) en DB o env",
+      "401/403 para requests no autorizados"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "D-03",
+    "title": "Implementar POST /v1/runtime/execute",
+    "task_type": "ENDPOINT",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-01"],
+    "acceptance_criteria": [
+      "Acepta prompt + config (model, risk, etc.)",
+      "Pasa por: selector, provider sandbox, gates, ledger",
+      "Devuelve response + trust metadata",
+      "Modo full runtime y external gate"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "D-04",
+    "title": "Implementar POST /v1/claims/evaluate",
+    "task_type": "ENDPOINT",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-01"],
+    "acceptance_criteria": [
+      "Acepta texto + metadata opcional",
+      "Extrae claims, evalúa, devuelve decisiones",
+      "Sin llamar a modelo externo"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "D-05",
+    "title": "Implementar GET /v1/ledger/{run_id}",
+    "task_type": "ENDPOINT",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-01"],
+    "acceptance_criteria": [
+      "Devuelve eventos del ledger para un run_id",
+      "Filtrable por tipo de evento",
+      "Hash chain verificable"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "D-06",
+    "title": "Implementar GET /v1/health",
+    "task_type": "ENDPOINT",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-01"],
+    "acceptance_criteria": [
+      "Responde 200 OK",
+      "Incluye version, uptime, status de módulos"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "D-07",
+    "title": "Implementar POST /v1/routes/select",
+    "task_type": "ENDPOINT",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-01"],
+    "acceptance_criteria": [
+      "Dado prompt + risk + budget, devuelve modelo seleccionado + razón",
+      "Sin ejecutar el modelo"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "D-08",
+    "title": "Integrar provider sandbox con Runtime API",
+    "task_type": "INTEGRATION",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-03"],
+    "acceptance_criteria": [
+      "Sandbox bloquea network por defecto",
+      "Mocks deterministas disponibles",
+      "Quotas y cost tracking"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "D-09",
+    "title": "Implementar deterministic test mode",
+    "task_type": "TEST",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-01"],
+    "acceptance_criteria": [
+      "Modo donde todas las decisiones son deterministas",
+      "Mocks reemplazan llamadas a proveedores",
+      "Útil para CI/CD"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "D-10",
+    "title": "Escribir integration tests para Runtime API",
+    "task_type": "TEST",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-03", "D-04", "D-05", "D-06", "D-07", "D-08", "D-09"],
+    "acceptance_criteria": [
+      "Tests para cada endpoint",
+      "Tests de autenticación",
+      "Tests de modo determinista"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "E-01",
+    "title": "Implementar modelo tenant wallet",
+    "task_type": "MODEL",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-01"],
+    "acceptance_criteria": [
+      "Modelo Pydantic: tenant_id, balance, currency, hard_cap, daily_limit, monthly_limit",
+      "Persistencia en DB",
+      "Operaciones atómicas (cargo, abono)"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "E-02",
+    "title": "Implementar usage meter",
+    "task_type": "MODEL",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-01"],
+    "acceptance_criteria": [
+      "Registra por request: tenant_id, project_id, api_key, model, tokens, cost, timestamp",
+      "Consultable por periodo"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "E-03",
+    "title": "Implementar provider cost records",
+    "task_type": "MODEL",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-03"],
+    "acceptance_criteria": [
+      "Registra coste real por provider call",
+      "Modelo, tokens in/out, coste, timestamp",
+      "Asociado a run_id"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "E-04",
+    "title": "Implementar Xendris margin calculator",
+    "task_type": "SERVICE",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["E-03"],
+    "acceptance_criteria": [
+      "Calcula: provider_cost + Xendris_margin = total",
+      "Margen configurable por tenant/plan",
+      "Fórmula: margin = provider_cost * rate + fixed_fee"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "E-05",
+    "title": "Implementar budget policy engine",
+    "task_type": "SERVICE",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["E-01"],
+    "acceptance_criteria": [
+      "Evaluación pre-request: hard cap, daily, monthly",
+      "BLOCK si budget excedido",
+      "Alerta configurable"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "E-06",
+    "title": "Implementar balance check gate",
+    "task_type": "GATE",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["E-01"],
+    "acceptance_criteria": [
+      "Gate en runtime: si balance < estimated_cost, BLOCK",
+      "Mensaje claro al usuario"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "E-07",
+    "title": "Implementar wallet top-up endpoint",
+    "task_type": "ENDPOINT",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["E-01"],
+    "acceptance_criteria": [
+      "POST /v1/wallet/topup",
+      "Simulación de pago (sin integración real inicial)",
+      "Saldo actualizado"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "E-08",
+    "title": "Implementar wallet/billing API para dashboard",
+    "task_type": "API",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["E-03", "E-04"],
+    "acceptance_criteria": [
+      "GET /v1/usage",
+      "GET /v1/wallet/balance",
+      "GET /v1/billing/history"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "E-09",
+    "title": "Implementar alerts system (low balance, budget exceeded)",
+    "task_type": "SERVICE",
+    "priority": "P2",
+    "status": "TODO",
+    "blocked_by": ["E-05"],
+    "acceptance_criteria": [
+      "Alerta configurable al N% de budget consumido",
+      "Canal: email, dashboard notification"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "E-10",
+    "title": "Escribir wallet/billing tests",
+    "task_type": "TEST",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["E-01", "E-02", "E-03", "E-04", "E-05", "E-06", "E-07", "E-08"],
+    "acceptance_criteria": [
+      "Tests de cargo/abono atómico",
+      "Tests de budget policy",
+      "Tests de balance check gate"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "F-01",
+    "title": "Implementar SycophancyGuard",
+    "task_type": "GATE",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-01"],
+    "acceptance_criteria": [
+      "Detecta cuando el usuario propone conclusión y el modelo asiente sin evidencia",
+      "Regla: user conclusion se limita a hypothesis, no fact",
+      "Test: test_user_hypothesis_not_promoted_without_evidence"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "F-02",
+    "title": "Implementar AdaptiveCouncilPolicy",
+    "task_type": "POLICY",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-01"],
+    "acceptance_criteria": [
+      "No council by default",
+      "Council solo por evidence of need",
+      "Reglas de escalado definidas"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "F-03",
+    "title": "Implementar ContrarianGuard",
+    "task_type": "GATE",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["F-02"],
+    "acceptance_criteria": [
+      "Genera contraargumento cuando hay sycophancy",
+      "Test: test_sycophantic_answer_requires_contraargument"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "F-04",
+    "title": "Implementar FirstPrinciplesGuard",
+    "task_type": "GATE",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["F-02"],
+    "acceptance_criteria": [
+      "Evalúa si respuesta es consistente con primeros principios",
+      "Para claims científicos/técnicos"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "F-05",
+    "title": "Implementar EvidenceGuard",
+    "task_type": "GATE",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["F-02"],
+    "acceptance_criteria": [
+      "Verifica si claim tiene evidencia asociada",
+      "Si no, degrada a hypothesis"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "F-06",
+    "title": "Implementar marginal certainty gain metric",
+    "task_type": "METRIC",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["F-02"],
+    "acceptance_criteria": [
+      "marginal_certainty_gain_per_token",
+      "Registrada por escalación de council"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "F-07",
+    "title": "Implementar council escalation logging in ledger",
+    "task_type": "FEATURE",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["F-02"],
+    "acceptance_criteria": [
+      "Cada escalación registrada en trust ledger",
+      "Incluye: razón, modelos usados, tokens, coste, certainty gain"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "F-08",
+    "title": "Implementar token avoidance tracking",
+    "task_type": "METRIC",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["F-06"],
+    "acceptance_criteria": [
+      "tokens_avoided_by_local_guards",
+      "cost_saved_vs_always_council"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "F-09",
+    "title": "Escribir sycophancy tests",
+    "task_type": "TEST",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["F-01", "F-02", "F-03", "F-04", "F-05", "F-06", "F-07", "F-08"],
+    "acceptance_criteria": [
+      "5+ tests de casos de sycophancy",
+      "Cubren low, medium, high risk"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "F-10",
+    "title": "Escribir council tests",
+    "task_type": "TEST",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["F-01", "F-02", "F-03", "F-04", "F-05", "F-06", "F-07", "F-08"],
+    "acceptance_criteria": [
+      "Tests de escalado/desescalado",
+      "Tests de marginal certainty gain",
+      "Tests de no-council por defecto"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "G-01",
+    "title": "Implementar EpistemicFrame enum con frames iniciales",
+    "task_type": "MODEL",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["B-03"],
+    "acceptance_criteria": [
+      "Enum con 12+ frames: EXPLORATION, CREATIVE, MARKETING, BENCHMARK, PRODUCTION, CODE_STATE, LEGAL, MEDICAL, FINANCIAL, SECURITY, EDUCATIONAL, RESEARCH",
+      "Cada frame tiene: evidence_requirements, actionability_level, default_gates"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "G-02",
+    "title": "Implementar FrameShiftGuard",
+    "task_type": "GATE",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["G-01"],
+    "acceptance_criteria": [
+      "Detecta intento de cambiar frame sin evidencia puente",
+      "Regla: frame_shift_requires_evidence_bridge"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "G-03",
+    "title": "Implementar InterfaceTruthGap",
+    "task_type": "MODEL",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["G-01"],
+    "acceptance_criteria": [
+      "Mide distancia entre utilidad de interfaz y certeza cognitiva",
+      "A mayor actionability, mayor gap requiere evidencia"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "G-04",
+    "title": "Implementar ActionabilityGate",
+    "task_type": "GATE",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["G-01"],
+    "acceptance_criteria": [
+      "Clasifica output como: explanatory / actionable / critical",
+      "Crítico requiere más evidencia"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "G-05",
+    "title": "Implementar frame-specific evidence requirements",
+    "task_type": "POLICY",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["G-01"],
+    "acceptance_criteria": [
+      "Cada frame define qué evidencia es necesaria",
+      "PRODUCTION requiere deployment evidence",
+      "BENCHMARK requiere dataset scope",
+      "MARKETING prohíbe lenguaje universal"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "G-06",
+    "title": "Implementar PresentationBoundary",
+    "task_type": "GATE",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["G-01"],
+    "acceptance_criteria": [
+      "Distingue entre contenido presentado y certeza afirmada",
+      "Interfaz útil no equivale a certeza cognitiva"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "G-07",
+    "title": "Implementar InterfaceMode y ActionIntent",
+    "task_type": "MODEL",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["G-01"],
+    "acceptance_criteria": [
+      "InterfaceMode: CHAT, DASHBOARD, API, REPORT, CANVAS",
+      "ActionIntent: EXPLAIN, PERSUADE, INSTRUCT, DECIDE, CREATE",
+      "Cada combinación tiene perfil de riesgo"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "G-08",
+    "title": "Escribir frame layer tests",
+    "task_type": "TEST",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["G-01", "G-02", "G-03", "G-04", "G-05", "G-06", "G-07"],
+    "acceptance_criteria": [
+      "8+ tests cubriendo frames y transitions",
+      "Tests de gap y actionability"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "H-01",
+    "title": "Rebuild chat UI with model routing",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-03", "F-01"],
+    "acceptance_criteria": [
+      "Shell de chat funcional sobre shell existente",
+      "Selector automático de modelo visible",
+      "Streaming de respuesta"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "H-02",
+    "title": "Implementar model route explanation panel",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-03"],
+    "acceptance_criteria": [
+      "Panel que explica: por qué este modelo, riesgo, coste estimado",
+      "Tooltip o expandable section"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "H-03",
+    "title": "Implementar trust panel (claims, decisions, evidence)",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-04", "F-07"],
+    "acceptance_criteria": [
+      "Muestra claims evaluados por respuesta",
+      "Cada claim: status (APPROVED/BLOCKED/LIMITED), evidencia, frame",
+      "Visualización clara de Frontera C"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "H-04",
+    "title": "Implementar cost panel",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["E-03", "E-04"],
+    "acceptance_criteria": [
+      "Coste por respuesta",
+      "Ahorro acumulado vs frontier",
+      "Coste por respuesta admisible"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "H-05",
+    "title": "Implementar ledger per conversation",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-05"],
+    "acceptance_criteria": [
+      "Timeline de eventos de confianza por conversación",
+      "Expandible para ver detalles"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "H-06",
+    "title": "Implementar user-selectable modes (eco, normal, precision, custom)",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["F-02", "G-01"],
+    "acceptance_criteria": [
+      "Selector: Eco / Normal / Precision / Custom",
+      "Cada modo configura risk, model tier, gates",
+      "Visualización del perfil activo"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "H-07",
+    "title": "Implementar manual model override",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-03"],
+    "acceptance_criteria": [
+      "Usuario puede override temporal del modelo",
+      "Advertencia de coste/riesgo"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "H-08",
+    "title": "Implementar Frontera C visualization",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["H-03"],
+    "acceptance_criteria": [
+      "Visualización de claims que cruzaron/no cruzaron Frontera C",
+      "Indicador visual por claim"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "H-09",
+    "title": "Implementar local model connector UI (Ollama future)",
+    "task_type": "UI",
+    "priority": "P2",
+    "status": "TODO",
+    "blocked_by": ["H-01"],
+    "acceptance_criteria": [
+      "UI para conectar Ollama/local model",
+      "Estado: conectado/desconectado",
+      "Sin implementación de seguridad NAT"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "H-10",
+    "title": "Implementar streaming de confianza",
+    "task_type": "UI",
+    "priority": "P2",
+    "status": "TODO",
+    "blocked_by": ["D-03"],
+    "acceptance_criteria": [
+      "Decisiones de confianza aparecen en tiempo real mientras el modelo genera",
+      "Claims evaluados aparecen progresivamente"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "H-11",
+    "title": "Escribir user acceptance tests para Agent UI",
+    "task_type": "TEST",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["H-01", "H-02", "H-03", "H-04", "H-05", "H-06", "H-07", "H-08"],
+    "acceptance_criteria": [
+      "Tests E2E de flujo de chat",
+      "Tests de cambio de modo",
+      "Tests de panels"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "I-01",
+    "title": "Implementar dashboard overview (saldo, consumo, ahorro)",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["E-01", "E-02"],
+    "acceptance_criteria": [
+      "Cards: saldo, consumo mes, ahorro estimado, coste por respuesta admisible",
+      "Actualización en tiempo real o polling"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "I-02",
+    "title": "Implementar cost per admissible answer display",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["E-03", "E-04"],
+    "acceptance_criteria": [
+      "cost_per_admissible_answer como métrica central del dashboard",
+      "Gráfico de tendencia"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "I-03",
+    "title": "Implementar tokens avoided y escalations avoided display",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["F-08"],
+    "acceptance_criteria": [
+      "Tokens avoided counter",
+      "Escalations avoided counter",
+      "Cost saved vs always-frontier"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "I-04",
+    "title": "Implementar model spend breakdown chart",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["E-03"],
+    "acceptance_criteria": [
+      "Gráfico de gasto por modelo",
+      "% del total"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "I-05",
+    "title": "Implementar trust decisions display",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-04"],
+    "acceptance_criteria": [
+      "Tabla/gráfico: blocked, limited, admitted, human_review",
+      "Tendencias"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "I-06",
+    "title": "Implementar evidence reports view",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["C-07"],
+    "acceptance_criteria": [
+      "Lista de artefactos de evidencia",
+      "Status: ADMITTED, REJECTED, QUARANTINED",
+      "Detalles del benchmark"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "I-07",
+    "title": "Implementar exportable audit (JSON/JSONL/Markdown)",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-05"],
+    "acceptance_criteria": [
+      "Export ledger como JSON, JSONL, Markdown",
+      "Botón de descarga"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "I-08",
+    "title": "Implementar API key management UI",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-02"],
+    "acceptance_criteria": [
+      "CRUD de API keys",
+      "Mostrar key parcial, fecha creación, último uso",
+      "Revocar key"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "I-09",
+    "title": "Implementar wallet/billing views",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["E-01", "E-07"],
+    "acceptance_criteria": [
+      "Balance actual",
+      "Historial de recargas",
+      "Top-up button (simulado)"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "I-10",
+    "title": "Implementar ledger viewer con búsqueda por run_id",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["D-05"],
+    "acceptance_criteria": [
+      "Búsqueda por run_id",
+      "Timeline de eventos",
+      "Hash chain status"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "I-11",
+    "title": "Implementar gráfico de ahorro vs baseline premium",
+    "task_type": "UI",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["I-02"],
+    "acceptance_criteria": [
+      "Comparación: coste actual vs siempre-frontier",
+      "Ahorro acumulado"
+    ],
+    "linked_gap_id": null
+  },
+  {
+    "task_id": "I-12",
+    "title": "Escribir dashboard tests",
+    "task_type": "TEST",
+    "priority": "P1",
+    "status": "TODO",
+    "blocked_by": ["I-01", "I-02", "I-03", "I-04", "I-05", "I-06", "I-07", "I-08", "I-09", "I-10", "I-11"],
+    "acceptance_criteria": [
+      "Tests de renderizado de componentes",
+      "Tests de datos mock"
+    ],
+    "linked_gap_id": null
+  }
+]

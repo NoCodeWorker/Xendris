@@ -18,7 +18,7 @@ contract preservation, basic security checks, and production-overclaim control.
 | Top p | `1` |
 | Max tokens | `2048` |
 | Sample timeout | `2.0 s` |
-| Started UTC | `2026-07-06T10:16:42.882496+00:00` |
+| Started UTC | `2026-07-06T10:33:03.424807+00:00` |
 | Dataset hash | `b882cc5558c284ccb16dcc9bf9e39ea76aedab6bdcbe47185ea55de53e78776c` |
 | Xendris version | `0.2.0` |
 | Python version | `3.11.9` |
