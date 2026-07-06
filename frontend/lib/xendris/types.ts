@@ -14,7 +14,15 @@ export type XendrisIntent =
   | "creative"
   | "security"
 
-export type XendrisProviderName = "mock" | "deepseek"
+export type XendrisProviderName = "mock" | "deepseek" | "runtime"
+
+export type XendrisMode = "eco" | "normal" | "precision" | "custom"
+
+export type XendrisGuardResult = {
+  guard: string
+  result: "PASS" | "FLAG" | "BLOCK"
+  reason: string
+}
 
 export type XendrisMessageRole = "user" | "assistant"
 
@@ -36,6 +44,15 @@ export type XendrisMessage = {
     repair?: XendrisRepairMetadata
     executionSummary?: ExecutionSummary
     detectedLanguage?: "es" | "en"
+    council?: {
+      verdict: string
+      guard_results: XendrisGuardResult[]
+      requires_council: boolean
+    }
+    wallet?: {
+      charge: string
+      usage_id: string
+    }
   }
 }
 

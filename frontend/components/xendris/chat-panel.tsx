@@ -6,6 +6,8 @@ import * as React from "react"
 import { ArrowUp, Copy, Check } from "lucide-react"
 import { Button } from "src/components/ui/button"
 import { DevRuntimeStatus } from "src/components/xendris/dev-runtime-status"
+import { TrustPanel } from "src/components/xendris/trust-panel"
+import { CostPanel } from "src/components/xendris/cost-panel"
 
 
 import { MarkdownMessage } from "src/components/xendris/markdown-message"
@@ -21,6 +23,7 @@ import type {
   XendrisConversation,
   XendrisMessage,
   XendrisProviderName,
+  XendrisMode,
 } from "src/lib/xendris/types"
 
 const INITIAL_ROUTE: IntentRoute = {
@@ -31,12 +34,13 @@ const INITIAL_ROUTE: IntentRoute = {
 const DEV_TOOLS_ENABLED = process.env.NEXT_PUBLIC_XENDRIS_DEV_TOOLS === "true"
 const STREAMING_ENABLED = process.env.NEXT_PUBLIC_XENDRIS_STREAMING === "true"
 const DEV_PROVIDER_STORAGE_KEY = "xendris.dev.provider.v1"
-const PROVIDERS: XendrisProviderName[] = ["mock", "deepseek"]
+const PROVIDERS: XendrisProviderName[] = ["mock", "deepseek", "runtime"]
 
 type ChatPanelProps = {
   conversation: XendrisConversation
   onConversationChange: (conversation: XendrisConversation) => void
   onGeneratingChange?: (isGenerating: boolean) => void
+  mode?: XendrisMode
 }
 
 function createConversationTitle(message: string) {
@@ -67,7 +71,7 @@ function createMessage(
 function readStoredProvider(): XendrisProviderName {
   try {
     const value = window.localStorage.getItem(DEV_PROVIDER_STORAGE_KEY)
-    return value === "deepseek" || value === "mock" ? value : "mock"
+    return value === "deepseek" || value === "mock" || value === "runtime" ? value : "mock"
   } catch {
     return "mock"
   }
@@ -99,6 +103,7 @@ export function ChatPanel({
   conversation,
   onConversationChange,
   onGeneratingChange,
+  mode = "normal",
 }: ChatPanelProps) {
   const [input, setInput] = React.useState("")
   const [route, setRoute] = React.useState<IntentRoute>(INITIAL_ROUTE)
@@ -175,70 +180,100 @@ export function ChatPanel({
     inFlightRef.current = true
     setIsSending(true)
 
-    if (STREAMING_ENABLED) {
+    if (STREAMING_ENABLED && selectedProvider !== "runtime") {
       await sendStreamingMessage(content, conversationWithPending, pendingMessage)
       return
     }
 
     try {
-      const apiResponse = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: content,
-          ...(DEV_TOOLS_ENABLED ? { provider: selectedProvider } : {}),
-        }),
-      })
+      if (selectedProvider === "runtime") {
+        const apiResponse = await fetch("/api/xendris/runtime", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: content,
+            mode: mode,
+          }),
+        })
 
-      const data = (await apiResponse.json()) as XendrisChatResponse
+        const data = await apiResponse.json()
 
-      if (!data.ok) {
-        const messagesAfterError = conversationWithPending.messages.map((message) =>
+        if (!data.ok) {
+          const messagesAfterError = conversationWithPending.messages.map((message) =>
+            message.id === pendingMessage.id
+              ? { ...message, content: `Runtime error: ${data.error.message}`, metadata: undefined }
+              : message
+          )
+          commitConversation(messagesAfterError)
+          return
+        }
+
+        const messagesAfterSuccess = conversationWithPending.messages.map((message) =>
           message.id === pendingMessage.id
             ? {
                 ...message,
-                content: `No he podido completar la respuesta: ${data.error.message}`,
-                metadata: undefined,
+                content: data.response,
+                metadata: {
+                  provider: data.provider,
+                  model: data.model,
+                  council: data.council,
+                  wallet: data.wallet,
+                },
               }
             : message
         )
-        commitConversation(messagesAfterError)
-        return
+
+        commitConversation(messagesAfterSuccess)
+      } else {
+        const apiResponse = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: content,
+            ...(DEV_TOOLS_ENABLED ? { provider: selectedProvider } : {}),
+          }),
+        })
+
+        const data = (await apiResponse.json()) as XendrisChatResponse
+
+        if (!data.ok) {
+          const messagesAfterError = conversationWithPending.messages.map((message) =>
+            message.id === pendingMessage.id
+              ? { ...message, content: `No he podido completar la respuesta: ${data.error.message}`, metadata: undefined }
+              : message
+          )
+          commitConversation(messagesAfterError)
+          return
+        }
+
+        const messagesAfterSuccess = conversationWithPending.messages.map((message) =>
+          message.id === pendingMessage.id
+            ? {
+                ...message,
+                content: data.response,
+                metadata: {
+                  detectedIntent: data.detectedIntent,
+                  cognitiveMode: data.cognitiveMode,
+                  provider: data.provider,
+                  model: data.model,
+                  cache: data.cache,
+                  evaluation: data.evaluation,
+                  controllerDecision: data.controllerDecision,
+                  repair: data.repair,
+                  executionSummary: data.executionSummary,
+                },
+              }
+            : message
+        )
+
+        setRoute(data.route)
+        commitConversation(messagesAfterSuccess)
       }
-
-      const messagesAfterSuccess = conversationWithPending.messages.map((message) =>
-        message.id === pendingMessage.id
-          ? {
-              ...message,
-              content: data.response,
-              metadata: {
-                detectedIntent: data.detectedIntent,
-                cognitiveMode: data.cognitiveMode,
-                provider: data.provider,
-                model: data.model,
-                cache: data.cache,
-                evaluation: data.evaluation,
-                controllerDecision: data.controllerDecision,
-                repair: data.repair,
-                executionSummary: data.executionSummary,
-              },
-            }
-          : message
-      )
-
-      setRoute(data.route)
-      commitConversation(messagesAfterSuccess)
-    } catch {
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : "Error desconocido"
       const messagesAfterFailure = conversationWithPending.messages.map((message) =>
         message.id === pendingMessage.id
-          ? {
-              ...message,
-              content:
-                "No he podido conectar con el contrato de chat local. Revisa que el servidor siga activo.",
-              metadata: undefined,
-            }
+          ? { ...message, content: `Error: ${errorMsg}`, metadata: undefined }
           : message
       )
       commitConversation(messagesAfterFailure)
@@ -398,7 +433,7 @@ export function ChatPanel({
 
   function handleProviderChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const value = event.target.value
-    if (value !== "mock" && value !== "deepseek") return
+    if (value !== "mock" && value !== "deepseek" && value !== "runtime") return
 
     setSelectedProvider(value)
 
@@ -497,6 +532,21 @@ export function ChatPanel({
                   ) : (
                     <p>{message.content}</p>
                   )}
+                  {message.role === "assistant" && message.metadata?.council && !message.metadata?.pending ? (
+                    <TrustPanel
+                      verdict={message.metadata.council.verdict}
+                      guardResults={message.metadata.council.guard_results}
+                      requiresCouncil={message.metadata.council.requires_council}
+                    />
+                  ) : null}
+                  {message.role === "assistant" && message.metadata?.wallet && !message.metadata?.pending ? (
+                    <CostPanel
+                      charge={message.metadata.wallet.charge}
+                      usageId={message.metadata.wallet.usage_id}
+                      provider={message.metadata.provider || ""}
+                      model={message.metadata.model || ""}
+                    />
+                  ) : null}
                   {message.role === "assistant" && !message.metadata?.pending ? (
                     <div className="mt-3 flex items-center gap-2 border-t border-current/15 pt-2">
                       <button

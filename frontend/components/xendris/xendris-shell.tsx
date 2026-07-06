@@ -9,8 +9,9 @@ import { ThemeToggle } from "src/components/theme-toggle"
 
 
 import { ChatPanel } from "src/components/xendris/chat-panel"
+import { ModeSelector } from "src/components/xendris/mode-selector"
 import { cn } from "src/lib/utils"
-import type { XendrisConversation } from "src/lib/xendris/types"
+import type { XendrisConversation, XendrisMode } from "src/lib/xendris/types"
 
 const STORAGE_KEY = "xendris.conversations.v1"
 const EMPTY_TITLE = "Nueva conversación"
@@ -68,6 +69,7 @@ export function XendrisShell() {
   const [activeConversationId, setActiveConversationId] = React.useState<string | null>(null)
   const [isHydrated, setIsHydrated] = React.useState(false)
   const [isGenerating, setIsGenerating] = React.useState(false)
+  const [mode, setMode] = React.useState<XendrisMode>("normal")
 
   React.useEffect(() => {
     const storedConversations = loadStoredConversations()
@@ -221,11 +223,8 @@ export function XendrisShell() {
           ))}
         </nav>
 
-        <div className="mt-3 rounded-xl border bg-background/70 p-3 shadow-xs">
-          <p className="text-xs font-semibold text-foreground">Modo adaptativo</p>
-          <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
-            Xendris decide el modo cognitivo internamente en cada mensaje.
-          </p>
+        <div className="mt-3">
+          <ModeSelector selected={mode} onChange={setMode} />
         </div>
       </aside>
 
@@ -268,6 +267,7 @@ export function XendrisShell() {
             conversation={activeConversation}
             onConversationChange={updateActiveConversation}
             onGeneratingChange={setIsGenerating}
+            mode={mode}
           />
         ) : null}
       </section>

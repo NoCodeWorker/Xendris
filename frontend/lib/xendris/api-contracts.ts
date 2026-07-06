@@ -72,3 +72,50 @@ export type XendrisStreamEvent =
   | XendrisStreamDeltaEvent
   | XendrisStreamDoneEvent
   | XendrisStreamErrorEvent
+
+export type XendrisMode = "eco" | "normal" | "precision" | "custom"
+
+export type XendrisGuardResult = {
+  guard: string
+  result: "PASS" | "FLAG" | "BLOCK"
+  reason: string
+}
+
+export type XendrisCouncilMetadata = {
+  verdict: string
+  guard_results: XendrisGuardResult[]
+  requires_council: boolean
+}
+
+export type XendrisWalletMetadata = {
+  charge: string
+  usage_id: string
+}
+
+export type XendrisRuntimeRequest = {
+  message: string
+  mode?: XendrisMode
+  risk_level?: string
+  model_id?: string
+  provider?: string
+  tenant_id?: string
+}
+
+export type XendrisRuntimeSuccessResponse = {
+  ok: true
+  response: string
+  provider: string
+  model: string
+  decision: string
+  reason: string
+  council: XendrisCouncilMetadata
+  wallet: XendrisWalletMetadata
+  route: IntentRoute
+}
+
+export type XendrisRuntimeErrorResponse = {
+  ok: false
+  error: XendrisApiError
+}
+
+export type XendrisRuntimeResponse = XendrisRuntimeSuccessResponse | XendrisRuntimeErrorResponse
