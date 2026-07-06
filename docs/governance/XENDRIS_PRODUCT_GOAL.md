@@ -262,6 +262,17 @@ Use frontier models only when justified.
 Use council only when epistemically necessary.
 ```
 
+Intervention principle:
+
+```txt
+No intervention without domain-calibrated benefit.
+```
+
+This means Xendris must not add stronger checks, imports, model calls, council
+steps, or code transformations merely because they look safer in the abstract.
+Intervention strength must be calibrated to the domain, category, execution
+mode, and measured harm/benefit.
+
 ## Adaptive Council Policy
 
 More tokens do not imply more certainty.
