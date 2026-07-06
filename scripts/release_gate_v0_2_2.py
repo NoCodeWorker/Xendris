@@ -70,8 +70,11 @@ def run_release_gate() -> list[GateStep]:
         returncode = result.returncode
         if name == "working_tree_clean" and result.stdout.strip():
             returncode = 1
-        warning_only = name == "git_diff_check" and _is_known_warning_only(
-            result.stdout + result.stderr
+        combined_output = result.stdout + result.stderr
+        warning_only = (
+            name == "git_diff_check"
+            and bool(combined_output.strip())
+            and _is_known_warning_only(combined_output)
         )
         steps.append(
             GateStep(
