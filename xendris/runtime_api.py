@@ -51,6 +51,10 @@ from xendris.core.wallet import (
     TenantWallet, WalletTransaction,
 )
 from xendris.core.usage import UsageMeter, UsageRecord, ProviderCostRecord, UsageQuery
+from xendris.core.council import (
+    AdaptiveCouncilPolicy, CouncilLogger, CouncilDecision,
+    GuardResult, GuardOutput,
+)
 
 # ── App setup ──────────────────────────────────────────────────────────
 
@@ -66,6 +70,10 @@ _usage_meter = UsageMeter(os.getenv("XENDRIS_USAGE_DIR", "data/usage"))
 _budget_policy = BudgetPolicy(_wallet_store)
 _balance_gate = BalanceCheckGate(_wallet_store)
 _margin_calc = MarginCalculator()
+
+# Council state
+_council_policy = AdaptiveCouncilPolicy()
+_council_logger = CouncilLogger()
 
 app = FastAPI(
     title="Xendris Runtime API",
@@ -129,6 +137,10 @@ class ExecuteRequest(BaseModel):
     prefer_low_cost: bool = False
     prefer_low_latency: bool = False
     deterministic: bool = False
+    tenant_id: str = ""
+    enable_council: bool = True
+    estimated_input_tokens: int = 512
+    estimated_output_tokens: int = 1024
 
 
 class ExecuteResponse(BaseModel):
@@ -144,6 +156,10 @@ class ExecuteResponse(BaseModel):
     blocked: bool
     reason: str
     sandbox_audits: list[dict]
+    council_verdict: str = ""
+    council_guard_results: list[dict] = Field(default_factory=list)
+    wallet_charge: str = ""
+    usage_id: str = ""
 
 
 class EvaluateClaimsRequest(BaseModel):
@@ -331,10 +347,31 @@ def runtime_execute(req: ExecuteRequest) -> ExecuteResponse:
 
     rid = req.request_id or f"req-{uuid.uuid4().hex[:12]}"
     run_id = f"run-{rid}"
+    tenant_id = req.tenant_id or ""
 
     registry = _build_default_registry()
     model_id = req.model_id or "gpt-4o-mini"
     provider = req.provider or "openai"
+
+    # 0. Wallet balance check (if tenant_id provided)
+    if tenant_id:
+        estimated_cost = Decimal("0.01")
+        budget_block = _budget_policy.check_limits(tenant_id, estimated_cost)
+        if budget_block is not None:
+            return ExecuteResponse(
+                response_id=f"resp-{uuid.uuid4().hex[:8]}",
+                request_id=rid,
+                decision="BLOCKED",
+                final_content=f"Wallet blocked: {budget_block}",
+                selected_model_id=model_id,
+                provider=provider,
+                limitations=[],
+                ledger_record_ids=[],
+                human_review_required=False,
+                blocked=True,
+                reason=f"Wallet: {budget_block}",
+                sandbox_audits=[],
+            )
 
     # 1. Route: select model
     selector = MultiModelSelector(cost_policy=CostPolicy(), risk_policy=RiskPolicy())
@@ -342,7 +379,8 @@ def runtime_execute(req: ExecuteRequest) -> ExecuteResponse:
         request_id=rid, user_intent="GENERAL_CHAT",
         local_context=ctx, epistemic_sector=sector,
         claim_type=ctype, risk_level=risk,
-        estimated_input_tokens=512, estimated_output_tokens=1024,
+        estimated_input_tokens=req.estimated_input_tokens,
+        estimated_output_tokens=req.estimated_output_tokens,
         prefer_low_cost=req.prefer_low_cost,
         prefer_low_latency=req.prefer_low_latency,
     )
@@ -384,11 +422,29 @@ def runtime_execute(req: ExecuteRequest) -> ExecuteResponse:
             sandbox_audits=[a.to_dict() for a in sandbox.audits],
         )
 
-    # 3. Basic claim extraction
+    # 3. Council evaluation (post-generation, before claim extraction)
+    council_decision: CouncilDecision | None = None
+    council_guard_results: list[dict] = []
+    council_verdict = ""
+    if req.enable_council:
+        risk_str = risk.name if hasattr(risk, "name") else str(risk)
+        ctype_str = ctype.name if hasattr(ctype, "name") else str(ctype)
+        council_decision = _council_policy.evaluate(
+            req.user_input, content,
+            risk_level=risk_str, claim_type=ctype_str,
+        )
+        _council_logger.log_decision(run_id, council_decision, req.user_input, content)
+        council_verdict = council_decision.verdict
+        council_guard_results = [
+            {"guard": g.guard_name, "result": g.result.value, "reason": g.reason}
+            for g in council_decision.guard_results
+        ]
+
+    # 4. Basic claim extraction
     extractor = ClaimExtractor()
     claims = extractor.extract_claims(content)
 
-    # 4. Evaluate claims
+    # 5. Evaluate claims
     blocked = False
     limitations = []
     decision = "APPROVED"
@@ -406,7 +462,32 @@ def runtime_execute(req: ExecuteRequest) -> ExecuteResponse:
             reason = "Some claims limited"
             limitations.append(claim.get("content", "")[:80])
 
-    # 5. Record in ledger
+    # 6. Wallet charge + usage recording
+    wallet_charge = ""
+    usage_id = ""
+    if tenant_id and decision not in ("BLOCKED", "ERROR"):
+        try:
+            charge_amount = Decimal("0.01")
+            wallet, tx = _wallet_store.charge(
+                tenant_id, charge_amount,
+                f"Runtime execute: {rid}", run_id,
+            )
+            wallet_charge = str(charge_amount)
+            usage = _usage_meter.record_usage(UsageRecord(
+                usage_id=f"usage-{uuid.uuid4().hex[:12]}",
+                tenant_id=tenant_id,
+                model_id=selected_model,
+                provider=selected_provider,
+                input_tokens=req.estimated_input_tokens,
+                output_tokens=req.estimated_output_tokens,
+                provider_cost=charge_amount,
+                xendris_cost=charge_amount,
+            ))
+            usage_id = usage.usage_id
+        except Exception:
+            pass
+
+    # 7. Record in ledger
     writer = TrustLedgerWriter()
     record_id = f"rec-{uuid.uuid4().hex[:8]}"
     writer.append_event(
@@ -417,6 +498,29 @@ def runtime_execute(req: ExecuteRequest) -> ExecuteResponse:
         risk_level=risk.name if hasattr(risk, "name") else str(risk),
         model_id=selected_model, provider=selected_provider,
     )
+
+    # Council escalation ledger record
+    council_record_ids: list[str] = []
+    if council_decision and council_decision.requires_council:
+        council_rec_id = f"rec-{uuid.uuid4().hex[:8]}"
+        writer.append_event(
+            record_id=council_rec_id, run_id=run_id,
+            event_type=TrustEventType.COUNCIL_ESCALATION,
+            source_component="AdaptiveCouncilPolicy",
+            decision=council_decision.verdict,
+            reason=council_decision.escalation_reason.value if council_decision.escalation_reason else "UNKNOWN",
+            risk_level=risk.name if hasattr(risk, "name") else str(risk),
+            model_id=selected_model,
+            provider=selected_provider,
+            metadata={
+                "guard_results": council_guard_results,
+                "selected_models": council_decision.selected_models,
+                "tokens_used": council_decision.tokens_used,
+                "cost": str(council_decision.cost),
+            },
+        )
+        council_record_ids.append(council_rec_id)
+
     _ledgers[run_id] = writer
 
     return ExecuteResponse(
@@ -427,11 +531,15 @@ def runtime_execute(req: ExecuteRequest) -> ExecuteResponse:
         selected_model_id=selected_model,
         provider=selected_provider,
         limitations=limitations,
-        ledger_record_ids=[record_id],
-        human_review_required=False,
+        ledger_record_ids=[record_id] + council_record_ids,
+        human_review_required=bool(council_decision and council_decision.requires_council),
         blocked=blocked,
         reason=reason,
         sandbox_audits=[a.to_dict() for a in sandbox.audits],
+        council_verdict=council_verdict,
+        council_guard_results=council_guard_results,
+        wallet_charge=wallet_charge,
+        usage_id=usage_id,
     )
 
 

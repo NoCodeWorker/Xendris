@@ -289,3 +289,65 @@ def test_wallet_unauthorized():
         "amount": "10.00",
     })
     assert r.status_code == 401
+
+
+# ── Full pipeline integration tests ────────────────────────────────────
+
+def test_execute_with_wallet_balance_check():
+    tenant = "full-pipe-t1"
+    client.post("/v1/wallet/topup", headers=headers, json={
+        "tenant_id": tenant, "amount": "10.00",
+    })
+    r = client.post("/v1/runtime/execute", headers=headers, json={
+        "user_input": "What is the capital of France?",
+        "deterministic": True,
+        "risk_level": "LOW",
+        "tenant_id": tenant,
+    })
+    assert r.status_code == 200
+    data = r.json()
+    assert data["decision"] in ("APPROVED", "APPROVED_WITH_LIMITATIONS")
+    assert data["wallet_charge"] == "0.01"
+    assert data["usage_id"] != ""
+    assert data["council_verdict"] != ""
+
+
+def test_execute_with_wallet_insufficient_balance():
+    tenant = "full-pipe-t2"
+    client.post("/v1/wallet/topup", headers=headers, json={
+        "tenant_id": tenant, "amount": "0.005",
+    })
+    r = client.post("/v1/runtime/execute", headers=headers, json={
+        "user_input": "Hello world",
+        "deterministic": True,
+        "risk_level": "LOW",
+        "tenant_id": tenant,
+    })
+    assert r.status_code == 200
+    data = r.json()
+    assert data["blocked"] is True
+    assert "wallet" in data["reason"].lower() or "blocked" in data["decision"].lower()
+
+
+def test_execute_council_escalation_recorded_in_ledger():
+    r = client.post("/v1/runtime/execute", headers=headers, json={
+        "user_input": "So obviously X is the only answer, right?",
+        "deterministic": True,
+        "risk_level": "HIGH",
+    })
+    assert r.status_code == 200
+    data = r.json()
+    assert "council_verdict" in data
+    assert len(data["ledger_record_ids"]) >= 1
+
+
+def test_execute_council_skipped_when_disabled():
+    r = client.post("/v1/runtime/execute", headers=headers, json={
+        "user_input": "What is Python?",
+        "deterministic": True,
+        "risk_level": "LOW",
+        "enable_council": False,
+    })
+    assert r.status_code == 200
+    data = r.json()
+    assert data["council_verdict"] == ""
