@@ -1,0 +1,61 @@
+{
+  "additional_candidates_needed": 8,
+  "authorized_claim": "Finitexo Code Matrix v0.4.1 implements a conservative intake layer for expanding the v0.4 frozen external/adapted candidate dataset.",
+  "base_benchmark_version": "v0.4",
+  "base_frozen_dataset_hash": "0ed903b013bff8650ce30030863d069a6cdd745d42964ba85082389d836cdb17",
+  "base_manifest_hash": "981406f6aa7a736cb64e698742075c4f05fbafcdf7e79e96a97c781224984298",
+  "batch_decision": "EXPANSION_POOL_INSUFFICIENT",
+  "benchmark_name": "Finitexo Code Matrix",
+  "blocked": 2,
+  "blocked_claims": [
+    "v0.4 frozen dataset was expanded",
+    "provider superiority demonstrated",
+    "Xendris superiority demonstrated",
+    "external benchmark performance validated",
+    "statistical significance established",
+    "production-readiness proven",
+    "verified third-party external benchmark established"
+  ],
+  "blocked_or_rejected": 5,
+  "counts_by_contamination_risk": {
+    "LOW": 10
+  },
+  "counts_by_difficulty_estimate": {
+    "large": 1,
+    "medium": 4,
+    "small": 5
+  },
+  "counts_by_leakage_risk": {
+    "HIGH": 1,
+    "LOW": 7,
+    "MEDIUM": 2
+  },
+  "counts_by_source_class": {
+    "EXTERNAL_ADAPTED": 5,
+    "EXTERNAL_VERIFIED": 3,
+    "MUTATED_FIXTURE": 1,
+    "SYNTHETIC_LOCAL": 1
+  },
+  "current_frozen_task_count": 2,
+  "diagnostic_mean_expansion_score": 0.8942,
+  "do_not_freeze": 3,
+  "env_read": false,
+  "expansion_intake_version": "v0.4.1",
+  "expansion_modifies_frozen_dataset": false,
+  "external_superiority_claim_authorized": false,
+  "final_decision": "FROZEN_DATASET_EXPANSION_INTAKE_IMPLEMENTED_NO_PROVIDER_EXECUTION",
+  "future_v0_4_2_freeze_expansion_recommended": false,
+  "model_comparison_allowed": false,
+  "model_comparison_run": false,
+  "needs_more_provenance": 0,
+  "needs_more_validation": 0,
+  "network_required": false,
+  "provider_execution_allowed": false,
+  "providers_executed": false,
+  "ready_for_future_freeze": 3,
+  "ready_with_human_review": 2,
+  "secrets_printed": false,
+  "statistical_claim_authorized": false,
+  "target_frozen_task_count": 10,
+  "total_expansion_candidates": 10
+}

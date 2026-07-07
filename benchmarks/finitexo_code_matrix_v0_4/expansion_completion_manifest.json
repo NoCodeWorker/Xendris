@@ -1,0 +1,19 @@
+{
+  "additional_ready_candidates_required": 8,
+  "base_benchmark_version": "v0.4",
+  "base_frozen_dataset_hash": "0ed903b013bff8650ce30030863d069a6cdd745d42964ba85082389d836cdb17",
+  "base_frozen_task_count": 2,
+  "base_manifest_hash": "981406f6aa7a736cb64e698742075c4f05fbafcdf7e79e96a97c781224984298",
+  "benchmark_name": "Finitexo Code Matrix",
+  "env_read_required": false,
+  "expansion_completion_version": "v0.4.2",
+  "expansion_intake_version": "v0.4.1",
+  "external_superiority_claim_authorized": false,
+  "future_freeze_requires_explicit_version_bump": true,
+  "model_comparison_allowed": false,
+  "modifies_frozen_dataset": false,
+  "network_required": false,
+  "provider_execution_allowed": false,
+  "statistical_claim_authorized": false,
+  "target_frozen_task_count": 10
+}

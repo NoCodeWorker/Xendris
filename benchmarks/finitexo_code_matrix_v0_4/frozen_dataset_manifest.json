@@ -1,0 +1,40 @@
+{
+  "authorized_claims": [
+    "Finitexo Code Matrix v0.4 contains a frozen external/adapted candidate dataset with provenance and hash controls."
+  ],
+  "benchmark_name": "Finitexo Code Matrix",
+  "benchmark_version": "v0.4",
+  "blocked_claims": [
+    "provider superiority demonstrated",
+    "Xendris superiority demonstrated",
+    "external benchmark performance validated",
+    "statistical significance established",
+    "production-readiness proven",
+    "verified third-party external benchmark"
+  ],
+  "created_from_trust_infrastructure": "v0.3.x",
+  "dataset_externality_label": "EXTERNAL_ADAPTED_CANDIDATE_FREEZE",
+  "dataset_name": "Finitexo External/Adapted Frozen Dataset",
+  "dataset_status": "FROZEN",
+  "dataset_type": "EXTERNAL_ADAPTED",
+  "dataset_version": "0.4",
+  "external_superiority_claim_authorized": false,
+  "frozen_dataset_modified_without_version_bump_allowed": false,
+  "frozen_task_ids": [
+    "fcm_v0_4_frozen_task_001",
+    "fcm_v0_4_frozen_task_002"
+  ],
+  "minimum_task_target": 3,
+  "minimum_task_target_met": false,
+  "minimum_task_target_notes": "Only two v0.3.3 records were eligible for future freeze or human-review freeze. We do not promote weaker, blocked, mutated, synthetic, network-dependent, or secret-dependent records to inflate the dataset.",
+  "model_comparison_allowed": false,
+  "policy_boundaries": [
+    "candidate_pool != frozen_benchmark_dataset",
+    "acquisition_record != benchmark_task",
+    "adapted_candidate != frozen_benchmark_task",
+    "audit_pass != dataset_promotion",
+    "frozen_dataset_created != provider_performance_validated"
+  ],
+  "provider_execution_allowed": false,
+  "statistical_claim_authorized": false
+}

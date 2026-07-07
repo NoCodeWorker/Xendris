@@ -1,0 +1,27 @@
+{
+  "acquisition_record_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/source_acquisition_examples/record_valid_external_verified.json",
+  "adaptation_record_path": "benchmarks/finitexo_code_matrix_v0_3/adaptation_audit/examples/adaptation_clean_external_verified_direct_port.json",
+  "adapted_candidate_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "frozen_task_hash": "fb759780505ad41f2e3b6b2ea6299c212ac7c98618454920e60e33f9964c34fc",
+  "human_review_required": false,
+  "human_review_status": "NOT_REQUIRED",
+  "intake_record_path": null,
+  "known_limitations": [
+    "Source URL is example.invalid in local trust-infrastructure examples.",
+    "Task is frozen as an external/adapted candidate, not as verified third-party benchmark evidence.",
+    "No provider execution or performance measurement is authorized in v0.4."
+  ],
+  "non_claims": [
+    "No provider superiority is demonstrated.",
+    "No Xendris superiority is demonstrated.",
+    "No statistical significance is established.",
+    "No production readiness is proven."
+  ],
+  "normalized_source_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "promotion_gate_result": "RECOMMEND_FOR_FUTURE_FREEZE",
+  "raw_source_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "source_id": "acq_001",
+  "source_license": "PUBLIC_DOCUMENTATION_COMPATIBLE_REFERENCE_ONLY",
+  "source_url": "https://example.invalid/public-doc-example",
+  "task_id": "fcm_v0_4_frozen_task_001"
+}

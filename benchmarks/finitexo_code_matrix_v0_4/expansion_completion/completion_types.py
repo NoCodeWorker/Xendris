@@ -1,0 +1,16 @@
+"""Types for v0.4.2 expansion pool completion."""
+
+from __future__ import annotations
+
+from enum import Enum
+
+
+class CompletionDecision(str, Enum):
+    EXPANSION_POOL_COMPLETED_READY_FOR_EXPLICIT_FREEZE = "EXPANSION_POOL_COMPLETED_READY_FOR_EXPLICIT_FREEZE"
+    EXPANSION_POOL_STILL_INSUFFICIENT_NO_FREEZE = "EXPANSION_POOL_STILL_INSUFFICIENT_NO_FREEZE"
+
+
+class CompletionCondition(str, Enum):
+    STRICT_READY = "STRICT_READY"
+    MIXED_CONSERVATIVE = "MIXED_CONSERVATIVE"
+    INSUFFICIENT = "INSUFFICIENT"

@@ -1,0 +1,28 @@
+{
+  "acquisition_record_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/source_acquisition_examples/record_valid_external_adapted.json",
+  "adaptation_record_path": "benchmarks/finitexo_code_matrix_v0_3/adaptation_audit/examples/adaptation_external_adapted_human_review.json",
+  "adapted_candidate_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "frozen_task_hash": "8673d09bad2015e0ac7527218af13108ca025f3f28242d0a93d137d417cbb26e",
+  "human_review_required": true,
+  "human_review_status": "COMPLETED_FOR_CANDIDATE_FREEZE_WITH_LIMITATIONS",
+  "intake_record_path": null,
+  "known_limitations": [
+    "Source URL is example.invalid in local trust-infrastructure examples.",
+    "v0.3.3 marked the adaptation as requiring human review.",
+    "Task is frozen as an external/adapted candidate, not as verified third-party benchmark evidence.",
+    "No provider execution or performance measurement is authorized in v0.4."
+  ],
+  "non_claims": [
+    "No provider superiority is demonstrated.",
+    "No Xendris superiority is demonstrated.",
+    "No statistical significance is established.",
+    "No production readiness is proven."
+  ],
+  "normalized_source_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "promotion_gate_result": "RECOMMEND_WITH_HUMAN_REVIEW",
+  "raw_source_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "source_id": "acq_002",
+  "source_license": "REFERENCE_ONLY_NO_CODE_COPIED",
+  "source_url": "https://example.invalid/public-issue",
+  "task_id": "fcm_v0_4_frozen_task_002"
+}

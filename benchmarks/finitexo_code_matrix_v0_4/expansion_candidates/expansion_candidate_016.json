@@ -1,0 +1,34 @@
+{
+  "acquisition_record_ref": "benchmarks/finitexo_code_matrix_v0_3/external_sources/source_acquisition_examples/record_rejected_missing_license.json",
+  "adaptation_record_ref": "benchmarks/finitexo_code_matrix_v0_3/adaptation_audit/examples/adaptation_rejected_synthetic_expansion.json",
+  "benchmark_fit_status": "FIT_WITH_LIMITATIONS",
+  "contamination_risk": "LOW",
+  "difficulty_estimate": "small",
+  "difficulty_shift_score": 0.7,
+  "expansion_candidate_id": "fcm_v0_4_2_candidate_016",
+  "external_superiority_claim_authorized": false,
+  "freeze_recommendation": "DO_NOT_RECOMMEND",
+  "human_review_required": false,
+  "human_review_status": "NOT_REQUIRED",
+  "leakage_risk": "LOW",
+  "network_required": false,
+  "proposed_task_hash": null,
+  "proposed_task_ref": "benchmarks/finitexo_code_matrix_v0_4/expansion_candidates/proposed/candidate_016.json",
+  "provenance_ref": null,
+  "provider_execution_required": false,
+  "rejection_reasons": [
+    "missing license and proposed hash"
+  ],
+  "secrets_required": false,
+  "semantic_preservation_score": 0.5,
+  "source_id": "exp_acq_016",
+  "source_license": "UNKNOWN",
+  "source_origin": "UNKNOWN",
+  "source_type": "UNVERIFIED_LOCAL_NOTE",
+  "source_url": null,
+  "structural_change_score": 0.8,
+  "task_validity_status": "VALID_WITH_WARNINGS",
+  "warnings": [
+    "insufficient provenance"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "dataset_hash": "0ed903b013bff8650ce30030863d069a6cdd745d42964ba85082389d836cdb17",
+  "generated_at": "2026-07-07T00:00:00Z",
+  "hash_algorithm": "sha256",
+  "manifest_hash": "981406f6aa7a736cb64e698742075c4f05fbafcdf7e79e96a97c781224984298",
+  "provenance_hashes": {
+    "provenance_frozen_task_001.json": "8c354456402dce030d141da1f01c002ec4e970bf16a89a22ab11b362f22ef0bb",
+    "provenance_frozen_task_002.json": "269903d1f30dad7fc505e55b0c955fd5888e5a8f2108409739c06a266003a254"
+  },
+  "task_hashes": {
+    "frozen_task_001.json": "fb759780505ad41f2e3b6b2ea6299c212ac7c98618454920e60e33f9964c34fc",
+    "frozen_task_002.json": "8673d09bad2015e0ac7527218af13108ca025f3f28242d0a93d137d417cbb26e"
+  }
+}

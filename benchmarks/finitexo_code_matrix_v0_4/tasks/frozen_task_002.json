@@ -1,0 +1,36 @@
+{
+  "acquisition_record_ref": "benchmarks/finitexo_code_matrix_v0_3/external_sources/source_acquisition_examples/record_valid_external_adapted.json",
+  "adaptation_record_ref": "benchmarks/finitexo_code_matrix_v0_3/adaptation_audit/examples/adaptation_external_adapted_human_review.json",
+  "adaptation_type": "API_NORMALIZATION_WITH_HUMAN_REVIEW",
+  "allowed_files": [
+    "normalizer.py"
+  ],
+  "contamination_risk": "LOW",
+  "content_hash": "8673d09bad2015e0ac7527218af13108ca025f3f28242d0a93d137d417cbb26e",
+  "difficulty_estimate": "small",
+  "difficulty_shift_score": 0.35,
+  "expected_behavior": "Normalize scalar input shape while preserving the existing public API behavior.",
+  "external_superiority_claim_authorized": false,
+  "forbidden_files": [
+    "tests/test_normalizer.py",
+    "docs/normalization_rules.md"
+  ],
+  "frozen_at": "2026-07-07T00:00:00Z",
+  "hidden_tests_description": "Checks scalar input, list input, tuple input, None handling, and preservation of normalized output shape.",
+  "leakage_risk": "MEDIUM",
+  "network_required": false,
+  "prompt": "Fix normalize so scalar inputs become one-item lists while existing list inputs remain stable. Preserve the public API.",
+  "promotion_decision": "FROZEN_FROM_RECOMMEND_WITH_HUMAN_REVIEW",
+  "promotion_notes": "Frozen with explicit limitation because v0.3.3 required human review of the simplification. The record is not treated as verified external benchmark evidence.",
+  "provenance_ref": "provenance/provenance_frozen_task_002.json",
+  "provider_execution_required": false,
+  "secrets_required": false,
+  "semantic_preservation_score": 0.78,
+  "source_origin": "EXTERNAL_ADAPTED_CANDIDATE_FREEZE",
+  "structural_change_score": 0.45,
+  "task_id": "fcm_v0_4_frozen_task_002",
+  "task_version": "0.4.0",
+  "title": "Normalize scalar API input",
+  "validation_oracle": "visible_and_hidden_unit_tests_with_api_contract_check",
+  "visible_tests_description": "normalize(3) returns [3] and preserves the normalize(value) API contract."
+}
