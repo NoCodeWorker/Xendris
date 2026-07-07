@@ -1,0 +1,15 @@
+{
+  "sample_id": "AP-015",
+  "task_type": "edge_cases",
+  "category": "edge_cases",
+  "issue_description": "safe_average() crashes with ZeroDivisionError on empty lists and does not filter out None values from the input, causing TypeError.",
+  "allowed_files": ["src/solver.py"],
+  "forbidden_files": ["tests/"],
+  "visible_test_command": "python -m pytest tests/test_solver.py -x",
+  "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+  "success_criteria": "All visible and hidden tests pass",
+  "risk_level": "low",
+  "max_iterations": 5,
+  "expected_public_api": ["safe_average(values)"],
+  "disallowed_dependencies": []
+}

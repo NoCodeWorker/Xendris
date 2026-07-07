@@ -1,0 +1,15 @@
+{
+  "sample_id": "AP-006",
+  "task_type": "edge_cases",
+  "category": "edge_cases",
+  "issue_description": "The safe_divide function crashes on edge cases: TypeError when items is None, ZeroDivisionError when divisor is 0, and TypeError when items contain non-numeric values. Add guards to return an empty list for any invalid input.",
+  "allowed_files": ["src/solver.py"],
+  "forbidden_files": ["tests/"],
+  "visible_test_command": "python -m pytest tests/test_solver.py -x",
+  "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+  "success_criteria": "All visible and hidden tests pass",
+  "risk_level": "low",
+  "max_iterations": 5,
+  "expected_public_api": ["safe_divide(items, divisor)"],
+  "disallowed_dependencies": ["pytest"]
+}

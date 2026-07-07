@@ -1,0 +1,15 @@
+{
+  "sample_id": "AP-014",
+  "task_type": "api_contracts",
+  "category": "api_contracts",
+  "issue_description": "merge_configs() claims to support a 'deep' merge_strategy but performs a shallow merge in all cases. The deep strategy must recursively merge nested dictionaries without mutating the base dict.",
+  "allowed_files": ["src/solver.py"],
+  "forbidden_files": ["tests/"],
+  "visible_test_command": "python -m pytest tests/test_solver.py -x",
+  "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+  "success_criteria": "All visible and hidden tests pass",
+  "risk_level": "low",
+  "max_iterations": 5,
+  "expected_public_api": ["merge_configs(base, override, merge_strategy='deep')"],
+  "disallowed_dependencies": []
+}

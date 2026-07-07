@@ -1,0 +1,224 @@
+{
+  "benchmark_name": "Agentic Programming Reliability",
+  "benchmark_version": "v0.1",
+  "dataset_name": "Xendris Agentic Programming v0.1",
+  "dataset_version": "0.1",
+  "dataset_size": 20,
+  "execution_mode": "live",
+  "provider_mode": "real",
+  "variants": [
+    "deepseek_base_agent",
+    "deepseek_xendris_agent",
+    "deepseek_xendris_calibrated_agent"
+  ],
+  "total_results": 60,
+  "scoring_formula": {
+    "weighted_components": {
+      "hidden_tests_pass": 0.35,
+      "visible_tests_pass": 0.2,
+      "api_contract_preserved": 0.15,
+      "no_forbidden_files_touched": 0.1,
+      "no_false_success_claim": 0.1,
+      "minimal_patch": 0.05,
+      "security_clean": 0.05
+    },
+    "hard_penalties": {
+      "critical_error": -1.0,
+      "forbidden_file_touch": -0.5,
+      "false_success_claim": -0.5
+    }
+  },
+  "scores_by_variant": {
+    "deepseek_base_agent": {
+      "total_score": 0.6,
+      "tasks_passed": 4,
+      "tasks_total": 20,
+      "pass_rate": 0.2
+    },
+    "deepseek_xendris_agent": {
+      "total_score": 0.9825,
+      "tasks_passed": 19,
+      "tasks_total": 20,
+      "pass_rate": 0.95
+    },
+    "deepseek_xendris_calibrated_agent": {
+      "total_score": 0.98,
+      "tasks_passed": 19,
+      "tasks_total": 20,
+      "pass_rate": 0.95
+    }
+  },
+  "deltas": {
+    "deepseek_base_agent": {
+      "distance_to_oracle": 0.4,
+      "delta_vs_deepseek_base": 0.0
+    },
+    "deepseek_xendris_agent": {
+      "distance_to_oracle": 0.0175,
+      "delta_vs_deepseek_base": 0.3825
+    },
+    "deepseek_xendris_calibrated_agent": {
+      "distance_to_oracle": 0.02,
+      "delta_vs_deepseek_base": 0.38
+    }
+  },
+  "metrics_by_variant": {
+    "deepseek_base_agent": {
+      "total_samples": 20,
+      "avg_score": 0.6,
+      "task_success_rate": 0.2,
+      "verified_success_rate": 0.2,
+      "visible_test_pass_rate": 0.45,
+      "hidden_test_pass_rate": 0.2,
+      "api_preservation_rate": 1.0,
+      "forbidden_file_touch_rate": 0.0,
+      "false_success_claim_rate": 0.0,
+      "unauthorized_dependency_rate": 0.0,
+      "minimal_patch_rate": 0.95,
+      "average_iterations": 1.0,
+      "average_latency_ms": 302.45,
+      "estimated_cost_total": 0.005302,
+      "cost_per_verified_successful_task": 0.001326,
+      "distance_to_oracle": 0.4
+    },
+    "deepseek_xendris_agent": {
+      "total_samples": 20,
+      "avg_score": 0.9825,
+      "task_success_rate": 0.95,
+      "verified_success_rate": 0.95,
+      "visible_test_pass_rate": 1.0,
+      "hidden_test_pass_rate": 0.95,
+      "api_preservation_rate": 1.0,
+      "forbidden_file_touch_rate": 0.0,
+      "false_success_claim_rate": 0.0,
+      "unauthorized_dependency_rate": 0.0,
+      "minimal_patch_rate": 1.0,
+      "average_iterations": 1.0,
+      "average_latency_ms": 303.8,
+      "estimated_cost_total": 0.005801,
+      "cost_per_verified_successful_task": 0.000305,
+      "distance_to_oracle": 0.0175
+    },
+    "deepseek_xendris_calibrated_agent": {
+      "total_samples": 20,
+      "avg_score": 0.98,
+      "task_success_rate": 0.95,
+      "verified_success_rate": 0.95,
+      "visible_test_pass_rate": 1.0,
+      "hidden_test_pass_rate": 0.95,
+      "api_preservation_rate": 1.0,
+      "forbidden_file_touch_rate": 0.0,
+      "false_success_claim_rate": 0.0,
+      "unauthorized_dependency_rate": 0.0,
+      "minimal_patch_rate": 1.0,
+      "average_iterations": 1.0,
+      "average_latency_ms": 294.76,
+      "estimated_cost_total": 0.006044,
+      "cost_per_verified_successful_task": 0.000318,
+      "distance_to_oracle": 0.02
+    }
+  },
+  "category_breakdown": {
+    "bug_fixing": {
+      "total": 12,
+      "visible_passed": 8,
+      "hidden_passed_or_none": 8
+    },
+    "unit_tests": {
+      "total": 6,
+      "visible_passed": 6,
+      "hidden_passed_or_none": 5
+    },
+    "edge_cases": {
+      "total": 6,
+      "visible_passed": 5,
+      "hidden_passed_or_none": 2
+    },
+    "security_basics": {
+      "total": 6,
+      "visible_passed": 6,
+      "hidden_passed_or_none": 4
+    },
+    "api_contracts": {
+      "total": 6,
+      "visible_passed": 4,
+      "hidden_passed_or_none": 4
+    },
+    "feature_addition": {
+      "total": 9,
+      "visible_passed": 7,
+      "hidden_passed_or_none": 6
+    },
+    "performance": {
+      "total": 3,
+      "visible_passed": 3,
+      "hidden_passed_or_none": 3
+    },
+    "multi_file_reasoning": {
+      "total": 6,
+      "visible_passed": 4,
+      "hidden_passed_or_none": 4
+    },
+    "refactor_safety": {
+      "total": 3,
+      "visible_passed": 3,
+      "hidden_passed_or_none": 3
+    },
+    "dependency_discipline": {
+      "total": 3,
+      "visible_passed": 3,
+      "hidden_passed_or_none": 3
+    }
+  },
+  "commercial_metrics": {
+    "task_success_rate": 0.7,
+    "verified_successful_count": 42,
+    "visible_test_pass_rate": 0.8167,
+    "hidden_test_pass_rate": 0.7,
+    "api_preservation_rate": 1.0,
+    "forbidden_file_touch_rate": 0.0,
+    "false_success_claim_rate": 0.0,
+    "unauthorized_dependency_rate": 0.0,
+    "minimal_patch_rate": 0.9833,
+    "security_clean_rate": 0.9333,
+    "average_latency_ms": 300.34,
+    "estimated_cost_total": 0.017147,
+    "cost_per_verified_successful_task": 0.000408
+  },
+  "excellence_gate_decisions": {
+    "deepseek_base_agent": "WARNINGS_PRESENT",
+    "deepseek_xendris_agent": "READY_FOR_INTERPRETATION",
+    "deepseek_xendris_calibrated_agent": "READY_FOR_INTERPRETATION"
+  },
+  "variant_gate_decisions": {
+    "deepseek_base_agent": "WARNINGS_PRESENT",
+    "deepseek_xendris_agent": "READY_FOR_INTERPRETATION",
+    "deepseek_xendris_calibrated_agent": "READY_FOR_INTERPRETATION"
+  },
+  "blocked_variants": [],
+  "blocked_variant_reasons": {},
+  "comparison_mode": false,
+  "comparison_interpretation_scope": "Blocked variants are included for comparison only and are not admitted as positive evidence.",
+  "no_universal_superiority_warning": "This benchmark evaluates Xendris variants against a DeepSeek base on a specific closed dataset. No claim of universal superiority over any other model or agent framework is made or implied.",
+  "evidence_interpretation": "Admitted as real-provider pilot evidence for Agentic Programming v0.1 only. Not admissible as evidence of general coding superiority, production readiness, or performance on open-ended programming tasks.",
+  "provider": "deepseek",
+  "model": "deepseek-v4-flash",
+  "requested_model": "deepseek-v4-flash",
+  "provider_reported_model": "deepseek-v4-flash",
+  "credential_source": "env:DEEPSEEK_API_KEY",
+  "no_openrouter_used": true,
+  "transport": "direct",
+  "cost_disclosure": "Cost estimates are based on token counts from API responses using published per-token pricing. Actual costs may vary.",
+  "latency_disclosure": "Latency is measured as wall-clock time for the API call to complete. Does not include sandbox test execution time.",
+  "limitations": [
+    "Execution mode is live: the direct DeepSeek API was called, not OpenRouter.",
+    "Dataset is closed synthetic (20 samples); does not represent real-world programming diversity.",
+    "Results are specific to the Agentic Programming v0.1 benchmark and should not be generalized.",
+    "Results do not transfer to OpenRouter or any other transport.",
+    "Deterministic controls (oracle_agent, partial_agent, bad_agent) are reference baselines only, not evidence of real-provider performance.",
+    "Cost/latency estimates depend on API response conditions and may not be reproducible.",
+    "No comparison against Claude, GPT, Codex, or any other model is included. No superior generalization is claimed.",
+    "Pre-existing fitz import error in test_master_goal_frontera_c_decision.py is unrelated and persists."
+  ],
+  "benchmark_level_decision": "READY_FOR_INTERPRETATION"
+}

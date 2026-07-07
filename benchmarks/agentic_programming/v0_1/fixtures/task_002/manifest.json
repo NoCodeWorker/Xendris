@@ -1,0 +1,15 @@
+{
+  "sample_id": "AP-002",
+  "task_type": "bug_fixing",
+  "category": "bug_fixing",
+  "issue_description": "The in_range function uses `or` instead of `and`, causing it to return True for values outside the specified range. A value is in range only when it is both >= min_val AND <= max_val.",
+  "allowed_files": ["src/solver.py"],
+  "forbidden_files": ["tests/"],
+  "visible_test_command": "python -m pytest tests/test_solver.py -x",
+  "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+  "success_criteria": "All visible and hidden tests pass",
+  "risk_level": "low",
+  "max_iterations": 5,
+  "expected_public_api": ["in_range(value, min_val, max_val)"],
+  "disallowed_dependencies": ["pytest"]
+}

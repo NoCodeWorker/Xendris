@@ -1,0 +1,15 @@
+{
+  "sample_id": "AP-009",
+  "task_type": "performance",
+  "category": "performance",
+  "issue_description": "The has_duplicates function uses a nested loop (O(n^2)) to check for duplicates. Optimize it to use a set for O(n) time complexity while preserving correct behavior.",
+  "allowed_files": ["src/solver.py"],
+  "forbidden_files": ["tests/"],
+  "visible_test_command": "python -m pytest tests/test_solver.py -x",
+  "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+  "success_criteria": "All visible and hidden tests pass",
+  "risk_level": "low",
+  "max_iterations": 5,
+  "expected_public_api": ["has_duplicates(items)"],
+  "disallowed_dependencies": ["pytest"]
+}

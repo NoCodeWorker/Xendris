@@ -1,0 +1,15 @@
+{
+  "sample_id": "AP-018",
+  "task_type": "security_basics",
+  "category": "security_basics",
+  "issue_description": "echo_message() uses subprocess.run with shell=True, allowing shell injection. Replace with a safe implementation that does not invoke a subprocess.",
+  "allowed_files": ["src/solver.py"],
+  "forbidden_files": ["tests/"],
+  "visible_test_command": "python -m pytest tests/test_solver.py -x",
+  "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+  "success_criteria": "All visible and hidden tests pass",
+  "risk_level": "medium",
+  "max_iterations": 5,
+  "expected_public_api": ["echo_message(message)"],
+  "disallowed_dependencies": []
+}

@@ -1,0 +1,15 @@
+{
+  "sample_id": "AP-010",
+  "task_type": "multi_file_reasoning",
+  "category": "multi_file_reasoning",
+  "issue_description": "The format_summary function in reporter.py tries to access stats['average'] but the compute_statistics function in analyzer.py returns a dict with key 'mean'. This key mismatch causes a KeyError when reporter.py is called through the validator.py chain.",
+  "allowed_files": ["src/analyzer.py", "src/reporter.py", "src/validator.py"],
+  "forbidden_files": ["tests/"],
+  "visible_test_command": "python -m pytest tests/test_solver.py -x",
+  "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+  "success_criteria": "All visible and hidden tests pass",
+  "risk_level": "low",
+  "max_iterations": 5,
+  "expected_public_api": ["compute_statistics(numbers)", "format_summary(numbers)", "check_data(numbers)"],
+  "disallowed_dependencies": ["pytest"]
+}

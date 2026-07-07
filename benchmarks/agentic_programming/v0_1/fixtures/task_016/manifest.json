@@ -1,0 +1,15 @@
+{
+  "sample_id": "AP-016",
+  "task_type": "unit_tests",
+  "category": "unit_tests",
+  "issue_description": "calculate_discount() does not validate input parameters. It must raise ValueError for negative prices or discount percentages, and clamp the result to 0 for discounts over 100%.",
+  "allowed_files": ["src/solver.py"],
+  "forbidden_files": ["tests/"],
+  "visible_test_command": "python -m pytest tests/test_solver.py -x",
+  "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+  "success_criteria": "All visible and hidden tests pass",
+  "risk_level": "low",
+  "max_iterations": 5,
+  "expected_public_api": ["calculate_discount(price, discount_percent)"],
+  "disallowed_dependencies": []
+}

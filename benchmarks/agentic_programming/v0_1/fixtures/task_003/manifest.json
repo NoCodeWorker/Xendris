@@ -1,0 +1,15 @@
+{
+  "sample_id": "AP-003",
+  "task_type": "feature_addition",
+  "category": "feature_addition",
+  "issue_description": "The parse_entry function is a stub that needs to be implemented. It should parse a string in the format 'key: value' and return a (key, value) tuple. Values that look like numbers should be converted to int or float. Return None for malformed input.",
+  "allowed_files": ["src/solver.py"],
+  "forbidden_files": ["tests/"],
+  "visible_test_command": "python -m pytest tests/test_solver.py -x",
+  "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+  "success_criteria": "All visible and hidden tests pass",
+  "risk_level": "low",
+  "max_iterations": 5,
+  "expected_public_api": ["parse_entry(line: str)"],
+  "disallowed_dependencies": ["pytest"]
+}

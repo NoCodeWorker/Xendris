@@ -1,0 +1,15 @@
+{
+  "sample_id": "AP-020",
+  "task_type": "multi_file_reasoning",
+  "category": "multi_file_reasoning",
+  "issue_description": "process_scores() passes each student tuple directly to format_score(), but format_score() expects two positional arguments (name, score). The bug requires understanding the interface contract between these two files.",
+  "allowed_files": ["src/solver.py", "src/formatter.py"],
+  "forbidden_files": ["tests/"],
+  "visible_test_command": "python -m pytest tests/test_solver.py -x",
+  "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+  "success_criteria": "All visible and hidden tests pass",
+  "risk_level": "low",
+  "max_iterations": 5,
+  "expected_public_api": ["process_scores(students)", "format_score(name, score)"],
+  "disallowed_dependencies": []
+}

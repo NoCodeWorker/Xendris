@@ -1,0 +1,15 @@
+{
+  "sample_id": "AP-004",
+  "task_type": "feature_addition",
+  "category": "feature_addition",
+  "issue_description": "The DataAnalyzer class has an analyze method that supports 'mean' and 'sum' but the 'median' path raises NotImplementedError. Implement the median calculation: for odd-length lists return the middle value, for even-length lists return the average of the two middle values.",
+  "allowed_files": ["src/solver.py"],
+  "forbidden_files": ["tests/"],
+  "visible_test_command": "python -m pytest tests/test_solver.py -x",
+  "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+  "success_criteria": "All visible and hidden tests pass",
+  "risk_level": "low",
+  "max_iterations": 5,
+  "expected_public_api": ["DataAnalyzer", "DataAnalyzer.analyze(data, method)"],
+  "disallowed_dependencies": ["pytest"]
+}

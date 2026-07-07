@@ -1,0 +1,15 @@
+{
+  "sample_id": "AP-011",
+  "task_type": "bug_fixing",
+  "category": "bug_fixing",
+  "issue_description": "sum_scores() incorrectly excludes the last element from the sum due to an off-by-one slice error. The function uses sum(scores[:-1]) instead of sum(scores).",
+  "allowed_files": ["src/solver.py"],
+  "forbidden_files": ["tests/"],
+  "visible_test_command": "python -m pytest tests/test_solver.py -x",
+  "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+  "success_criteria": "All visible and hidden tests pass",
+  "risk_level": "low",
+  "max_iterations": 5,
+  "expected_public_api": ["sum_scores(scores)"],
+  "disallowed_dependencies": []
+}

@@ -1,0 +1,15 @@
+{
+  "sample_id": "AP-005",
+  "task_type": "api_contracts",
+  "category": "api_contracts",
+  "issue_description": "The extract_values function raises a KeyError when a dictionary in the data list doesn't contain the specified key. The fix must use dict.get() to return None for missing keys without changing the function signature.",
+  "allowed_files": ["src/solver.py"],
+  "forbidden_files": ["tests/"],
+  "visible_test_command": "python -m pytest tests/test_solver.py -x",
+  "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+  "success_criteria": "All visible and hidden tests pass",
+  "risk_level": "low",
+  "max_iterations": 5,
+  "expected_public_api": ["extract_values(data, key)"],
+  "disallowed_dependencies": ["pytest"]
+}

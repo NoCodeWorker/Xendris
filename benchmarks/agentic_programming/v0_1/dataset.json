@@ -1,0 +1,457 @@
+{
+  "meta": {
+    "description": "Xendris Agentic Programming Benchmark",
+    "version": "0.1",
+    "sample_count": 20
+  },
+  "samples": [
+    {
+      "sample_id": "AP-001",
+      "task_type": "bug_fixing",
+      "category": "bug_fixing",
+      "issue_description": "The count_items function returns a count that is one higher than the actual number of items due to an off-by-one error in the for loop range.",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "count_items(items)"
+      ],
+      "disallowed_dependencies": [
+        "pytest"
+      ]
+    },
+    {
+      "sample_id": "AP-018",
+      "task_type": "security_basics",
+      "category": "security_basics",
+      "issue_description": "echo_message() uses subprocess.run with shell=True, allowing shell injection. Replace with a safe implementation that does not invoke a subprocess.",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "medium",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "echo_message(message)"
+      ],
+      "disallowed_dependencies": []
+    },
+    {
+      "sample_id": "AP-017",
+      "task_type": "security_basics",
+      "category": "security_basics",
+      "issue_description": "evaluate_expression() passes user input directly to Python's eval(), allowing arbitrary code execution. Replace with a safe AST-based evaluator that only supports basic arithmetic (+, -, *, /).",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "medium",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "evaluate_expression(expr)"
+      ],
+      "disallowed_dependencies": []
+    },
+    {
+      "sample_id": "AP-016",
+      "task_type": "unit_tests",
+      "category": "unit_tests",
+      "issue_description": "calculate_discount() does not validate input parameters. It must raise ValueError for negative prices or discount percentages, and clamp the result to 0 for discounts over 100%.",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "calculate_discount(price, discount_percent)"
+      ],
+      "disallowed_dependencies": []
+    },
+    {
+      "sample_id": "AP-015",
+      "task_type": "edge_cases",
+      "category": "edge_cases",
+      "issue_description": "safe_average() crashes with ZeroDivisionError on empty lists and does not filter out None values from the input, causing TypeError.",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "safe_average(values)"
+      ],
+      "disallowed_dependencies": []
+    },
+    {
+      "sample_id": "AP-014",
+      "task_type": "api_contracts",
+      "category": "api_contracts",
+      "issue_description": "merge_configs() claims to support a 'deep' merge_strategy but performs a shallow merge in all cases. The deep strategy must recursively merge nested dictionaries without mutating the base dict.",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "merge_configs(base, override, merge_strategy='deep')"
+      ],
+      "disallowed_dependencies": []
+    },
+    {
+      "sample_id": "AP-013",
+      "task_type": "feature_addition",
+      "category": "feature_addition",
+      "issue_description": "word_frequency() is a stub that always returns an empty dict. Implement it to correctly count word frequencies in the input text. Words are case-sensitive and separated by whitespace.",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "word_frequency(text)"
+      ],
+      "disallowed_dependencies": []
+    },
+    {
+      "sample_id": "AP-012",
+      "task_type": "bug_fixing",
+      "category": "bug_fixing",
+      "issue_description": "is_valid_user() uses the 'or' operator instead of 'and', returning a truthy string value instead of a boolean. It returns True if either parameter is non-empty rather than requiring both.",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "is_valid_user(username, password)"
+      ],
+      "disallowed_dependencies": []
+    },
+    {
+      "sample_id": "AP-011",
+      "task_type": "bug_fixing",
+      "category": "bug_fixing",
+      "issue_description": "sum_scores() incorrectly excludes the last element from the sum due to an off-by-one slice error. The function uses sum(scores[:-1]) instead of sum(scores).",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "sum_scores(scores)"
+      ],
+      "disallowed_dependencies": []
+    },
+    {
+      "sample_id": "AP-010",
+      "task_type": "multi_file_reasoning",
+      "category": "multi_file_reasoning",
+      "issue_description": "The format_summary function in reporter.py tries to access stats['average'] but the compute_statistics function in analyzer.py returns a dict with key 'mean'. This key mismatch causes a KeyError when reporter.py is called through the validator.py chain.",
+      "allowed_files": [
+        "src/analyzer.py",
+        "src/reporter.py",
+        "src/validator.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "compute_statistics(numbers)",
+        "format_summary(numbers)",
+        "check_data(numbers)"
+      ],
+      "disallowed_dependencies": [
+        "pytest"
+      ]
+    },
+    {
+      "sample_id": "AP-009",
+      "task_type": "performance",
+      "category": "performance",
+      "issue_description": "The has_duplicates function uses a nested loop (O(n^2)) to check for duplicates. Optimize it to use a set for O(n) time complexity while preserving correct behavior.",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "has_duplicates(items)"
+      ],
+      "disallowed_dependencies": [
+        "pytest"
+      ]
+    },
+    {
+      "sample_id": "AP-008",
+      "task_type": "refactor_safety",
+      "category": "refactor_safety",
+      "issue_description": "The function `get_info` has an unclear name and should be renamed to `get_statistics` throughout the codebase. All imports and calls in src/ and tests/ files must be updated to use the new name.",
+      "allowed_files": [
+        "src/solver.py",
+        "src/processor.py",
+        "tests/test_solver.py"
+      ],
+      "forbidden_files": [],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "get_statistics(data)"
+      ],
+      "disallowed_dependencies": [
+        "pytest"
+      ]
+    },
+    {
+      "sample_id": "AP-007",
+      "task_type": "unit_tests",
+      "category": "unit_tests",
+      "issue_description": "The factorial function returns -1 for negative input instead of raising a ValueError as the docstring implies. Fix the implementation and add a proper unit test for the negative input case in test_solver.py to ensure the fix is maintained.",
+      "allowed_files": [
+        "src/solver.py",
+        "tests/test_solver.py"
+      ],
+      "forbidden_files": [],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "factorial(n)"
+      ],
+      "disallowed_dependencies": [
+        "pytest"
+      ]
+    },
+    {
+      "sample_id": "AP-006",
+      "task_type": "edge_cases",
+      "category": "edge_cases",
+      "issue_description": "The safe_divide function crashes on edge cases: TypeError when items is None, ZeroDivisionError when divisor is 0, and TypeError when items contain non-numeric values. Add guards to return an empty list for any invalid input.",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "safe_divide(items, divisor)"
+      ],
+      "disallowed_dependencies": [
+        "pytest"
+      ]
+    },
+    {
+      "sample_id": "AP-005",
+      "task_type": "api_contracts",
+      "category": "api_contracts",
+      "issue_description": "The extract_values function raises a KeyError when a dictionary in the data list doesn't contain the specified key. The fix must use dict.get() to return None for missing keys without changing the function signature.",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "extract_values(data, key)"
+      ],
+      "disallowed_dependencies": [
+        "pytest"
+      ]
+    },
+    {
+      "sample_id": "AP-004",
+      "task_type": "feature_addition",
+      "category": "feature_addition",
+      "issue_description": "The DataAnalyzer class has an analyze method that supports 'mean' and 'sum' but the 'median' path raises NotImplementedError. Implement the median calculation: for odd-length lists return the middle value, for even-length lists return the average of the two middle values.",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "DataAnalyzer",
+        "DataAnalyzer.analyze(data, method)"
+      ],
+      "disallowed_dependencies": [
+        "pytest"
+      ]
+    },
+    {
+      "sample_id": "AP-003",
+      "task_type": "feature_addition",
+      "category": "feature_addition",
+      "issue_description": "The parse_entry function is a stub that needs to be implemented. It should parse a string in the format 'key: value' and return a (key, value) tuple. Values that look like numbers should be converted to int or float. Return None for malformed input.",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "parse_entry(line: str)"
+      ],
+      "disallowed_dependencies": [
+        "pytest"
+      ]
+    },
+    {
+      "sample_id": "AP-002",
+      "task_type": "bug_fixing",
+      "category": "bug_fixing",
+      "issue_description": "The in_range function uses `or` instead of `and`, causing it to return True for values outside the specified range. A value is in range only when it is both >= min_val AND <= max_val.",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "in_range(value, min_val, max_val)"
+      ],
+      "disallowed_dependencies": [
+        "pytest"
+      ]
+    },
+    {
+      "sample_id": "AP-019",
+      "task_type": "dependency_discipline",
+      "category": "dependency_discipline",
+      "issue_description": "get_app_config_dir() imports the 'os' module which is disallowed. Replace all os.path operations with pathlib.Path equivalents.",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "get_app_config_dir()"
+      ],
+      "disallowed_dependencies": [
+        "os"
+      ]
+    },
+    {
+      "sample_id": "AP-020",
+      "task_type": "multi_file_reasoning",
+      "category": "multi_file_reasoning",
+      "issue_description": "process_scores() passes each student tuple directly to format_score(), but format_score() expects two positional arguments (name, score). The bug requires understanding the interface contract between these two files.",
+      "allowed_files": [
+        "src/solver.py",
+        "src/formatter.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "process_scores(students)",
+        "format_score(name, score)"
+      ],
+      "disallowed_dependencies": []
+    }
+  ]
+}

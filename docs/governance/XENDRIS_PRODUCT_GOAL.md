@@ -397,11 +397,36 @@ Goal: avoid token escalation without epistemic justification.
 
 Goal: implement Frontera C Mayor at representation-frame level.
 
-### H. Xendris Agent UI
+### H. Agentic Programming Benchmark v0.1
+
+Agentic Programming benchmarks must distinguish pipeline-valid dry-run evidence from real-provider agent performance evidence. Dry-run artifacts are admissible only as pipeline validation; real-provider claims require separate live-mode execution with provider disclosure, cost, and latency metrics.
+
+Exit criteria:
+
+Goal: evaluate whether Xendris scaffolding improves agent reliability on small programming tasks, through a closed synthetic dataset with excellence-gated scoring.
+
+Exit criteria:
+
+```txt
+dataset: 20 tasks across 10 categories (bug_fixing, feature_addition,
+  api_contracts, edge_cases, unit_tests, refactor_safety, performance,
+  security_basics, dependency_discipline, multi_file_reasoning)
+module: xendris.benchmarking.agentic_programming (10 files)
+scoring: 7 weighted components with hard penalties
+excellence gate: READY_FOR_INTERPRETATION / WARNINGS_PRESENT /
+  BLOCKED_FOR_INTERPRETATION
+tests: 4 test files covering dataset, scorer, runner, excellence_gate
+```
+
+### Milestone H Result
+
+Agentic Programming v0.1 produced admitted real-provider evidence that, on a closed 20-task mini-repo benchmark using direct DeepSeek v4 Flash, Xendris calibrated increased measured agentic programming score from 0.585 to 0.9625 and pass rate from 15% to 90%, remaining explicitly scoped to this dataset, provider, model, and configuration.
+
+### I. Xendris Agent UI
 
 Goal: usable product surface: one agent, all models, trust-routed.
 
-### I. Trust Dashboard
+### J. Trust Dashboard
 
 Goal: make the differential value of Xendris visible.
 

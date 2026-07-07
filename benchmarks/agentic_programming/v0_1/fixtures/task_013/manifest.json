@@ -1,0 +1,15 @@
+{
+  "sample_id": "AP-013",
+  "task_type": "feature_addition",
+  "category": "feature_addition",
+  "issue_description": "word_frequency() is a stub that always returns an empty dict. Implement it to correctly count word frequencies in the input text. Words are case-sensitive and separated by whitespace.",
+  "allowed_files": ["src/solver.py"],
+  "forbidden_files": ["tests/"],
+  "visible_test_command": "python -m pytest tests/test_solver.py -x",
+  "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+  "success_criteria": "All visible and hidden tests pass",
+  "risk_level": "low",
+  "max_iterations": 5,
+  "expected_public_api": ["word_frequency(text)"],
+  "disallowed_dependencies": []
+}

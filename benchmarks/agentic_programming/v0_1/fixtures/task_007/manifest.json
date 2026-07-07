@@ -1,0 +1,15 @@
+{
+  "sample_id": "AP-007",
+  "task_type": "unit_tests",
+  "category": "unit_tests",
+  "issue_description": "The factorial function returns -1 for negative input instead of raising a ValueError as the docstring implies. Fix the implementation and add a proper unit test for the negative input case in test_solver.py to ensure the fix is maintained.",
+  "allowed_files": ["src/solver.py", "tests/test_solver.py"],
+  "forbidden_files": [],
+  "visible_test_command": "python -m pytest tests/test_solver.py -x",
+  "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+  "success_criteria": "All visible and hidden tests pass",
+  "risk_level": "low",
+  "max_iterations": 5,
+  "expected_public_api": ["factorial(n)"],
+  "disallowed_dependencies": ["pytest"]
+}

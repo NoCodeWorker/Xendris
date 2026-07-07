@@ -1,8 +1,8 @@
 {
   "blocked_count": 0,
-  "generated_at_utc": "2026-07-06T18:45:25.716330+00:00",
-  "quarantined_rejected_count": 4,
-  "ready_count": 2,
+  "generated_at_utc": "2026-07-06T21:42:22.810549+00:00",
+  "quarantined_rejected_count": 3,
+  "ready_count": 3,
   "records": [
     {
       "blocker_count": 0,
@@ -149,47 +149,27 @@
       "warning_count": 9
     },
     {
-      "blocker_count": 1,
-      "decision": "BLOCKED_FOR_INTERPRETATION",
-      "has_blockers": true,
+      "blocker_count": 0,
+      "decision": "READY_FOR_INTERPRETATION",
+      "has_blockers": false,
       "is_quarantined_historical": true,
-      "is_ready": false,
+      "is_ready": true,
       "issues": [
         {
-          "code": "dry_run_result",
-          "message": "Execution mode is dry-run; provider performance is not measured.",
+          "code": "benchmark_local_only",
+          "message": "Report limits interpretation to the benchmark context.",
           "severity": "NOTE"
         },
         {
-          "code": "dry_run_report_claims_real_provider_performance",
-          "message": "Dry-run report suggests real provider performance.",
-          "severity": "BLOCKER"
-        },
-        {
-          "code": "missing_dataset_hash_algorithm",
-          "message": "Dataset hash algorithm is not disclosed.",
-          "severity": "WARNING"
-        },
-        {
-          "code": "missing_run_date",
-          "message": "Run date is not disclosed.",
-          "severity": "WARNING"
-        },
-        {
-          "code": "missing_external_data_disclosure",
-          "message": "External data disclosure policy is not documented.",
-          "severity": "WARNING"
-        },
-        {
-          "code": "missing_pricing_assumptions",
-          "message": "Pricing assumptions are not documented.",
-          "severity": "WARNING"
+          "code": "closed_dataset",
+          "message": "Artifact describes a closed dataset.",
+          "severity": "NOTE"
         }
       ],
-      "note_count": 1,
-      "report_path": "docs\\benchmarks\\RUN_DEEPSEEK_VS_XENDRIS_TRUST_TRAPS_V0_1.md.template",
+      "note_count": 2,
+      "report_path": "runs\\deepseek_vs_xendris_trust_traps_v0_1_report.md",
       "summary_path": "runs\\deepseek_vs_xendris_trust_traps_v0_1_summary.json",
-      "warning_count": 4
+      "warning_count": 0
     },
     {
       "blocker_count": 4,
