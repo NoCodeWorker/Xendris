@@ -1,0 +1,18 @@
+{
+  "task_id": "fcm_v0_2_004",
+  "title": "Avoid unsafe expression evaluation",
+  "category": "security_basic",
+  "difficulty": "medium",
+  "prompt": "Replace unsafe eval in calculate_expression with a safe implementation supporting +, -, *, /, and parentheses.",
+  "visible_tests": [
+    "calculate_expression('2 + 3 * 4') returns 14",
+    "calculate_expression('__import__(\"os\").system(\"echo bad\")') raises ValueError"
+  ],
+  "hidden_test_description": "Covers nested parentheses, division, unsupported nodes, and attribute access attempts.",
+  "forbidden_files": ["tests/"],
+  "expected_files_touched": ["src/calculator.py"],
+  "api_contract": "calculate_expression(expr: str) -> float",
+  "success_criteria": ["unsafe eval removed", "safe arithmetic preserved", "security checks pass"],
+  "anti_ad_hoc_notes": "Security task should not reward superficial string filtering.",
+  "dataset_hash_material": "fcm_v0_2_004|security_basic|calculate_expression"
+}

@@ -1,0 +1,18 @@
+{
+  "task_id": "fcm_v0_2_014",
+  "title": "Prevent path traversal",
+  "category": "security_basic",
+  "difficulty": "medium",
+  "prompt": "Fix safe_join so user-provided relative paths cannot escape the configured base directory.",
+  "visible_tests": [
+    "safe_join('/tmp/app', 'data/file.txt') stays under /tmp/app",
+    "safe_join('/tmp/app', '../secret.txt') raises ValueError"
+  ],
+  "hidden_test_description": "Covers absolute paths, encoded separators, and nested traversal.",
+  "forbidden_files": ["tests/"],
+  "expected_files_touched": ["src/paths.py"],
+  "api_contract": "safe_join(base_dir, relative_path) -> str",
+  "success_criteria": ["traversal blocked", "normal paths preserved", "security checks pass"],
+  "anti_ad_hoc_notes": "Security task should not rely on substring checks only.",
+  "dataset_hash_material": "fcm_v0_2_014|security_basic|safe_join"
+}

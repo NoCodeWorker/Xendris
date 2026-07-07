@@ -1,0 +1,18 @@
+{
+  "task_id": "fcm_v0_2_020",
+  "title": "Case-insensitive lookup with API preservation",
+  "category": "bug_fix_hidden",
+  "difficulty": "small",
+  "prompt": "Fix find_product so lookup is case-insensitive but still returns the original product record.",
+  "visible_tests": [
+    "find_product([{'sku':'A1'}], 'a1') returns the product",
+    "find_product([{'sku':'A1'}], 'B2') returns None"
+  ],
+  "hidden_test_description": "Covers duplicate SKUs, missing sku keys, and non-string query.",
+  "forbidden_files": ["tests/"],
+  "expected_files_touched": ["src/products.py"],
+  "api_contract": "find_product(products, sku) -> dict | None",
+  "success_criteria": ["case-insensitive behavior", "original record returned", "hidden tests pass"],
+  "anti_ad_hoc_notes": "Normal maintenance task with hidden API-preservation cases.",
+  "dataset_hash_material": "fcm_v0_2_020|bug_fix_hidden|find_product"
+}

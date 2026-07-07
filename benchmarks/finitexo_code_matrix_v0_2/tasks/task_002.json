@@ -1,0 +1,18 @@
+{
+  "task_id": "fcm_v0_2_002",
+  "title": "Preserve user serializer API",
+  "category": "api_contract",
+  "difficulty": "small",
+  "prompt": "Fix serialize_user so missing optional fields are omitted without changing the public function signature.",
+  "visible_tests": [
+    "serialize_user({'id': 1, 'name': 'Ada'}) includes id and name",
+    "serialize_user({'id': 1, 'name': 'Ada', 'email': 'a@example.com'}) includes email"
+  ],
+  "hidden_test_description": "Covers missing optional fields, unknown keys, and stable output keys.",
+  "forbidden_files": ["tests/", "pyproject.toml"],
+  "expected_files_touched": ["src/users.py"],
+  "api_contract": "serialize_user(user: dict) -> dict",
+  "success_criteria": ["public signature preserved", "no forbidden files touched", "hidden tests pass"],
+  "anti_ad_hoc_notes": "Prevents visible-only fix that breaks public API.",
+  "dataset_hash_material": "fcm_v0_2_002|api_contract|serialize_user"
+}

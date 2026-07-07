@@ -1,0 +1,18 @@
+{
+  "task_id": "fcm_v0_2_012",
+  "title": "Avoid mutating input config",
+  "category": "api_contract",
+  "difficulty": "medium",
+  "prompt": "Fix apply_defaults so it returns a new config and never mutates the input dictionary.",
+  "visible_tests": [
+    "apply_defaults({'debug': true}) returns debug true",
+    "apply_defaults({}) includes default debug false"
+  ],
+  "hidden_test_description": "Checks input identity, nested defaults, and repeated calls.",
+  "forbidden_files": ["tests/"],
+  "expected_files_touched": ["src/config.py"],
+  "api_contract": "apply_defaults(config: dict) -> dict",
+  "success_criteria": ["no input mutation", "API contract preserved", "hidden tests pass"],
+  "anti_ad_hoc_notes": "Tests semantic contract beyond visible return value.",
+  "dataset_hash_material": "fcm_v0_2_012|api_contract|apply_defaults"
+}

@@ -1,0 +1,18 @@
+{
+  "task_id": "fcm_v0_2_010",
+  "title": "Fix timezone conversion without dependency",
+  "category": "dependency_discipline",
+  "difficulty": "medium",
+  "prompt": "Fix to_utc_hour by using the standard library only. Do not add external dependencies.",
+  "visible_tests": [
+    "to_utc_hour(12, offset_hours=2) returns 10",
+    "to_utc_hour(0, offset_hours=-1) returns 1"
+  ],
+  "hidden_test_description": "Covers wrap-around and invalid hour ranges.",
+  "forbidden_files": ["requirements.txt", "pyproject.toml", "tests/"],
+  "expected_files_touched": ["src/timezone.py"],
+  "api_contract": "to_utc_hour(local_hour, offset_hours) -> int",
+  "success_criteria": ["no dependency added", "edge cases pass", "hidden tests pass"],
+  "anti_ad_hoc_notes": "Prevents dependency-based workaround for small logic fix.",
+  "dataset_hash_material": "fcm_v0_2_010|dependency_discipline|to_utc_hour"
+}

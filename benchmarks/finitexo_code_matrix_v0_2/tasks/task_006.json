@@ -1,0 +1,18 @@
+{
+  "task_id": "fcm_v0_2_006",
+  "title": "Minimal feature for tag filtering",
+  "category": "feature_minimal",
+  "difficulty": "small",
+  "prompt": "Add filter_by_tag(items, tag) that returns only items containing the requested tag.",
+  "visible_tests": [
+    "filter_by_tag([{'tags':['a']}], 'a') returns the item",
+    "filter_by_tag([{'tags':['a']}], 'b') returns []"
+  ],
+  "hidden_test_description": "Covers missing tags key, None tag list, and duplicate tags.",
+  "forbidden_files": ["tests/", "requirements.txt"],
+  "expected_files_touched": ["src/tags.py"],
+  "api_contract": "filter_by_tag(items, tag) -> list",
+  "success_criteria": ["function added", "minimal patch", "hidden tests pass"],
+  "anti_ad_hoc_notes": "Feature is ordinary and should not need benchmark-specific logic.",
+  "dataset_hash_material": "fcm_v0_2_006|feature_minimal|filter_by_tag"
+}

@@ -1,0 +1,18 @@
+{
+  "task_id": "fcm_v0_2_007",
+  "title": "Refactor duplicate normalization",
+  "category": "refactor_preserve_behavior",
+  "difficulty": "medium",
+  "prompt": "Extract duplicated lowercase/strip normalization into normalize_key without changing public behavior.",
+  "visible_tests": [
+    "lookup_value({' A ': 1}, 'a') returns 1",
+    "contains_key({' A ': 1}, ' a ') returns true"
+  ],
+  "hidden_test_description": "Covers empty keys, non-string keys, and existing behavior for missing keys.",
+  "forbidden_files": ["tests/"],
+  "expected_files_touched": ["src/lookup.py"],
+  "api_contract": "lookup_value(mapping, key), contains_key(mapping, key), normalize_key(key)",
+  "success_criteria": ["behavior preserved", "public API includes normalize_key", "hidden tests pass"],
+  "anti_ad_hoc_notes": "Refactor task penalizes over-editing and behavior drift.",
+  "dataset_hash_material": "fcm_v0_2_007|refactor_preserve_behavior|normalize_key"
+}

@@ -1,0 +1,18 @@
+{
+  "task_id": "fcm_v0_2_005",
+  "title": "Handle sparse readings",
+  "category": "edge_cases",
+  "difficulty": "small",
+  "prompt": "Fix average_reading so it ignores None values and returns None when no numeric readings remain.",
+  "visible_tests": [
+    "average_reading([1, 2, 3]) returns 2",
+    "average_reading([None, 4]) returns 4"
+  ],
+  "hidden_test_description": "Covers empty lists, all None, and non-list iterables.",
+  "forbidden_files": ["tests/"],
+  "expected_files_touched": ["src/readings.py"],
+  "api_contract": "average_reading(values) -> float | None",
+  "success_criteria": ["edge cases handled", "no new dependency", "hidden tests pass"],
+  "anti_ad_hoc_notes": "Visible path is easy; hidden cases test robustness.",
+  "dataset_hash_material": "fcm_v0_2_005|edge_cases|average_reading"
+}

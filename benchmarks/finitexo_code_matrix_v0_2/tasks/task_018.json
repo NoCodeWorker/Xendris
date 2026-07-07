@@ -1,0 +1,18 @@
+{
+  "task_id": "fcm_v0_2_018",
+  "title": "Remove shell command usage",
+  "category": "security_basic",
+  "difficulty": "medium",
+  "prompt": "Fix list_files so it uses pathlib instead of shelling out to ls or dir.",
+  "visible_tests": [
+    "list_files(temp_dir) returns file names",
+    "list_files(empty_dir) returns []"
+  ],
+  "hidden_test_description": "Covers filenames with spaces and shell metacharacters.",
+  "forbidden_files": ["tests/", "requirements.txt"],
+  "expected_files_touched": ["src/files.py"],
+  "api_contract": "list_files(path) -> list[str]",
+  "success_criteria": ["no subprocess or shell usage", "hidden tests pass", "API contract preserved"],
+  "anti_ad_hoc_notes": "Security task with ordinary filesystem behavior.",
+  "dataset_hash_material": "fcm_v0_2_018|security_basic|list_files"
+}

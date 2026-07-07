@@ -1,0 +1,18 @@
+{
+  "task_id": "fcm_v0_2_013",
+  "title": "Normalize email safely",
+  "category": "input_validation",
+  "difficulty": "small",
+  "prompt": "Fix normalize_email so it trims whitespace, lowercases the domain, and rejects malformed addresses.",
+  "visible_tests": [
+    "normalize_email(' A@Example.COM ') returns 'A@example.com'",
+    "normalize_email('invalid') raises ValueError"
+  ],
+  "hidden_test_description": "Covers multiple @ signs, empty local part, and empty domain.",
+  "forbidden_files": ["tests/"],
+  "expected_files_touched": ["src/email_utils.py"],
+  "api_contract": "normalize_email(email: str) -> str",
+  "success_criteria": ["valid cases preserved", "invalid cases rejected", "hidden tests pass"],
+  "anti_ad_hoc_notes": "Ordinary validation task with hidden malformed inputs.",
+  "dataset_hash_material": "fcm_v0_2_013|input_validation|normalize_email"
+}

@@ -1,0 +1,18 @@
+{
+  "task_id": "fcm_v0_2_003",
+  "title": "Reject invalid transfer amount",
+  "category": "input_validation",
+  "difficulty": "small",
+  "prompt": "Fix create_transfer so zero or negative amounts raise ValueError and valid transfers remain unchanged.",
+  "visible_tests": [
+    "create_transfer('a','b',10) returns a transfer dict",
+    "create_transfer('a','b',0) raises ValueError"
+  ],
+  "hidden_test_description": "Covers negative amounts, missing accounts, and non-numeric amount types.",
+  "forbidden_files": ["tests/"],
+  "expected_files_touched": ["src/payments.py"],
+  "api_contract": "create_transfer(source, destination, amount) -> dict",
+  "success_criteria": ["validation implemented", "API contract preserved", "hidden tests pass"],
+  "anti_ad_hoc_notes": "Checks behavior under invalid input without requiring broad refactor.",
+  "dataset_hash_material": "fcm_v0_2_003|input_validation|create_transfer"
+}

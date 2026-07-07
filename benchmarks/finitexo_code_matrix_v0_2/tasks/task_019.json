@@ -1,0 +1,18 @@
+{
+  "task_id": "fcm_v0_2_019",
+  "title": "Small parser without over-editing",
+  "category": "minimal_patch",
+  "difficulty": "small",
+  "prompt": "Fix parse_flag so it accepts '--name=value' and '--name value' forms without rewriting the CLI module.",
+  "visible_tests": [
+    "parse_flag(['--port=8080'], 'port') returns '8080'",
+    "parse_flag(['--port', '8080'], 'port') returns '8080'"
+  ],
+  "hidden_test_description": "Covers missing value, repeated flag, and unrelated arguments.",
+  "forbidden_files": ["tests/", "docs/"],
+  "expected_files_touched": ["src/cli.py"],
+  "api_contract": "parse_flag(argv, name) -> str | None",
+  "success_criteria": ["minimal patch", "hidden tests pass", "no docs/tests touched"],
+  "anti_ad_hoc_notes": "Designed to penalize broad rewrites for a narrow parser bug.",
+  "dataset_hash_material": "fcm_v0_2_019|minimal_patch|parse_flag"
+}

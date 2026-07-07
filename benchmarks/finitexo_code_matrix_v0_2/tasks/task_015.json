@@ -1,0 +1,18 @@
+{
+  "task_id": "fcm_v0_2_015",
+  "title": "Preserve multi-file formatter contract",
+  "category": "multi_file_contract",
+  "difficulty": "medium",
+  "prompt": "Fix render_invoice so formatter.py and totals.py agree on cents versus dollars without changing public names.",
+  "visible_tests": [
+    "render_invoice([100, 250]) includes $3.50",
+    "format_money(350) returns '$3.50'"
+  ],
+  "hidden_test_description": "Covers zero totals, rounding, and direct calls to both modules.",
+  "forbidden_files": ["tests/"],
+  "expected_files_touched": ["src/formatter.py", "src/totals.py"],
+  "api_contract": "render_invoice(lines), format_money(cents), sum_cents(lines)",
+  "success_criteria": ["multi-file contract preserved", "hidden tests pass", "minimal patch"],
+  "anti_ad_hoc_notes": "Multi-file task prevents single-file benchmark overfit.",
+  "dataset_hash_material": "fcm_v0_2_015|multi_file_contract|render_invoice"
+}

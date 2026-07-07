@@ -1,0 +1,18 @@
+{
+  "task_id": "fcm_v0_2_016",
+  "title": "Clamp retry delay",
+  "category": "edge_cases",
+  "difficulty": "small",
+  "prompt": "Fix compute_retry_delay so the exponential delay is clamped to max_delay and handles attempt zero.",
+  "visible_tests": [
+    "compute_retry_delay(1, base=2, max_delay=10) returns 2",
+    "compute_retry_delay(10, base=2, max_delay=10) returns 10"
+  ],
+  "hidden_test_description": "Covers attempt zero, negative attempts, and non-positive base.",
+  "forbidden_files": ["tests/"],
+  "expected_files_touched": ["src/retry.py"],
+  "api_contract": "compute_retry_delay(attempt, base=2, max_delay=60) -> int",
+  "success_criteria": ["delay clamped", "invalid inputs handled", "hidden tests pass"],
+  "anti_ad_hoc_notes": "Small arithmetic edge-case task.",
+  "dataset_hash_material": "fcm_v0_2_016|edge_cases|compute_retry_delay"
+}

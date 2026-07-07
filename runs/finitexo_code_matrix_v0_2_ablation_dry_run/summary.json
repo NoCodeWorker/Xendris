@@ -1,0 +1,235 @@
+{
+  "benchmark_name": "Finitexo Code Matrix",
+  "benchmark_version": "v0.2",
+  "dataset_name": "Xendris Agentic Programming Anti-Ad-Hoc v0.2",
+  "dataset_version": "0.2",
+  "dataset_hash": "18ea0b43b7febb43dfcb5411a652a8641699253c42d33d65c3bce991eb90b304",
+  "scoring_contract_hash": "c92d9a7e07be6a00fbc21ec7546dec3f56d39af9e8be36dbc35dcf6f5a84da74",
+  "execution_mode": "dry-run",
+  "run_id": "fcm-v0-2-20260707T113744Z",
+  "timestamp": "2026-07-07T11:37:44.213967+00:00",
+  "sample_count": 5,
+  "task_ids": [
+    "fcm_v0_2_001",
+    "fcm_v0_2_002",
+    "fcm_v0_2_003",
+    "fcm_v0_2_004",
+    "fcm_v0_2_005"
+  ],
+  "models": [
+    "deepseek-v4-flash",
+    "gpt-4.1-nano"
+  ],
+  "variants": [
+    "base_agent",
+    "base_agent_with_contract_prompt",
+    "base_agent_with_scoring_awareness",
+    "xendris_without_calibration",
+    "xendris_without_evidence_gate",
+    "xendris_without_claim_gate",
+    "xendris_agent",
+    "xendris_calibrated_agent"
+  ],
+  "matrix_results": [
+    {
+      "model": "deepseek-v4-flash",
+      "variant": "base_agent",
+      "execution_status": "DRY_RUN_ONLY",
+      "score": null,
+      "verified_successes": null,
+      "estimated_cost": null,
+      "evidence_decision": "INSUFFICIENT",
+      "benchmark_gate": "BUDGET_VALIDATION_ONLY",
+      "limitations": "No provider execution was performed; no performance metric is generated."
+    },
+    {
+      "model": "deepseek-v4-flash",
+      "variant": "base_agent_with_contract_prompt",
+      "execution_status": "DRY_RUN_ONLY",
+      "score": null,
+      "verified_successes": null,
+      "estimated_cost": null,
+      "evidence_decision": "INSUFFICIENT",
+      "benchmark_gate": "BUDGET_VALIDATION_ONLY",
+      "limitations": "No provider execution was performed; no performance metric is generated."
+    },
+    {
+      "model": "deepseek-v4-flash",
+      "variant": "base_agent_with_scoring_awareness",
+      "execution_status": "DRY_RUN_ONLY",
+      "score": null,
+      "verified_successes": null,
+      "estimated_cost": null,
+      "evidence_decision": "INSUFFICIENT",
+      "benchmark_gate": "BUDGET_VALIDATION_ONLY",
+      "limitations": "No provider execution was performed; no performance metric is generated."
+    },
+    {
+      "model": "deepseek-v4-flash",
+      "variant": "xendris_without_calibration",
+      "execution_status": "DRY_RUN_ONLY",
+      "score": null,
+      "verified_successes": null,
+      "estimated_cost": null,
+      "evidence_decision": "INSUFFICIENT",
+      "benchmark_gate": "BUDGET_VALIDATION_ONLY",
+      "limitations": "No provider execution was performed; no performance metric is generated."
+    },
+    {
+      "model": "deepseek-v4-flash",
+      "variant": "xendris_without_evidence_gate",
+      "execution_status": "DRY_RUN_ONLY",
+      "score": null,
+      "verified_successes": null,
+      "estimated_cost": null,
+      "evidence_decision": "INSUFFICIENT",
+      "benchmark_gate": "BUDGET_VALIDATION_ONLY",
+      "limitations": "No provider execution was performed; no performance metric is generated."
+    },
+    {
+      "model": "deepseek-v4-flash",
+      "variant": "xendris_without_claim_gate",
+      "execution_status": "DRY_RUN_ONLY",
+      "score": null,
+      "verified_successes": null,
+      "estimated_cost": null,
+      "evidence_decision": "INSUFFICIENT",
+      "benchmark_gate": "BUDGET_VALIDATION_ONLY",
+      "limitations": "No provider execution was performed; no performance metric is generated."
+    },
+    {
+      "model": "deepseek-v4-flash",
+      "variant": "xendris_agent",
+      "execution_status": "DRY_RUN_ONLY",
+      "score": null,
+      "verified_successes": null,
+      "estimated_cost": null,
+      "evidence_decision": "INSUFFICIENT",
+      "benchmark_gate": "BUDGET_VALIDATION_ONLY",
+      "limitations": "No provider execution was performed; no performance metric is generated."
+    },
+    {
+      "model": "deepseek-v4-flash",
+      "variant": "xendris_calibrated_agent",
+      "execution_status": "DRY_RUN_ONLY",
+      "score": null,
+      "verified_successes": null,
+      "estimated_cost": null,
+      "evidence_decision": "INSUFFICIENT",
+      "benchmark_gate": "BUDGET_VALIDATION_ONLY",
+      "limitations": "No provider execution was performed; no performance metric is generated."
+    },
+    {
+      "model": "gpt-4.1-nano",
+      "variant": "base_agent",
+      "execution_status": "DRY_RUN_ONLY",
+      "score": null,
+      "verified_successes": null,
+      "estimated_cost": null,
+      "evidence_decision": "INSUFFICIENT",
+      "benchmark_gate": "BUDGET_VALIDATION_ONLY",
+      "limitations": "No provider execution was performed; no performance metric is generated."
+    },
+    {
+      "model": "gpt-4.1-nano",
+      "variant": "base_agent_with_contract_prompt",
+      "execution_status": "DRY_RUN_ONLY",
+      "score": null,
+      "verified_successes": null,
+      "estimated_cost": null,
+      "evidence_decision": "INSUFFICIENT",
+      "benchmark_gate": "BUDGET_VALIDATION_ONLY",
+      "limitations": "No provider execution was performed; no performance metric is generated."
+    },
+    {
+      "model": "gpt-4.1-nano",
+      "variant": "base_agent_with_scoring_awareness",
+      "execution_status": "DRY_RUN_ONLY",
+      "score": null,
+      "verified_successes": null,
+      "estimated_cost": null,
+      "evidence_decision": "INSUFFICIENT",
+      "benchmark_gate": "BUDGET_VALIDATION_ONLY",
+      "limitations": "No provider execution was performed; no performance metric is generated."
+    },
+    {
+      "model": "gpt-4.1-nano",
+      "variant": "xendris_without_calibration",
+      "execution_status": "DRY_RUN_ONLY",
+      "score": null,
+      "verified_successes": null,
+      "estimated_cost": null,
+      "evidence_decision": "INSUFFICIENT",
+      "benchmark_gate": "BUDGET_VALIDATION_ONLY",
+      "limitations": "No provider execution was performed; no performance metric is generated."
+    },
+    {
+      "model": "gpt-4.1-nano",
+      "variant": "xendris_without_evidence_gate",
+      "execution_status": "DRY_RUN_ONLY",
+      "score": null,
+      "verified_successes": null,
+      "estimated_cost": null,
+      "evidence_decision": "INSUFFICIENT",
+      "benchmark_gate": "BUDGET_VALIDATION_ONLY",
+      "limitations": "No provider execution was performed; no performance metric is generated."
+    },
+    {
+      "model": "gpt-4.1-nano",
+      "variant": "xendris_without_claim_gate",
+      "execution_status": "DRY_RUN_ONLY",
+      "score": null,
+      "verified_successes": null,
+      "estimated_cost": null,
+      "evidence_decision": "INSUFFICIENT",
+      "benchmark_gate": "BUDGET_VALIDATION_ONLY",
+      "limitations": "No provider execution was performed; no performance metric is generated."
+    },
+    {
+      "model": "gpt-4.1-nano",
+      "variant": "xendris_agent",
+      "execution_status": "DRY_RUN_ONLY",
+      "score": null,
+      "verified_successes": null,
+      "estimated_cost": null,
+      "evidence_decision": "INSUFFICIENT",
+      "benchmark_gate": "BUDGET_VALIDATION_ONLY",
+      "limitations": "No provider execution was performed; no performance metric is generated."
+    },
+    {
+      "model": "gpt-4.1-nano",
+      "variant": "xendris_calibrated_agent",
+      "execution_status": "DRY_RUN_ONLY",
+      "score": null,
+      "verified_successes": null,
+      "estimated_cost": null,
+      "evidence_decision": "INSUFFICIENT",
+      "benchmark_gate": "BUDGET_VALIDATION_ONLY",
+      "limitations": "No provider execution was performed; no performance metric is generated."
+    }
+  ],
+  "anti_ad_hoc": {
+    "anti_ad_hoc_decision": "WARNINGS_PRESENT",
+    "warnings": [
+      "sample_count_below_20_budget_validation_only"
+    ],
+    "blocking_issues": []
+  },
+  "benchmark_gate": "BUDGET_VALIDATION_ONLY",
+  "claim_policy": "no superiority claim authorized",
+  "no_superiority_claim_authorized": true,
+  "ablation_protocol": {
+    "variants_reported": [
+      "base_agent",
+      "base_agent_with_contract_prompt",
+      "base_agent_with_scoring_awareness",
+      "xendris_without_calibration",
+      "xendris_without_evidence_gate",
+      "xendris_without_claim_gate",
+      "xendris_agent",
+      "xendris_calibrated_agent"
+    ],
+    "unavailable_variants_policy": "report as SKIPPED_VARIANT_NOT_AVAILABLE or DRY_RUN_ONLY; do not hide",
+    "performance_claim_authorized": false
+  }
+}

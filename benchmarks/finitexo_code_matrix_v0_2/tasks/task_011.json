@@ -1,0 +1,18 @@
+{
+  "task_id": "fcm_v0_2_011",
+  "title": "Stable sort by priority",
+  "category": "bug_fix_hidden",
+  "difficulty": "small",
+  "prompt": "Fix sort_tasks so it sorts by priority descending while preserving original order for equal priorities.",
+  "visible_tests": [
+    "sort_tasks sorts high priority before low priority",
+    "sort_tasks returns an empty list for empty input"
+  ],
+  "hidden_test_description": "Covers stable order for equal priorities and missing priority defaults.",
+  "forbidden_files": ["tests/"],
+  "expected_files_touched": ["src/tasks.py"],
+  "api_contract": "sort_tasks(tasks) -> list",
+  "success_criteria": ["stable ordering preserved", "hidden tests pass", "minimal patch"],
+  "anti_ad_hoc_notes": "Hidden tests distinguish true stable sort from visible-only sort.",
+  "dataset_hash_material": "fcm_v0_2_011|bug_fix_hidden|sort_tasks"
+}
