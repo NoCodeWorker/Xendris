@@ -1,0 +1,23 @@
+{
+  "task_id": "fcm_v0_3_2_candidate_010",
+  "origin": "MUTATED_FIXTURE",
+  "source_id": "src_010",
+  "source_reference": "local_fixture_pattern:query_parameter_duplicates",
+  "title": "Preserve duplicate query parameters",
+  "category": "regression",
+  "difficulty": "medium",
+  "prompt": "Fix parse_query so duplicate keys preserve all values in input order. Preserve the public API and do not decode unrelated syntax.",
+  "repository_fixture": "fixtures/query_parameter_duplicates_mutation",
+  "visible_tests": ["parse_query('a=1&a=2') == {'a': ['1', '2']}"],
+  "hidden_tests_description": "Empty values, repeated keys, single keys, and stable ordering are checked.",
+  "forbidden_files": ["docs/query_format.md"],
+  "public_api_contract": "parse_query(query: str) -> dict[str, list[str]]",
+  "success_criteria": ["duplicate values preserved", "single value wrapped in list", "input order preserved"],
+  "anti_xendris_bias_notes": "The candidate rewards ordinary parser correctness and does not use internal terminology.",
+  "h0_risk_notes": "This is a mutated local fixture, so it cannot support strong externality claims.",
+  "origin_confidence": "MEDIUM",
+  "externality_score": 0.66,
+  "admissible_for_v0_3": true,
+  "rejection_reason": null,
+  "hash_material": "fcm-v0-3-2-candidate-010|query-duplicates|mutated-fixture"
+}

@@ -1,0 +1,19 @@
+{
+  "task_id": "FCM-V03-002",
+  "origin": "SEMI_EXTERNAL_SYNTHETIC",
+  "source_reference": "manual_external_style_synthetic:date_window",
+  "title": "Inclusive date window",
+  "category": "edge_cases",
+  "difficulty": "medium",
+  "prompt": "Fix in_window(date, start, end) so both endpoints are inclusive. Keep the existing function name and argument order.",
+  "repository_fixture": "fixtures/date_window",
+  "visible_tests": ["in_window('2026-01-01', '2026-01-01', '2026-01-31') is True"],
+  "hidden_tests_description": "End boundary, reversed ranges, and invalid date strings are checked.",
+  "forbidden_files": ["tests/test_date_window.py"],
+  "public_api_contract": "in_window(date: str, start: str, end: str) -> bool",
+  "success_criteria": ["inclusive start", "inclusive end", "invalid inputs handled deterministically"],
+  "anti_xendris_bias_notes": "No preferred response style beyond preserving the API.",
+  "h0_risk_notes": "Strong baselines may match if they read the contract carefully.",
+  "expected_failure_modes": ["exclusive end date", "string comparison only", "changing API"],
+  "hash_material": "FCM-V03-002|date_window|inclusive"
+}

@@ -1,0 +1,19 @@
+{
+  "task_id": "FCM-V03-009",
+  "origin": "SEMI_EXTERNAL_SYNTHETIC",
+  "source_reference": "manual_external_style_synthetic:markdown_links",
+  "title": "Extract markdown links safely",
+  "category": "parsing",
+  "difficulty": "medium",
+  "prompt": "Fix extract_links so it returns normal Markdown links but ignores image links and malformed brackets.",
+  "repository_fixture": "fixtures/markdown_links",
+  "visible_tests": ["extract_links('[a](https://e.test)') == [('a', 'https://e.test')]"],
+  "hidden_tests_description": "Image links, nested brackets, and missing closing parenthesis are checked.",
+  "forbidden_files": ["docs/examples.md"],
+  "public_api_contract": "extract_links(markdown: str) -> list[tuple[str, str]]",
+  "success_criteria": ["normal links extracted", "images ignored", "malformed input tolerated"],
+  "anti_xendris_bias_notes": "No system-specific format or language required.",
+  "h0_risk_notes": "Regex-heavy and parser-heavy approaches can both work.",
+  "expected_failure_modes": ["including image links", "crashing on malformed input", "overmatching"],
+  "hash_material": "FCM-V03-009|markdown_links|ignore_images"
+}

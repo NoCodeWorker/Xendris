@@ -1,0 +1,23 @@
+{
+  "task_id": "fcm_v0_3_1_candidate_003",
+  "origin": "SEMI_EXTERNAL_SYNTHETIC",
+  "source_id": "src_003",
+  "source_reference": "manual_issue_style_synthetic:slug_collision",
+  "title": "Avoid duplicate slugs",
+  "category": "bugfix",
+  "difficulty": "medium",
+  "prompt": "Fix make_unique_slug so it appends a numeric suffix when the base slug already exists. Preserve the function signature.",
+  "repository_fixture": "fixtures/slug_collision_synthetic",
+  "visible_tests": ["make_unique_slug('Hello World', {'hello-world'}) == 'hello-world-2'"],
+  "hidden_tests_description": "Existing numeric suffixes, repeated collisions, empty titles, and punctuation are checked.",
+  "forbidden_files": ["data/slugs.json"],
+  "public_api_contract": "make_unique_slug(title: str, existing: set[str]) -> str",
+  "success_criteria": ["stable slug normalization", "collision suffixing", "no mutation of existing set"],
+  "anti_xendris_bias_notes": "Internally authored task; no system-specific response pattern is rewarded.",
+  "h0_risk_notes": "Origin is internal, so positive claims must remain weak even if solved.",
+  "origin_confidence": "LOW",
+  "externality_score": 0.42,
+  "admissible_for_v0_3": true,
+  "rejection_reason": null,
+  "hash_material": "fcm-v0-3-1-candidate-003|slug-collision|semi-synthetic"
+}

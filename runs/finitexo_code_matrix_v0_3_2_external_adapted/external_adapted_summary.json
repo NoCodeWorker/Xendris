@@ -1,0 +1,18 @@
+{
+  "accepted_count": 5,
+  "benchmark_version": "v0.3.2",
+  "candidate_count_total": 10,
+  "claims_authorized": [],
+  "external_adapted_count": 4,
+  "mean_externality_score_all_candidates": 0.6,
+  "mean_externality_score_new_candidates": 0.732,
+  "mutated_fixture_count": 1,
+  "new_candidate_count": 5,
+  "phase_decision": "EXTERNAL_ADAPTED_TARGET_MET",
+  "providers_executed": false,
+  "rejected_count": 0,
+  "semi_external_synthetic_count": 0,
+  "target_mean_externality_score": 0.6,
+  "target_met": true,
+  "warnings_count": 0
+}

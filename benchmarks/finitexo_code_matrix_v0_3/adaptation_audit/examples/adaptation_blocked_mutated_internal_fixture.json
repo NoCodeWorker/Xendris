@@ -1,0 +1,29 @@
+{
+  "adaptation_id": "adapt_004",
+  "source_id": "local_fixture_001",
+  "acquisition_record_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/source_acquisition_examples/record_blocked_contamination.json",
+  "source_origin_candidate": "MUTATED_FIXTURE",
+  "adapted_candidate_path": "benchmarks/finitexo_code_matrix_v0_3/tasks/external_task_001.json",
+  "normalized_source_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/normalized/local_fixture_001.json",
+  "raw_source_hash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "adapted_candidate_hash": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "adaptation_type": "MUTATED_INTERNAL_FIXTURE",
+  "adaptation_summary": "Internal fixture mutation included as a blocked example.",
+  "semantic_preservation_score": 0.88,
+  "structural_change_score": 0.30,
+  "difficulty_shift_score": 0.20,
+  "contamination_risk": "BLOCKED",
+  "leakage_risk": "BLOCKED",
+  "task_validity_status": "BLOCKED",
+  "benchmark_fit_status": "BLOCKED",
+  "requires_human_review": true,
+  "promotion_recommendation": "BLOCKED",
+  "rejection_reasons": ["internal fixture source"],
+  "warnings": [],
+  "task_metadata": {
+    "expected_behavior": "Internal fixture mutation should not be promoted as external.",
+    "visible_tests": ["blocked() is True"],
+    "reproducible_setup": true,
+    "copied_internal_fixture": true
+  }
+}

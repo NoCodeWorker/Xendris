@@ -1,0 +1,26 @@
+{
+  "adversarial_decision": "READY_FOR_ADVERSARIAL_INTERPRETATION",
+  "baseline_comparison": {
+    "blockers": [],
+    "decision": "BENCHMARK_INCONCLUSIVE",
+    "h0_status": "LIVE",
+    "interpretation": "No provider matrix was executed; no baseline comparison evidence exists yet."
+  },
+  "benchmark_name": "Finitexo Code Matrix",
+  "benchmark_version": "0.3",
+  "blind_scoring_decision": "REQUIRED",
+  "blockers": [],
+  "dataset_hash": "a1b03f0da1c4e051c4b54df46baae8eef65a8c401f7da7ed5c520f9bf2c29907",
+  "execution_mode": "plan-only",
+  "h0_status": "LIVE",
+  "models": [],
+  "provider_execution": "NO_PROVIDER_EXECUTION",
+  "result_decision": "IMPLEMENTED_SEMI_EXTERNAL_ADVERSARIAL_INFRASTRUCTURE",
+  "samples": 10,
+  "scoring_contract_hash": "499b1f0413bbf42f6b474a3a0e94572177bc07fafd28bf3f68c9e15b09274d30",
+  "variants": [],
+  "warnings": [
+    "NO_PROVIDER_EXECUTION",
+    "SEMI_EXTERNAL_OR_MUTATED_TASKS_PRESENT"
+  ]
+}

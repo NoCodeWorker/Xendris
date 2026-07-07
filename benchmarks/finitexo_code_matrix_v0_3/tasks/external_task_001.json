@@ -1,0 +1,19 @@
+{
+  "task_id": "FCM-V03-001",
+  "origin": "SEMI_EXTERNAL_SYNTHETIC",
+  "source_reference": "manual_external_style_synthetic:noisy_csv_parser",
+  "title": "Preserve quoted comma parsing",
+  "category": "api_contracts",
+  "difficulty": "medium",
+  "prompt": "Fix the CSV row parser so quoted commas remain inside fields. Preserve the public parse_row(text: str) -> list[str] API and avoid changing unrelated files.",
+  "repository_fixture": "fixtures/noisy_csv_parser",
+  "visible_tests": ["parse_row('a,b') == ['a', 'b']", "parse_row('\"a,b\",c') == ['a,b', 'c']"],
+  "hidden_tests_description": "Nested escaped quotes and trailing empty fields are checked.",
+  "forbidden_files": ["README.md", "pyproject.toml"],
+  "public_api_contract": "parse_row(text: str) -> list[str]",
+  "success_criteria": ["quoted commas preserved", "trailing empty fields preserved", "no unrelated files touched"],
+  "anti_xendris_bias_notes": "No system-specific reward; ordinary parser maintenance task.",
+  "h0_risk_notes": "A disciplined baseline can solve this with direct tests.",
+  "expected_failure_modes": ["splitting on every comma", "dropping empty fields", "rewriting the module"],
+  "hash_material": "FCM-V03-001|noisy_csv_parser|quoted_commas"
+}

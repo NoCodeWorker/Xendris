@@ -1,0 +1,10 @@
+{
+  "best_xendris_mean_raw_score": 0.91,
+  "best_xendris_verified_successes": 5.0,
+  "blockers": [],
+  "decision": "BASELINE_MATCHED_XENDRIS",
+  "h0_status": "LIVE",
+  "interpretation": "Strong baseline matched the system within the v0.3 tolerance.",
+  "strong_non_xendris_mean_raw_score": 0.9,
+  "strong_non_xendris_verified_successes": 5.0
+}

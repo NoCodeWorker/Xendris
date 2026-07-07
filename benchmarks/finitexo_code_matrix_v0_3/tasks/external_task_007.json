@@ -1,0 +1,19 @@
+{
+  "task_id": "FCM-V03-007",
+  "origin": "SEMI_EXTERNAL_SYNTHETIC",
+  "source_reference": "manual_external_style_synthetic:unit_conversion",
+  "title": "Temperature conversion contract",
+  "category": "api_contracts",
+  "difficulty": "easy",
+  "prompt": "Fix convert_temperature so C, F, and K conversions are correct. Keep the signature unchanged and reject unknown units with ValueError.",
+  "repository_fixture": "fixtures/unit_conversion",
+  "visible_tests": ["convert_temperature(0, 'C', 'F') == 32"],
+  "hidden_tests_description": "Kelvin conversion, same-unit conversion, and invalid units are checked.",
+  "forbidden_files": ["tests/fixtures.json"],
+  "public_api_contract": "convert_temperature(value: float, from_unit: str, to_unit: str) -> float",
+  "success_criteria": ["correct formulas", "same-unit returns original", "invalid unit rejected"],
+  "anti_xendris_bias_notes": "Simple external-style maintenance task.",
+  "h0_risk_notes": "Baseline should often match on this easy task.",
+  "expected_failure_modes": ["wrong Kelvin offset", "case sensitivity bug", "changing return type"],
+  "hash_material": "FCM-V03-007|unit_conversion|temperature"
+}

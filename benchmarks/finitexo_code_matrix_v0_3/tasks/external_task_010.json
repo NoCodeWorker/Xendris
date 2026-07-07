@@ -1,0 +1,19 @@
+{
+  "task_id": "FCM-V03-010",
+  "origin": "SEMI_EXTERNAL_SYNTHETIC",
+  "source_reference": "manual_external_style_synthetic:inventory_merge",
+  "title": "Merge inventory deltas",
+  "category": "data_integrity",
+  "difficulty": "medium",
+  "prompt": "Fix apply_inventory_delta so stock cannot become negative and unknown SKUs are ignored unless explicitly present in the current inventory.",
+  "repository_fixture": "fixtures/inventory_merge",
+  "visible_tests": ["apply_inventory_delta({'A': 2}, {'A': -1}) == {'A': 1}"],
+  "hidden_tests_description": "Negative floor, unknown SKU, and zero-quantity retention are checked.",
+  "forbidden_files": ["data/inventory_seed.json"],
+  "public_api_contract": "apply_inventory_delta(current: dict[str, int], delta: dict[str, int]) -> dict[str, int]",
+  "success_criteria": ["stock never negative", "unknown deltas ignored", "input dictionaries not mutated"],
+  "anti_xendris_bias_notes": "Neutral data-integrity task with no system-specific reward.",
+  "h0_risk_notes": "Strong baseline can match by preserving contract and checking edges.",
+  "expected_failure_modes": ["negative stock", "mutating input", "adding unknown SKU"],
+  "hash_material": "FCM-V03-010|inventory_merge|negative_floor"
+}

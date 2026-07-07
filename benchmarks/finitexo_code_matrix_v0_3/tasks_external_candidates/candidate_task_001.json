@@ -1,0 +1,23 @@
+{
+  "task_id": "fcm_v0_3_1_candidate_001",
+  "origin": "MUTATED_FIXTURE",
+  "source_id": "src_001",
+  "source_reference": "local_fixture_pattern:pagination_boundary",
+  "title": "Clamp pagination boundaries",
+  "category": "edge_case",
+  "difficulty": "small",
+  "prompt": "Fix paginate so page numbers below 1 return the first page and page numbers beyond the end return an empty list. Preserve the public function signature.",
+  "repository_fixture": "fixtures/pagination_boundary_mutation",
+  "visible_tests": ["paginate([1, 2, 3], page=1, per_page=2) == [1, 2]"],
+  "hidden_tests_description": "Page zero, negative page numbers, beyond-end pages, and zero per_page are checked.",
+  "forbidden_files": ["README.md", "tests/test_pagination.py"],
+  "public_api_contract": "paginate(items: list, page: int, per_page: int) -> list",
+  "success_criteria": ["first page clamp", "beyond-end empty list", "no input mutation", "signature preserved"],
+  "anti_xendris_bias_notes": "No system-specific structure is rewarded.",
+  "h0_risk_notes": "A disciplined baseline should be competitive on this boundary task.",
+  "origin_confidence": "MEDIUM",
+  "externality_score": 0.58,
+  "admissible_for_v0_3": true,
+  "rejection_reason": null,
+  "hash_material": "fcm-v0-3-1-candidate-001|pagination-boundary|mutated-fixture"
+}

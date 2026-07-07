@@ -1,0 +1,19 @@
+{
+  "task_id": "FCM-V03-005",
+  "origin": "SEMI_EXTERNAL_SYNTHETIC",
+  "source_reference": "manual_external_style_synthetic:path_safety",
+  "title": "Reject path traversal",
+  "category": "security_basics",
+  "difficulty": "medium",
+  "prompt": "Fix safe_join so user-provided paths cannot escape the base directory. Preserve the return type and raise ValueError for unsafe paths.",
+  "repository_fixture": "fixtures/path_safety",
+  "visible_tests": ["safe_join('/tmp/base', 'file.txt').endswith('file.txt')"],
+  "hidden_tests_description": "Parent traversal, absolute paths, and normalized symlink-like segments are checked without filesystem access.",
+  "forbidden_files": ["security_policy.md"],
+  "public_api_contract": "safe_join(base_dir: str, user_path: str) -> str",
+  "success_criteria": ["safe child paths accepted", "escape attempts rejected", "no shell commands"],
+  "anti_xendris_bias_notes": "Security check is ordinary and architecture-neutral.",
+  "h0_risk_notes": "A strong security-aware baseline may match.",
+  "expected_failure_modes": ["string prefix check only", "accepting absolute path", "shelling out"],
+  "hash_material": "FCM-V03-005|path_safety|traversal"
+}

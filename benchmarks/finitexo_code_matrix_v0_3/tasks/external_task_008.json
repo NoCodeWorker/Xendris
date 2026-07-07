@@ -1,0 +1,19 @@
+{
+  "task_id": "FCM-V03-008",
+  "origin": "SEMI_EXTERNAL_SYNTHETIC",
+  "source_reference": "manual_external_style_synthetic:rate_limiter",
+  "title": "Sliding window boundary",
+  "category": "edge_cases",
+  "difficulty": "hard",
+  "prompt": "Fix allow_request so events exactly outside the time window are expired and the current request is counted only when allowed.",
+  "repository_fixture": "fixtures/rate_limiter",
+  "visible_tests": ["allow_request([0, 10], now=20, window=10, limit=2) is True"],
+  "hidden_tests_description": "Window boundaries, duplicate timestamps, and limit zero are checked.",
+  "forbidden_files": ["ops/rate_limits.md"],
+  "public_api_contract": "allow_request(history: list[int], now: int, window: int, limit: int) -> bool",
+  "success_criteria": ["correct boundary expiry", "limit respected", "no global state"],
+  "anti_xendris_bias_notes": "Adversarial edge-case task favors careful reasoning, not labels.",
+  "h0_risk_notes": "Strong baseline may match with explicit boundary analysis.",
+  "expected_failure_modes": ["off-by-one expiry", "counting denied requests", "global mutable history"],
+  "hash_material": "FCM-V03-008|rate_limiter|sliding_window"
+}

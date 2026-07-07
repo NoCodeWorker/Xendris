@@ -1,0 +1,31 @@
+{
+  "adaptation_id": "adapt_003",
+  "source_id": "acq_003",
+  "acquisition_record_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/source_acquisition_examples/record_rejected_missing_license.json",
+  "source_origin_candidate": "EXTERNAL_ADAPTED",
+  "adapted_candidate_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/adapted/adapt_003_candidate.json",
+  "normalized_source_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/normalized/acq_003.json",
+  "raw_source_hash": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+  "adapted_candidate_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "adaptation_type": "SYNTHETIC_EXPANSION",
+  "adaptation_summary": "Expands a weak source into a much broader local task; preservation is intentionally poor for test coverage.",
+  "semantic_preservation_score": 0.41,
+  "structural_change_score": 0.82,
+  "difficulty_shift_score": 0.61,
+  "contamination_risk": "MEDIUM",
+  "leakage_risk": "LOW",
+  "task_validity_status": "VALID_WITH_WARNINGS",
+  "benchmark_fit_status": "FIT_WITH_LIMITATIONS",
+  "requires_human_review": true,
+  "promotion_recommendation": "DO_NOT_PROMOTE",
+  "rejection_reasons": [],
+  "warnings": ["weak source preservation"],
+  "task_metadata": {
+    "expected_behavior": "Synthetic expansion of a weak source.",
+    "visible_tests": ["f(1) == 1"],
+    "reproducible_setup": true,
+    "expected_files_changed": 1,
+    "hidden_tests_relevant": true,
+    "minimal_patch_required": true
+  }
+}

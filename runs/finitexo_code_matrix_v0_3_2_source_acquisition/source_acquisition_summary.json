@@ -1,0 +1,138 @@
+{
+  "benchmark_version": "v0.3.2",
+  "blocked": 1,
+  "claims_authorized": [],
+  "counts_by_contamination_risk": {
+    "BLOCKED": 1,
+    "LOW": 2,
+    "MEDIUM": 1
+  },
+  "counts_by_origin_candidate": {
+    "EXTERNAL_ADAPTED": 3,
+    "EXTERNAL_VERIFIED": 1
+  },
+  "counts_by_source_type": {
+    "PUBLIC_BUG_REPORT": 1,
+    "PUBLIC_DOC_EXAMPLE": 1,
+    "PUBLIC_GITHUB_ISSUE": 1,
+    "PUBLIC_GITHUB_PR": 1
+  },
+  "decisions": [
+    {
+      "promotion_decision": {
+        "blockers": [
+          "contamination_risk_blocks_promotion"
+        ],
+        "decision": "BLOCKED_FOR_FUTURE_PROMOTION",
+        "promotion_allowed": false,
+        "warnings": []
+      },
+      "record": {
+        "adaptation_notes": "Example of a record that must remain blocked due to contamination risk.",
+        "adaptation_required": true,
+        "adapted_task_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/adapted/acq_004_candidate.json",
+        "contamination_risk": "BLOCKED",
+        "license": "REFERENCE_ONLY_NO_CODE_COPIED",
+        "normalized_snapshot_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/normalized/acq_004.json",
+        "origin_candidate": "EXTERNAL_ADAPTED",
+        "promotion_allowed": false,
+        "raw_snapshot_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/raw/acq_004.txt",
+        "rejection_reasons": [],
+        "retrieved_at": "2026-07-07T00:00:00Z",
+        "source_hash": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+        "source_id": "acq_004",
+        "source_type": "PUBLIC_GITHUB_PR",
+        "source_url": "https://example.invalid/public-pr",
+        "warnings": []
+      }
+    },
+    {
+      "promotion_decision": {
+        "blockers": [
+          "missing_or_unknown_license"
+        ],
+        "decision": "BLOCKED_FOR_FUTURE_PROMOTION",
+        "promotion_allowed": false,
+        "warnings": [
+          "missing_adapted_task_path"
+        ]
+      },
+      "record": {
+        "adaptation_notes": "Would require local adaptation, but license is unknown.",
+        "adaptation_required": true,
+        "adapted_task_path": null,
+        "contamination_risk": "LOW",
+        "license": "UNKNOWN",
+        "normalized_snapshot_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/normalized/acq_003.json",
+        "origin_candidate": "EXTERNAL_ADAPTED",
+        "promotion_allowed": false,
+        "raw_snapshot_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/raw/acq_003.txt",
+        "rejection_reasons": [],
+        "retrieved_at": "2026-07-07T00:00:00Z",
+        "source_hash": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "source_id": "acq_003",
+        "source_type": "PUBLIC_BUG_REPORT",
+        "source_url": "https://example.invalid/public-bug-report",
+        "warnings": []
+      }
+    },
+    {
+      "promotion_decision": {
+        "blockers": [],
+        "decision": "ELIGIBLE_FOR_FUTURE_PROMOTION",
+        "promotion_allowed": true,
+        "warnings": []
+      },
+      "record": {
+        "adaptation_notes": "Only the technical issue shape is adapted into a local fixture; no external code or long text is copied.",
+        "adaptation_required": true,
+        "adapted_task_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/adapted/acq_002_candidate.json",
+        "contamination_risk": "MEDIUM",
+        "license": "REFERENCE_ONLY_NO_CODE_COPIED",
+        "normalized_snapshot_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/normalized/acq_002.json",
+        "origin_candidate": "EXTERNAL_ADAPTED",
+        "promotion_allowed": false,
+        "raw_snapshot_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/raw/acq_002.txt",
+        "rejection_reasons": [],
+        "retrieved_at": "2026-07-07T00:00:00Z",
+        "source_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+        "source_id": "acq_002",
+        "source_type": "PUBLIC_GITHUB_ISSUE",
+        "source_url": "https://example.invalid/public-issue",
+        "warnings": []
+      }
+    },
+    {
+      "promotion_decision": {
+        "blockers": [],
+        "decision": "ELIGIBLE_FOR_FUTURE_PROMOTION",
+        "promotion_allowed": true,
+        "warnings": []
+      },
+      "record": {
+        "adaptation_notes": null,
+        "adaptation_required": false,
+        "adapted_task_path": null,
+        "contamination_risk": "LOW",
+        "license": "PUBLIC_DOCUMENTATION_COMPATIBLE_REFERENCE_ONLY",
+        "normalized_snapshot_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/normalized/acq_001.json",
+        "origin_candidate": "EXTERNAL_VERIFIED",
+        "promotion_allowed": false,
+        "raw_snapshot_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/raw/acq_001.txt",
+        "rejection_reasons": [],
+        "retrieved_at": "2026-07-07T00:00:00Z",
+        "source_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "source_id": "acq_001",
+        "source_type": "PUBLIC_DOC_EXAMPLE",
+        "source_url": "https://example.invalid/public-doc-example",
+        "warnings": []
+      }
+    }
+  ],
+  "eligible_for_future_promotion": 2,
+  "final_decision": "SOURCE_ACQUISITION_GATE_IMPLEMENTED_NO_DATASET_PROMOTION",
+  "frozen_dataset_modified": false,
+  "providers_executed": false,
+  "rejected": 2,
+  "total_records": 4
+}

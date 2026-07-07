@@ -1,0 +1,107 @@
+{
+  "accepted_count": 10,
+  "benchmark_version": "v0.3.2",
+  "candidate_count": 10,
+  "candidate_pool_modifies_seed_dataset": false,
+  "claims_authorized": [],
+  "decisions": [
+    {
+      "blocking_issues": [],
+      "externality_score": 0.58,
+      "intake_decision": "ACCEPTED",
+      "origin": "MUTATED_FIXTURE",
+      "task_id": "fcm_v0_3_1_candidate_001",
+      "warnings": []
+    },
+    {
+      "blocking_issues": [],
+      "externality_score": 0.56,
+      "intake_decision": "ACCEPTED",
+      "origin": "MUTATED_FIXTURE",
+      "task_id": "fcm_v0_3_1_candidate_002",
+      "warnings": []
+    },
+    {
+      "blocking_issues": [],
+      "externality_score": 0.42,
+      "intake_decision": "ACCEPTED",
+      "origin": "SEMI_EXTERNAL_SYNTHETIC",
+      "task_id": "fcm_v0_3_1_candidate_003",
+      "warnings": []
+    },
+    {
+      "blocking_issues": [],
+      "externality_score": 0.4,
+      "intake_decision": "ACCEPTED",
+      "origin": "SEMI_EXTERNAL_SYNTHETIC",
+      "task_id": "fcm_v0_3_1_candidate_004",
+      "warnings": []
+    },
+    {
+      "blocking_issues": [],
+      "externality_score": 0.38,
+      "intake_decision": "ACCEPTED",
+      "origin": "SEMI_EXTERNAL_SYNTHETIC",
+      "task_id": "fcm_v0_3_1_candidate_005",
+      "warnings": []
+    },
+    {
+      "blocking_issues": [],
+      "externality_score": 0.78,
+      "intake_decision": "ACCEPTED",
+      "origin": "EXTERNAL_ADAPTED",
+      "task_id": "fcm_v0_3_2_candidate_006",
+      "warnings": []
+    },
+    {
+      "blocking_issues": [],
+      "externality_score": 0.76,
+      "intake_decision": "ACCEPTED",
+      "origin": "EXTERNAL_ADAPTED",
+      "task_id": "fcm_v0_3_2_candidate_007",
+      "warnings": []
+    },
+    {
+      "blocking_issues": [],
+      "externality_score": 0.74,
+      "intake_decision": "ACCEPTED",
+      "origin": "EXTERNAL_ADAPTED",
+      "task_id": "fcm_v0_3_2_candidate_008",
+      "warnings": []
+    },
+    {
+      "blocking_issues": [],
+      "externality_score": 0.72,
+      "intake_decision": "ACCEPTED",
+      "origin": "EXTERNAL_ADAPTED",
+      "task_id": "fcm_v0_3_2_candidate_009",
+      "warnings": []
+    },
+    {
+      "blocking_issues": [],
+      "externality_score": 0.66,
+      "intake_decision": "ACCEPTED",
+      "origin": "MUTATED_FIXTURE",
+      "task_id": "fcm_v0_3_2_candidate_010",
+      "warnings": []
+    }
+  ],
+  "intake_decision": "ACCEPTED",
+  "intake_run_id": "fcm-v0-3-2-intake-20260707T163422Z",
+  "mean_externality_score": 0.6,
+  "mean_externality_score_new_candidates": 0.732,
+  "new_candidate_count": 5,
+  "new_external_adapted_count": 4,
+  "origin_distribution": {
+    "EXTERNAL_ADAPTED": 4,
+    "MUTATED_FIXTURE": 3,
+    "SEMI_EXTERNAL_SYNTHETIC": 3
+  },
+  "phase_decision": "EXTERNAL_ADAPTED_TARGET_MET",
+  "providers_executed": false,
+  "rejected_count": 0,
+  "source_registry_issues": [],
+  "target_mean_externality_score": 0.6,
+  "target_met": true,
+  "warnings_count": 0
+}

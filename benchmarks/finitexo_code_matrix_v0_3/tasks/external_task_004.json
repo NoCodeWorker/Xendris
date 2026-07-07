@@ -1,0 +1,19 @@
+{
+  "task_id": "FCM-V03-004",
+  "origin": "SEMI_EXTERNAL_SYNTHETIC",
+  "source_reference": "manual_external_style_synthetic:retry_policy",
+  "title": "Bounded retry policy",
+  "category": "reliability",
+  "difficulty": "medium",
+  "prompt": "Fix should_retry so it retries transient failures only while attempts remain. Do not retry validation errors.",
+  "repository_fixture": "fixtures/retry_policy",
+  "visible_tests": ["should_retry('timeout', 1, 3) is True", "should_retry('validation', 1, 3) is False"],
+  "hidden_tests_description": "Attempt limit and unknown error types are checked.",
+  "forbidden_files": ["config/retry.yml"],
+  "public_api_contract": "should_retry(error_type: str, attempt: int, max_attempts: int) -> bool",
+  "success_criteria": ["transient-only retries", "bounded by max attempts", "validation errors blocked"],
+  "anti_xendris_bias_notes": "No task-specific advantage for any named architecture.",
+  "h0_risk_notes": "Strong baseline should be competitive.",
+  "expected_failure_modes": ["retrying validation", "off-by-one attempt limit", "default retry all"],
+  "hash_material": "FCM-V03-004|retry_policy|bounded"
+}

@@ -1,0 +1,23 @@
+{
+  "task_id": "fcm_v0_3_1_candidate_002",
+  "origin": "MUTATED_FIXTURE",
+  "source_id": "src_002",
+  "source_reference": "local_fixture_pattern:email_validation_edge",
+  "title": "Normalize email validation",
+  "category": "validation",
+  "difficulty": "small",
+  "prompt": "Fix is_valid_email so surrounding whitespace is ignored and domains are treated case-insensitively. Preserve the return type.",
+  "repository_fixture": "fixtures/email_validation_mutation",
+  "visible_tests": ["is_valid_email(' user@example.com ') is True"],
+  "hidden_tests_description": "Uppercase domains, missing local parts, multiple at-signs, and whitespace-only values are checked.",
+  "forbidden_files": ["docs/email_rules.md"],
+  "public_api_contract": "is_valid_email(value: str) -> bool",
+  "success_criteria": ["strip surrounding whitespace", "case-insensitive domain", "reject malformed addresses"],
+  "anti_xendris_bias_notes": "No internal benchmark format is rewarded.",
+  "h0_risk_notes": "A strong non-system baseline can plausibly match this task.",
+  "origin_confidence": "MEDIUM",
+  "externality_score": 0.56,
+  "admissible_for_v0_3": true,
+  "rejection_reason": null,
+  "hash_material": "fcm-v0-3-1-candidate-002|email-validation|mutated-fixture"
+}

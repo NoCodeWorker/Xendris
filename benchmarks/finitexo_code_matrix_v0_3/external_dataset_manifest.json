@@ -1,0 +1,62 @@
+{
+  "benchmark_name": "Finitexo Code Matrix",
+  "benchmark_version": "0.3",
+  "dataset_name": "Finitexo Code Matrix External Adversarial Seed",
+  "dataset_version": "0.3.0",
+  "dataset_size": 10,
+  "dataset_type": "EXTERNAL_ADVERSARIAL_OR_SEMI_EXTERNAL",
+  "frozen": true,
+  "hash_algorithm": "sha256",
+  "task_hashes": {
+    "external_task_001.json": "45a501f0d826fea37572cb898e7a79deeb519696c9a1c2da44e4515bf52bf7fa",
+    "external_task_002.json": "d8ee98fbb067977db39100cd43037964c8f789122d3bb4919a71e89666ce2f49",
+    "external_task_003.json": "e630b2c069a7043b629f0264e20d38e34c45a807daaa5e17d1d82f1737c33b8d",
+    "external_task_004.json": "22774ee4f25bd2687cbb0743f697d553f8b62be63bc4412cdd81c0d0c5923288",
+    "external_task_005.json": "fd0902a524a948c35d042100622e85c6e0e834d753182bb503b0b07c1067da13",
+    "external_task_006.json": "fdfab9f3df51c7c39e23ac59ad6db5c6739ab5bc20c53c464ced7b5e737f2643",
+    "external_task_007.json": "8893ed30ab0e18b35e0fa307fd0592c006ae60aae3eeaa4ddb63d2d66bfe13a5",
+    "external_task_008.json": "d6cfedb350b8756272dec0a276a7d0005cc3b4db7e1a9a49fdd46aa692fda60d",
+    "external_task_009.json": "c5c4ff11fff28ba616992170138309ea24402fcb01250153cfc37c8d870b985e",
+    "external_task_010.json": "2ba6d01fc7c149d7a2b09e95adb42d3338ef2114fc847021643df840b46afad1"
+  },
+  "dataset_hash": "a1b03f0da1c4e051c4b54df46baae8eef65a8c401f7da7ed5c520f9bf2c29907",
+  "scoring_contract_hash": "499b1f0413bbf42f6b474a3a0e94572177bc07fafd28bf3f68c9e15b09274d30",
+  "blind_scoring_required": true,
+  "strong_baseline_required": true,
+  "external_dataset_intake_version": "v0.3.2",
+  "external_source_acquisition_version": "0.3.2",
+  "external_adaptation_audit_version": "0.3.3",
+  "external_adaptation_audit_policy": {
+    "adaptation_audit_records_are_not_benchmark_tasks": true,
+    "adaptation_recommendation_is_not_dataset_promotion": true,
+    "frozen_dataset_modification_requires_explicit_future_version_bump": true,
+    "provider_execution_remains_unauthorized_in_this_phase": true,
+    "external_superiority_claims_remain_unauthorized": true,
+    "future_frozen_external_or_adapted_dataset_required_for_cautious_benchmark_claims": true
+  },
+  "external_source_acquisition_policy": {
+    "acquisition_records_are_not_benchmark_tasks": true,
+    "acquisition_eligibility_does_not_equal_dataset_promotion": true,
+    "frozen_dataset_modification_requires_explicit_future_version_bump": true,
+    "externality_claims_remain_unauthorized_until_frozen_external_or_adapted_dataset_exists": true
+  },
+  "externality_summary": {
+    "external_verified": 0,
+    "external_adapted": 4,
+    "semi_external_synthetic": 3,
+    "mutated_fixture": 3,
+    "candidate_pool_size": 10,
+    "candidate_accepted": 10,
+    "candidate_rejected": 0,
+    "candidate_warnings": 0,
+    "mean_candidate_externality_score": 0.6,
+    "target_mean_externality_score": 0.6,
+    "target_met": true
+  },
+  "intake_policy": "candidate pool does not modify frozen seed dataset without explicit version bump",
+  "promotion_policy": "dataset promotion requires a future explicit phase",
+  "claim_policy": "no superiority claim authorized",
+  "h0_policy": "H0 live until weakened by interpretable external adversarial evidence",
+  "provider_execution_default": "disabled",
+  "real_execution_requires": "--execute"
+}

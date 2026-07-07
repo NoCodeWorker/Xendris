@@ -1,0 +1,33 @@
+{
+  "adaptation_id": "adapt_002",
+  "source_id": "acq_002",
+  "acquisition_record_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/source_acquisition_examples/record_valid_external_adapted.json",
+  "source_origin_candidate": "EXTERNAL_ADAPTED",
+  "adapted_candidate_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/adapted/adapt_002_candidate.json",
+  "normalized_source_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/normalized/acq_002.json",
+  "raw_source_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "adapted_candidate_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "adaptation_type": "API_NORMALIZATION",
+  "adaptation_summary": "Adapts a public issue shape into a local API normalization fixture with documented simplification.",
+  "semantic_preservation_score": 0.78,
+  "structural_change_score": 0.45,
+  "difficulty_shift_score": 0.35,
+  "contamination_risk": "LOW",
+  "leakage_risk": "MEDIUM",
+  "task_validity_status": "VALID_WITH_WARNINGS",
+  "benchmark_fit_status": "FIT_WITH_LIMITATIONS",
+  "requires_human_review": true,
+  "promotion_recommendation": "DO_NOT_PROMOTE",
+  "rejection_reasons": [],
+  "warnings": ["needs manual review of simplification"],
+  "task_metadata": {
+    "expected_behavior": "Normalize input shape while preserving API behavior.",
+    "visible_tests": ["normalize(3) == [3]"],
+    "reproducible_setup": true,
+    "expected_files_changed": 1,
+    "api_contract_sensitive": true,
+    "hidden_tests_relevant": true,
+    "ambiguous": false,
+    "minimal_patch_required": true
+  }
+}

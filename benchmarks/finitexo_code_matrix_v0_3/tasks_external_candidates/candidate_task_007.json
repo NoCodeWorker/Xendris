@@ -1,0 +1,23 @@
+{
+  "task_id": "fcm_v0_3_2_candidate_007",
+  "origin": "EXTERNAL_ADAPTED",
+  "source_id": "src_007",
+  "source_reference": "Requests documentation on connect/read timeout tuple behavior",
+  "title": "Normalize timeout configuration",
+  "category": "api_preservation",
+  "difficulty": "small",
+  "prompt": "Fix normalize_timeout so a positive number becomes both connect and read timeout, and a two-item tuple is preserved after validation. Reject zero, negative, and malformed values.",
+  "repository_fixture": "fixtures/timeout_config_external_adapted",
+  "visible_tests": ["normalize_timeout(3) == (3.0, 3.0)", "normalize_timeout((1, 5)) == (1.0, 5.0)"],
+  "hidden_tests_description": "Zero, negative, non-numeric, and wrong-length tuple values are checked.",
+  "forbidden_files": ["config/defaults.py"],
+  "public_api_contract": "normalize_timeout(value: float | tuple[float, float]) -> tuple[float, float]",
+  "success_criteria": ["scalar normalized to pair", "pair validated", "malformed values rejected", "signature preserved"],
+  "anti_xendris_bias_notes": "No internal response format or terminology is rewarded.",
+  "h0_risk_notes": "A careful baseline can solve this by validating shape and range.",
+  "origin_confidence": "HIGH",
+  "externality_score": 0.76,
+  "admissible_for_v0_3": true,
+  "rejection_reason": null,
+  "hash_material": "fcm-v0-3-2-candidate-007|timeout-config|external-adapted"
+}

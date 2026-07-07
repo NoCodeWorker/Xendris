@@ -1,0 +1,23 @@
+{
+  "task_id": "fcm_v0_3_1_candidate_004",
+  "origin": "SEMI_EXTERNAL_SYNTHETIC",
+  "source_id": "src_004",
+  "source_reference": "manual_issue_style_synthetic:config_precedence",
+  "title": "Respect configuration precedence",
+  "category": "regression",
+  "difficulty": "medium",
+  "prompt": "Fix resolve_config so explicit user settings override environment defaults, and missing values fall back to defaults. Preserve the existing mapping shape.",
+  "repository_fixture": "fixtures/config_precedence_synthetic",
+  "visible_tests": ["resolve_config({'timeout': 5}, {'timeout': 10})['timeout'] == 5"],
+  "hidden_tests_description": "None values, missing keys, and unknown keys are checked.",
+  "forbidden_files": [".env", "config/defaults.json"],
+  "public_api_contract": "resolve_config(user_config: dict, defaults: dict) -> dict",
+  "success_criteria": ["user values take precedence", "defaults fill missing keys", "inputs are not mutated"],
+  "anti_xendris_bias_notes": "The task rewards ordinary configuration correctness only.",
+  "h0_risk_notes": "Internal authorship means this remains candidate-pool evidence only.",
+  "origin_confidence": "LOW",
+  "externality_score": 0.4,
+  "admissible_for_v0_3": true,
+  "rejection_reason": null,
+  "hash_material": "fcm-v0-3-1-candidate-004|config-precedence|semi-synthetic"
+}

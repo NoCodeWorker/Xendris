@@ -1,0 +1,19 @@
+{
+  "task_id": "FCM-V03-006",
+  "origin": "SEMI_EXTERNAL_SYNTHETIC",
+  "source_reference": "manual_external_style_synthetic:cache_key",
+  "title": "Stable cache key",
+  "category": "determinism",
+  "difficulty": "medium",
+  "prompt": "Fix make_cache_key so dictionaries with the same semantic content produce the same key regardless of insertion order.",
+  "repository_fixture": "fixtures/cache_key",
+  "visible_tests": ["make_cache_key({'a': 1, 'b': 2}) == make_cache_key({'b': 2, 'a': 1})"],
+  "hidden_tests_description": "Nested dictionaries and lists are checked.",
+  "forbidden_files": ["cache.db"],
+  "public_api_contract": "make_cache_key(payload: dict) -> str",
+  "success_criteria": ["order-independent dict encoding", "stable output", "no persistent writes"],
+  "anti_xendris_bias_notes": "No preferred implementation beyond determinism.",
+  "h0_risk_notes": "Direct use of sorted serialization can solve it.",
+  "expected_failure_modes": ["using str(dict)", "non-deterministic hash", "writing cache state"],
+  "hash_material": "FCM-V03-006|cache_key|stable"
+}

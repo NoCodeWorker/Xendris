@@ -1,0 +1,18 @@
+{
+  "source_id": "acq_002",
+  "source_type": "PUBLIC_GITHUB_ISSUE",
+  "source_url": "https://example.invalid/public-issue",
+  "retrieved_at": "2026-07-07T00:00:00Z",
+  "license": "REFERENCE_ONLY_NO_CODE_COPIED",
+  "source_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "raw_snapshot_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/raw/acq_002.txt",
+  "normalized_snapshot_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/normalized/acq_002.json",
+  "adapted_task_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/adapted/acq_002_candidate.json",
+  "origin_candidate": "EXTERNAL_ADAPTED",
+  "contamination_risk": "MEDIUM",
+  "adaptation_required": true,
+  "adaptation_notes": "Only the technical issue shape is adapted into a local fixture; no external code or long text is copied.",
+  "promotion_allowed": false,
+  "rejection_reasons": [],
+  "warnings": []
+}

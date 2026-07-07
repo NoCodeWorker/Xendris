@@ -1,0 +1,287 @@
+{
+  "benchmark_version": "v0.3.3",
+  "blocked": 1,
+  "claims_authorized": [],
+  "counts_by_adaptation_type": {
+    "API_NORMALIZATION": 1,
+    "DIRECT_PORT": 1,
+    "MUTATED_INTERNAL_FIXTURE": 1,
+    "REQUIREMENT_EXTRACTION": 1,
+    "SYNTHETIC_EXPANSION": 1
+  },
+  "counts_by_benchmark_fit_status": {
+    "BLOCKED": 1,
+    "FIT_FOR_AGENTIC_PROGRAMMING": 1,
+    "FIT_WITH_LIMITATIONS": 2,
+    "TOO_DEPENDENT_ON_EXTERNAL_STATE": 1
+  },
+  "counts_by_contamination_risk": {
+    "BLOCKED": 1,
+    "LOW": 3,
+    "MEDIUM": 1
+  },
+  "counts_by_leakage_risk": {
+    "BLOCKED": 1,
+    "LOW": 3,
+    "MEDIUM": 1
+  },
+  "counts_by_task_validity_status": {
+    "BLOCKED": 2,
+    "VALID": 1,
+    "VALID_WITH_WARNINGS": 2
+  },
+  "decisions": [
+    {
+      "audit_decision": {
+        "flags": [
+          "resembles_internal_fixture_naming",
+          "source_origin_not_external"
+        ],
+        "recommendation": "BLOCKED",
+        "rejection_reasons": [
+          "internal fixture source",
+          "adaptation_type_not_external_safe",
+          "source_origin_not_external_or_adapted",
+          "blocked_adaptation_type",
+          "contamination_risk_blocks_recommendation",
+          "leakage_risk_blocks_recommendation",
+          "task_validity_blocked",
+          "benchmark_fit_blocked"
+        ],
+        "warnings": []
+      },
+      "record": {
+        "acquisition_record_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/source_acquisition_examples/record_blocked_contamination.json",
+        "adaptation_id": "adapt_004",
+        "adaptation_summary": "Internal fixture mutation included as a blocked example.",
+        "adaptation_type": "MUTATED_INTERNAL_FIXTURE",
+        "adapted_candidate_hash": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "adapted_candidate_path": "benchmarks/finitexo_code_matrix_v0_3/tasks/external_task_001.json",
+        "benchmark_fit_status": "BLOCKED",
+        "contamination_risk": "BLOCKED",
+        "difficulty_shift_score": 0.2,
+        "leakage_risk": "BLOCKED",
+        "normalized_source_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/normalized/local_fixture_001.json",
+        "promotion_recommendation": "BLOCKED",
+        "raw_source_hash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "rejection_reasons": [
+          "internal fixture source"
+        ],
+        "requires_human_review": true,
+        "semantic_preservation_score": 0.88,
+        "source_id": "local_fixture_001",
+        "source_origin_candidate": "MUTATED_FIXTURE",
+        "structural_change_score": 0.3,
+        "task_metadata": {
+          "copied_internal_fixture": true,
+          "expected_behavior": "Internal fixture mutation should not be promoted as external.",
+          "reproducible_setup": true,
+          "visible_tests": [
+            "blocked() is True"
+          ]
+        },
+        "task_validity_status": "BLOCKED",
+        "warnings": []
+      }
+    },
+    {
+      "audit_decision": {
+        "flags": [],
+        "recommendation": "RECOMMEND_FOR_FUTURE_FREEZE",
+        "rejection_reasons": [],
+        "warnings": []
+      },
+      "record": {
+        "acquisition_record_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/source_acquisition_examples/record_valid_external_verified.json",
+        "adaptation_id": "adapt_001",
+        "adaptation_summary": "Directly ports a small public documentation behavior into a local, original task fixture without copying source code.",
+        "adaptation_type": "DIRECT_PORT",
+        "adapted_candidate_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "adapted_candidate_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/adapted/adapt_001_candidate.json",
+        "benchmark_fit_status": "FIT_FOR_AGENTIC_PROGRAMMING",
+        "contamination_risk": "LOW",
+        "difficulty_shift_score": 0.2,
+        "leakage_risk": "LOW",
+        "normalized_source_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/normalized/acq_001.json",
+        "promotion_recommendation": "DO_NOT_PROMOTE",
+        "raw_source_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "rejection_reasons": [],
+        "requires_human_review": false,
+        "semantic_preservation_score": 0.86,
+        "source_id": "acq_001",
+        "source_origin_candidate": "EXTERNAL_VERIFIED",
+        "structural_change_score": 0.25,
+        "task_metadata": {
+          "api_contract_sensitive": true,
+          "expected_behavior": "Normalize a documented edge case into a local helper contract.",
+          "expected_files_changed": 1,
+          "hidden_tests_relevant": true,
+          "minimal_patch_required": true,
+          "reproducible_setup": true,
+          "visible_tests": [
+            "helper('example') == 'example'"
+          ]
+        },
+        "task_validity_status": "VALID",
+        "warnings": []
+      }
+    },
+    {
+      "audit_decision": {
+        "flags": [],
+        "recommendation": "RECOMMEND_WITH_HUMAN_REVIEW",
+        "rejection_reasons": [],
+        "warnings": [
+          "needs manual review of simplification"
+        ]
+      },
+      "record": {
+        "acquisition_record_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/source_acquisition_examples/record_valid_external_adapted.json",
+        "adaptation_id": "adapt_002",
+        "adaptation_summary": "Adapts a public issue shape into a local API normalization fixture with documented simplification.",
+        "adaptation_type": "API_NORMALIZATION",
+        "adapted_candidate_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "adapted_candidate_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/adapted/adapt_002_candidate.json",
+        "benchmark_fit_status": "FIT_WITH_LIMITATIONS",
+        "contamination_risk": "LOW",
+        "difficulty_shift_score": 0.35,
+        "leakage_risk": "MEDIUM",
+        "normalized_source_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/normalized/acq_002.json",
+        "promotion_recommendation": "DO_NOT_PROMOTE",
+        "raw_source_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+        "rejection_reasons": [],
+        "requires_human_review": true,
+        "semantic_preservation_score": 0.78,
+        "source_id": "acq_002",
+        "source_origin_candidate": "EXTERNAL_ADAPTED",
+        "structural_change_score": 0.45,
+        "task_metadata": {
+          "ambiguous": false,
+          "api_contract_sensitive": true,
+          "expected_behavior": "Normalize input shape while preserving API behavior.",
+          "expected_files_changed": 1,
+          "hidden_tests_relevant": true,
+          "minimal_patch_required": true,
+          "reproducible_setup": true,
+          "visible_tests": [
+            "normalize(3) == [3]"
+          ]
+        },
+        "task_validity_status": "VALID_WITH_WARNINGS",
+        "warnings": [
+          "needs manual review of simplification"
+        ]
+      }
+    },
+    {
+      "audit_decision": {
+        "flags": [],
+        "recommendation": "DO_NOT_PROMOTE",
+        "rejection_reasons": [
+          "depends on live network and secrets",
+          "task_validity_blocked",
+          "benchmark_fit_too_dependent_on_external_state"
+        ],
+        "warnings": []
+      },
+      "record": {
+        "acquisition_record_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/source_acquisition_examples/record_valid_external_adapted.json",
+        "adaptation_id": "adapt_005",
+        "adaptation_summary": "Invalid example that depends on live network state and secrets.",
+        "adaptation_type": "REQUIREMENT_EXTRACTION",
+        "adapted_candidate_hash": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+        "adapted_candidate_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/adapted/adapt_005_candidate.json",
+        "benchmark_fit_status": "TOO_DEPENDENT_ON_EXTERNAL_STATE",
+        "contamination_risk": "LOW",
+        "difficulty_shift_score": 0.3,
+        "leakage_risk": "LOW",
+        "normalized_source_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/normalized/acq_005.json",
+        "promotion_recommendation": "DO_NOT_PROMOTE",
+        "raw_source_hash": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "rejection_reasons": [
+          "depends on live network and secrets"
+        ],
+        "requires_human_review": true,
+        "semantic_preservation_score": 0.75,
+        "source_id": "acq_005",
+        "source_origin_candidate": "EXTERNAL_ADAPTED",
+        "structural_change_score": 0.35,
+        "task_metadata": {
+          "depends_on_live_network": true,
+          "expected_behavior": "Requires live API response.",
+          "reproducible_setup": false,
+          "requires_provider_execution": true,
+          "requires_secrets": true,
+          "visible_tests": [
+            "requires network"
+          ]
+        },
+        "task_validity_status": "BLOCKED",
+        "warnings": []
+      }
+    },
+    {
+      "audit_decision": {
+        "flags": [],
+        "recommendation": "DO_NOT_PROMOTE",
+        "rejection_reasons": [
+          "adaptation_type_not_external_safe",
+          "blocked_adaptation_type",
+          "semantic_preservation_below_threshold",
+          "structural_change_above_threshold",
+          "difficulty_shift_above_threshold"
+        ],
+        "warnings": [
+          "weak source preservation",
+          "high_structural_divergence"
+        ]
+      },
+      "record": {
+        "acquisition_record_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/source_acquisition_examples/record_rejected_missing_license.json",
+        "adaptation_id": "adapt_003",
+        "adaptation_summary": "Expands a weak source into a much broader local task; preservation is intentionally poor for test coverage.",
+        "adaptation_type": "SYNTHETIC_EXPANSION",
+        "adapted_candidate_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "adapted_candidate_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/adapted/adapt_003_candidate.json",
+        "benchmark_fit_status": "FIT_WITH_LIMITATIONS",
+        "contamination_risk": "MEDIUM",
+        "difficulty_shift_score": 0.61,
+        "leakage_risk": "LOW",
+        "normalized_source_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/normalized/acq_003.json",
+        "promotion_recommendation": "DO_NOT_PROMOTE",
+        "raw_source_hash": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "rejection_reasons": [],
+        "requires_human_review": true,
+        "semantic_preservation_score": 0.41,
+        "source_id": "acq_003",
+        "source_origin_candidate": "EXTERNAL_ADAPTED",
+        "structural_change_score": 0.82,
+        "task_metadata": {
+          "expected_behavior": "Synthetic expansion of a weak source.",
+          "expected_files_changed": 1,
+          "hidden_tests_relevant": true,
+          "minimal_patch_required": true,
+          "reproducible_setup": true,
+          "visible_tests": [
+            "f(1) == 1"
+          ]
+        },
+        "task_validity_status": "VALID_WITH_WARNINGS",
+        "warnings": [
+          "weak source preservation"
+        ]
+      }
+    }
+  ],
+  "do_not_promote": 2,
+  "env_read": false,
+  "examples_are_benchmark_tasks": false,
+  "final_decision": "EXTERNAL_ADAPTATION_AUDIT_IMPLEMENTED_NO_FROZEN_DATASET_CHANGE",
+  "frozen_dataset_modified": false,
+  "network_required": false,
+  "providers_executed": false,
+  "recommended_for_future_freeze": 1,
+  "recommended_with_human_review": 1,
+  "secrets_printed": false,
+  "total_adaptation_records": 5
+}

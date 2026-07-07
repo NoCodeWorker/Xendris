@@ -1,0 +1,127 @@
+{
+  "registry_version": "0.1",
+  "benchmark_version": "v0.3.1",
+  "created_for": "external dataset intake",
+  "sources": [
+    {
+      "source_id": "src_001",
+      "source_type": "MUTATED_FIXTURE",
+      "title": "Local pagination fixture mutation",
+      "reference": "local_fixture_pattern:pagination_boundary",
+      "license_or_usage_notes": "Internal fixture pattern; no third-party code copied.",
+      "adaptation_notes": "Mutation changes page boundary behavior and keeps a public helper contract.",
+      "xendris_contamination_risk": "LOW",
+      "traceability_confidence": "MEDIUM",
+      "accepted": true,
+      "rejection_reason": null
+    },
+    {
+      "source_id": "src_002",
+      "source_type": "MUTATED_FIXTURE",
+      "title": "Local validation fixture mutation",
+      "reference": "local_fixture_pattern:email_validation_edge",
+      "license_or_usage_notes": "Internal fixture pattern; no third-party code copied.",
+      "adaptation_notes": "Mutation introduces normal validation edge cases around whitespace and case.",
+      "xendris_contamination_risk": "LOW",
+      "traceability_confidence": "MEDIUM",
+      "accepted": true,
+      "rejection_reason": null
+    },
+    {
+      "source_id": "src_003",
+      "source_type": "SEMI_EXTERNAL_SYNTHETIC",
+      "title": "Issue-like slug collision task",
+      "reference": "manual_issue_style_synthetic:slug_collision",
+      "license_or_usage_notes": "Internally authored; no third-party code copied.",
+      "adaptation_notes": "Created to resemble a normal application bug report without external claim.",
+      "xendris_contamination_risk": "LOW",
+      "traceability_confidence": "LOW",
+      "accepted": true,
+      "rejection_reason": null
+    },
+    {
+      "source_id": "src_004",
+      "source_type": "SEMI_EXTERNAL_SYNTHETIC",
+      "title": "Issue-like config precedence task",
+      "reference": "manual_issue_style_synthetic:config_precedence",
+      "license_or_usage_notes": "Internally authored; no third-party code copied.",
+      "adaptation_notes": "Created from common configuration precedence failure patterns.",
+      "xendris_contamination_risk": "LOW",
+      "traceability_confidence": "LOW",
+      "accepted": true,
+      "rejection_reason": null
+    },
+    {
+      "source_id": "src_005",
+      "source_type": "SEMI_EXTERNAL_SYNTHETIC",
+      "title": "Issue-like duration parser task",
+      "reference": "manual_issue_style_synthetic:duration_parser",
+      "license_or_usage_notes": "Internally authored; no third-party code copied.",
+      "adaptation_notes": "Created from common parser edge cases without copying external code.",
+      "xendris_contamination_risk": "LOW",
+      "traceability_confidence": "LOW",
+      "accepted": true,
+      "rejection_reason": null
+    },
+    {
+      "source_id": "src_006",
+      "source_type": "EXTERNAL_ADAPTED",
+      "title": "URL join safety warning adapted to local redirect validation",
+      "reference": "Python urllib.parse documentation warning about urljoin with attacker-controlled absolute URLs",
+      "license_or_usage_notes": "Uses the public technical idea only; no CPython code or documentation text is copied into the fixture.",
+      "adaptation_notes": "External technical idea: absolute URLs can override the intended base when joined. What was adapted: local redirect target validation. What was not copied: implementation code and original prose. Fixture is local because function names, tests, and behavior are authored here. Remaining origin risk: public documentation is referenced but not vendored.",
+      "xendris_contamination_risk": "LOW",
+      "traceability_confidence": "HIGH",
+      "accepted": true,
+      "rejection_reason": null
+    },
+    {
+      "source_id": "src_007",
+      "source_type": "EXTERNAL_ADAPTED",
+      "title": "Requests timeout shape adapted to local configuration normalization",
+      "reference": "Requests documentation on connect/read timeout tuple behavior",
+      "license_or_usage_notes": "Uses the public API behavior idea only; no Requests code or long documentation excerpt is copied.",
+      "adaptation_notes": "External technical idea: timeout may be scalar or connect/read pair. What was adapted: a local normalize_timeout helper. What was not copied: Requests implementation and examples. Fixture is local because input schema and tests are original. Remaining origin risk: documentation-inspired rather than imported from a real issue.",
+      "xendris_contamination_risk": "LOW",
+      "traceability_confidence": "HIGH",
+      "accepted": true,
+      "rejection_reason": null
+    },
+    {
+      "source_id": "src_008",
+      "source_type": "EXTERNAL_ADAPTED",
+      "title": "Semantic version precedence adapted to local comparator",
+      "reference": "Semantic Versioning 2.0.0 precedence rules",
+      "license_or_usage_notes": "Uses the public standard behavior idea only; no external parser code is copied.",
+      "adaptation_notes": "External technical idea: pre-release versions sort before their corresponding final release. What was adapted: a small local compare_versions helper. What was not copied: any external library implementation. Fixture is local because supported version subset and tests are authored here. Remaining origin risk: standard-inspired but simplified.",
+      "xendris_contamination_risk": "LOW",
+      "traceability_confidence": "HIGH",
+      "accepted": true,
+      "rejection_reason": null
+    },
+    {
+      "source_id": "src_009",
+      "source_type": "EXTERNAL_ADAPTED",
+      "title": "HTTP Retry-After header behavior adapted to local parser",
+      "reference": "HTTP Retry-After header behavior documented in HTTP specifications and MDN references",
+      "license_or_usage_notes": "Uses the public protocol behavior idea only; no external implementation is copied.",
+      "adaptation_notes": "External technical idea: Retry-After may be delay seconds or date. What was adapted: local delay parser focused on seconds and invalid values. What was not copied: spec text beyond the concept and any external parser code. Fixture is local because supported subset, API, and tests are original. Remaining origin risk: simplified protocol behavior.",
+      "xendris_contamination_risk": "LOW",
+      "traceability_confidence": "MEDIUM",
+      "accepted": true,
+      "rejection_reason": null
+    },
+    {
+      "source_id": "src_010",
+      "source_type": "MUTATED_FIXTURE",
+      "title": "Local query parameter fixture mutation",
+      "reference": "local_fixture_pattern:query_parameter_duplicates",
+      "license_or_usage_notes": "Internal fixture mutation; no third-party code copied.",
+      "adaptation_notes": "Mutation adds duplicate query-parameter handling and stable ordering expectations to a local parser fixture.",
+      "xendris_contamination_risk": "LOW",
+      "traceability_confidence": "MEDIUM",
+      "accepted": true,
+      "rejection_reason": null
+    }
+  ]
+}

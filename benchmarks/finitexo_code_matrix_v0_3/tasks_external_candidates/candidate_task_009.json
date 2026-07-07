@@ -1,0 +1,23 @@
+{
+  "task_id": "fcm_v0_3_2_candidate_009",
+  "origin": "EXTERNAL_ADAPTED",
+  "source_id": "src_009",
+  "source_reference": "HTTP Retry-After header behavior documented in HTTP specifications and MDN references",
+  "title": "Parse Retry-After delay seconds",
+  "category": "validation",
+  "difficulty": "small",
+  "prompt": "Fix parse_retry_after so positive integer delay values return seconds and invalid or negative values return None. Preserve the current function signature.",
+  "repository_fixture": "fixtures/retry_after_external_adapted",
+  "visible_tests": ["parse_retry_after('120') == 120", "parse_retry_after('-1') is None"],
+  "hidden_tests_description": "Whitespace, zero, fractional values, date-like values, and non-numeric strings are checked.",
+  "forbidden_files": ["docs/http_headers.md"],
+  "public_api_contract": "parse_retry_after(value: str) -> int | None",
+  "success_criteria": ["positive integer accepted", "invalid values return None", "no exception for malformed input"],
+  "anti_xendris_bias_notes": "The candidate rewards protocol-inspired defensive parsing only.",
+  "h0_risk_notes": "A baseline with basic validation discipline should remain competitive.",
+  "origin_confidence": "MEDIUM",
+  "externality_score": 0.72,
+  "admissible_for_v0_3": true,
+  "rejection_reason": null,
+  "hash_material": "fcm-v0-3-2-candidate-009|retry-after|external-adapted"
+}

@@ -1,0 +1,23 @@
+{
+  "task_id": "fcm_v0_3_2_candidate_006",
+  "origin": "EXTERNAL_ADAPTED",
+  "source_id": "src_006",
+  "source_reference": "Python urllib.parse documentation warning about urljoin with attacker-controlled absolute URLs",
+  "title": "Reject unsafe redirect targets",
+  "category": "security",
+  "difficulty": "medium",
+  "prompt": "Fix normalize_redirect_target so relative paths are accepted but absolute URLs and scheme-relative URLs are rejected with ValueError. Preserve the public API.",
+  "repository_fixture": "fixtures/redirect_target_external_adapted",
+  "visible_tests": ["normalize_redirect_target('/account') == '/account'"],
+  "hidden_tests_description": "Absolute http URLs, scheme-relative URLs, whitespace, and path traversal-like inputs are checked.",
+  "forbidden_files": ["security_policy.md", "docs/redirects.md"],
+  "public_api_contract": "normalize_redirect_target(target: str) -> str",
+  "success_criteria": ["relative paths accepted", "absolute URLs rejected", "scheme-relative URLs rejected", "ValueError used for unsafe targets"],
+  "anti_xendris_bias_notes": "The candidate rewards ordinary redirect safety and API preservation only.",
+  "h0_risk_notes": "A strong non-system baseline with security discipline should be competitive.",
+  "origin_confidence": "HIGH",
+  "externality_score": 0.78,
+  "admissible_for_v0_3": true,
+  "rejection_reason": null,
+  "hash_material": "fcm-v0-3-2-candidate-006|redirect-target|external-adapted"
+}

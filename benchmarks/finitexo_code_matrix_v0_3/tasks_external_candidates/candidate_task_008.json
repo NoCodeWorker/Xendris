@@ -1,0 +1,23 @@
+{
+  "task_id": "fcm_v0_3_2_candidate_008",
+  "origin": "EXTERNAL_ADAPTED",
+  "source_id": "src_008",
+  "source_reference": "Semantic Versioning 2.0.0 precedence rules",
+  "title": "Compare pre-release versions",
+  "category": "edge_case",
+  "difficulty": "medium",
+  "prompt": "Fix compare_versions so a pre-release version sorts before the matching final release. Preserve the comparator return convention: -1, 0, or 1.",
+  "repository_fixture": "fixtures/version_compare_external_adapted",
+  "visible_tests": ["compare_versions('1.0.0-alpha', '1.0.0') == -1"],
+  "hidden_tests_description": "Equal versions, patch differences, and multiple pre-release labels are checked within the supported subset.",
+  "forbidden_files": ["docs/versioning.md"],
+  "public_api_contract": "compare_versions(left: str, right: str) -> int",
+  "success_criteria": ["pre-release before final", "numeric components compared", "stable -1/0/1 return values"],
+  "anti_xendris_bias_notes": "The task is standard-comparison oriented and does not reward any system-specific format.",
+  "h0_risk_notes": "A strong non-system baseline familiar with version rules can match this.",
+  "origin_confidence": "HIGH",
+  "externality_score": 0.74,
+  "admissible_for_v0_3": true,
+  "rejection_reason": null,
+  "hash_material": "fcm-v0-3-2-candidate-008|version-compare|external-adapted"
+}

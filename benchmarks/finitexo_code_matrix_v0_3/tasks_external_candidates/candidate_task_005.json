@@ -1,0 +1,23 @@
+{
+  "task_id": "fcm_v0_3_1_candidate_005",
+  "origin": "SEMI_EXTERNAL_SYNTHETIC",
+  "source_id": "src_005",
+  "source_reference": "manual_issue_style_synthetic:duration_parser",
+  "title": "Parse compact durations",
+  "category": "api_preservation",
+  "difficulty": "medium",
+  "prompt": "Fix parse_duration so compact strings like 2h30m and 45s return seconds. Preserve the public API and reject unknown units.",
+  "repository_fixture": "fixtures/duration_parser_synthetic",
+  "visible_tests": ["parse_duration('2h30m') == 9000"],
+  "hidden_tests_description": "Whitespace, repeated units, invalid units, and zero durations are checked.",
+  "forbidden_files": ["docs/duration_format.md"],
+  "public_api_contract": "parse_duration(value: str) -> int",
+  "success_criteria": ["hours minutes seconds parsed", "invalid units rejected", "integer seconds returned"],
+  "anti_xendris_bias_notes": "No benchmark-specific output structure is rewarded.",
+  "h0_risk_notes": "A parser-focused baseline can reasonably match this task.",
+  "origin_confidence": "LOW",
+  "externality_score": 0.38,
+  "admissible_for_v0_3": true,
+  "rejection_reason": null,
+  "hash_material": "fcm-v0-3-1-candidate-005|duration-parser|semi-synthetic"
+}

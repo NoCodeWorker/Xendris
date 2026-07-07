@@ -1,0 +1,32 @@
+{
+  "adaptation_id": "adapt_001",
+  "source_id": "acq_001",
+  "acquisition_record_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/source_acquisition_examples/record_valid_external_verified.json",
+  "source_origin_candidate": "EXTERNAL_VERIFIED",
+  "adapted_candidate_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/adapted/adapt_001_candidate.json",
+  "normalized_source_path": "benchmarks/finitexo_code_matrix_v0_3/external_sources/normalized/acq_001.json",
+  "raw_source_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "adapted_candidate_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "adaptation_type": "DIRECT_PORT",
+  "adaptation_summary": "Directly ports a small public documentation behavior into a local, original task fixture without copying source code.",
+  "semantic_preservation_score": 0.86,
+  "structural_change_score": 0.25,
+  "difficulty_shift_score": 0.20,
+  "contamination_risk": "LOW",
+  "leakage_risk": "LOW",
+  "task_validity_status": "VALID",
+  "benchmark_fit_status": "FIT_FOR_AGENTIC_PROGRAMMING",
+  "requires_human_review": false,
+  "promotion_recommendation": "DO_NOT_PROMOTE",
+  "rejection_reasons": [],
+  "warnings": [],
+  "task_metadata": {
+    "expected_behavior": "Normalize a documented edge case into a local helper contract.",
+    "visible_tests": ["helper('example') == 'example'"],
+    "reproducible_setup": true,
+    "expected_files_changed": 1,
+    "api_contract_sensitive": true,
+    "hidden_tests_relevant": true,
+    "minimal_patch_required": true
+  }
+}

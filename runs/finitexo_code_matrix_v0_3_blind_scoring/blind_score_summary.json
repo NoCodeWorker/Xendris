@@ -1,0 +1,36 @@
+{
+  "anonymized": {
+    "anonymization_map": {
+      "23a53b265378c617": {
+        "identity_metadata": {
+          "variant": "strong_non_xendris_agent"
+        },
+        "submission_id": "dry-run-001"
+      }
+    },
+    "anonymization_map_hash": "5ad6197d22b1293511728f2ec1643129f9e512f7d9133530c39c18585ce2a657",
+    "blind_payload": {
+      "anonymous_submission_id": "23a53b265378c617",
+      "evidence_decision": "INTERPRETABLE",
+      "limitations": [],
+      "scoring_components": {
+        "api_contract_preserved": true,
+        "external_validity_integrity": true,
+        "hidden_tests_pass": true,
+        "minimal_patch": true,
+        "no_false_success_claim": true,
+        "no_forbidden_files_touched": true,
+        "security_clean": true,
+        "visible_tests_pass": true
+      },
+      "task_id": "FCM-V03-001"
+    }
+  },
+  "score": {
+    "blind_scoring_decision": "PASSED",
+    "blocking_reasons": [],
+    "raw_score": 1.0,
+    "score": 1.0,
+    "verified_success": true
+  }
+}
