@@ -1,0 +1,18 @@
+{
+  "acquisition_record_ref": "benchmarks/finitexo_code_matrix_v0_3/external_sources/source_acquisition_examples/record_valid_external_verified.json",
+  "adaptation_record_ref": "benchmarks/finitexo_code_matrix_v0_3/adaptation_audit/examples/adaptation_clean_external_verified_direct_port.json",
+  "adapted_candidate_hash": "sha256:4111111111111111111111111111111111111111111111111111111111111111",
+  "base_task_ref": null,
+  "expansion_candidate_ref": "benchmarks/finitexo_code_matrix_v0_4/expansion_candidates/expansion_candidate_011.json",
+  "frozen_task_hash": "b2253ef0fde6bd11f854143153e043387811278bbdfcaa7d07bf7ff9d6dd2fb5",
+  "human_review_ref": null,
+  "known_limitations": ["Expansion candidate freeze only.", "No provider execution is authorized."],
+  "non_claims": ["No provider superiority.", "No Xendris superiority.", "No statistical significance."],
+  "promotion_gate_result": "READY_FOR_FUTURE_FREEZE",
+  "raw_source_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "source_id": "exp_acq_011",
+  "source_license": "REFERENCE_ONLY_NO_CODE_COPIED",
+  "source_origin": "EXTERNAL_VERIFIED",
+  "source_url": "https://example.invalid/expansion-011",
+  "task_id": "fcm_v0_4_3_frozen_task_006"
+}

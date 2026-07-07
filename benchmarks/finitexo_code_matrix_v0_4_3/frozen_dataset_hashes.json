@@ -1,0 +1,33 @@
+{
+  "dataset_hash": "a48e5da1ff9d480efea20965eea12af5b1bff2e996470ba18e6eb01fb7b3d3a4",
+  "generated_at": "2026-07-07T00:00:00Z",
+  "hash_algorithm": "sha256",
+  "human_review_hashes": {
+    "human_review_candidate_004.json": "46bbd77a8a69a738becff27be04c3443046ca140055b616737a2f016b4683bba"
+  },
+  "manifest_hash": "6c1a0873bafbb23b7145b81d26c426cd70c3ab2025b1c3250cba9f11efa7152e",
+  "provenance_hashes": {
+    "provenance_frozen_task_001.json": "79f6c73c76fede0b52677bd348d7b018b69a7676d693de2695cb2ededf46dfc8",
+    "provenance_frozen_task_002.json": "05cb7c5e4e7e27341145ebc14177a68108832bd5ea05ae79376b34638895fef3",
+    "provenance_frozen_task_003.json": "7cf3953f2ec2b028eab8f87b4460d5a15314510dec03f70438f3f20b263bf449",
+    "provenance_frozen_task_004.json": "f4ed3e483c75fae2ab5731aa64d7698e97f2749b80524029e4882a40d9e47011",
+    "provenance_frozen_task_005.json": "6570fe5862e76532f67232e0b58b4827bf53bcbef6ad0c45a4fd8f5377cb3be4",
+    "provenance_frozen_task_006.json": "b3a69a361f98b3f31828043105541837b1ed1c367f5da68c8b5e74f3de23eff4",
+    "provenance_frozen_task_007.json": "888916666a2ec69c6cf44321338362dd9f5e0c64d6589961f08ce42c8eb1802c",
+    "provenance_frozen_task_008.json": "4e22463b90c793c21b9adb59f8185184de27320191daeb1107bc2545a4961c24",
+    "provenance_frozen_task_009.json": "f7e2bf52a212311f7f0986160e4085e5d30f61bc7937dee1c0a0045c51966830",
+    "provenance_frozen_task_010.json": "bef34bd41b7d2d6771495775512385dcb2c7d5c099673539a11eea32dfc6554e"
+  },
+  "task_hashes": {
+    "frozen_task_001.json": "3b2f575d353b0818c223ac60daa0b6813b7c1b3e8105b9fb9e10c16f33fa05c1",
+    "frozen_task_002.json": "9c8cd3985928db6492168d2486b829ce6300c17447b6433578be274a843763e0",
+    "frozen_task_003.json": "5b1071f5c0b0e084f4412add450f8af942ecf3121db5569f63e6ddefd43f9435",
+    "frozen_task_004.json": "fa77fe58489a9003494161e07212131d77751ca2b29dd92128f1ae5cf28843a1",
+    "frozen_task_005.json": "8d64e5a97d8f4a4efc6981d6a9a33a388784380700a494f0bc5ee1a310a1cec1",
+    "frozen_task_006.json": "b2253ef0fde6bd11f854143153e043387811278bbdfcaa7d07bf7ff9d6dd2fb5",
+    "frozen_task_007.json": "3844a95d144bac8824f916923c1a5d76566b170ef3dc3e9c69cdb2961b8ab610",
+    "frozen_task_008.json": "faaa338c18dd26e527ea9e6384b8bf6d4147430655e26ef695f0add179e50381",
+    "frozen_task_009.json": "fcdee035b574510fa6d06a99725ed5564517ea9cc2742acf268cd8a8a5623426",
+    "frozen_task_010.json": "1107174d9ed188ded3a9ffca63360ba9f6d36858f27aa1117a47d3195a492912"
+  }
+}

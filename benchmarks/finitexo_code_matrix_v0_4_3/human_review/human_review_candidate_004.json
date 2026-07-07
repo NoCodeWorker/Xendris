@@ -1,0 +1,15 @@
+{
+  "approval_notes": "Approved only for inclusion in the v0.4.3 expanded candidate freeze. This does not validate provider performance or superiority.",
+  "approved_at": "2026-07-07T00:00:00Z",
+  "candidate_id": "fcm_v0_4_1_candidate_004",
+  "does_not_authorize_provider_claims": true,
+  "does_not_authorize_superiority_claims": true,
+  "known_limitations": [
+    "Candidate required human review because the adaptation involved simplification.",
+    "Approval is limited to dataset freeze inclusion.",
+    "No provider execution, model comparison, statistical claim, or superiority claim is authorized."
+  ],
+  "review_scope": "Freeze eligibility for one external/adapted candidate in Finitexo Code Matrix v0.4.3.",
+  "review_status": "APPROVED_FOR_FREEZE",
+  "reviewer": "LOCAL_HUMAN_REVIEW"
+}

@@ -1,0 +1,60 @@
+{
+  "authorized_claims": [
+    "Finitexo Code Matrix v0.4.3 contains an explicitly versioned expanded frozen external/adapted candidate dataset with n=10 tasks, provenance records, and reproducible hashes."
+  ],
+  "benchmark_name": "Finitexo Code Matrix",
+  "benchmark_version": "v0.4.3",
+  "blocked_claims": [
+    "provider superiority demonstrated",
+    "Xendris superiority demonstrated",
+    "external benchmark performance validated",
+    "statistical significance established",
+    "production-readiness proven",
+    "verified third-party external benchmark established"
+  ],
+  "counts_by_adaptation_type": {
+    "API_NORMALIZATION": 3,
+    "API_NORMALIZATION_WITH_HUMAN_REVIEW": 2,
+    "DIRECT_PORT": 2,
+    "DIRECT_PORT_REFERENCE_ONLY": 1,
+    "DIRECT_PORT_WITH_LIMITATIONS": 2
+  },
+  "counts_by_contamination_risk": {
+    "LOW": 10
+  },
+  "counts_by_difficulty": {
+    "large": 1,
+    "medium": 4,
+    "small": 5
+  },
+  "counts_by_leakage_risk": {
+    "LOW": 6,
+    "MEDIUM": 4
+  },
+  "counts_by_source_origin": {
+    "EXTERNAL_ADAPTED": 5,
+    "EXTERNAL_ADAPTED_CANDIDATE_FREEZE": 2,
+    "EXTERNAL_VERIFIED": 3
+  },
+  "dataset_hash": "a48e5da1ff9d480efea20965eea12af5b1bff2e996470ba18e6eb01fb7b3d3a4",
+  "dataset_name": "Finitexo Expanded External/Adapted Frozen Dataset",
+  "dataset_version": "0.4.3",
+  "env_read": false,
+  "excluded_candidate_count": 6,
+  "expansion_candidates_promoted_count": 8,
+  "external_superiority_claim_authorized": false,
+  "final_decision": "EXPLICIT_EXPANDED_FREEZE_N10_CREATED_NO_PROVIDER_EXECUTION",
+  "frozen_task_count": 10,
+  "human_review_promoted_count": 1,
+  "inherited_v0_4_tasks_count": 2,
+  "manifest_hash": "6c1a0873bafbb23b7145b81d26c426cd70c3ab2025b1c3250cba9f11efa7152e",
+  "model_comparison_allowed": false,
+  "model_comparison_run": false,
+  "network_required": false,
+  "provider_execution_allowed": false,
+  "providers_executed": false,
+  "secrets_printed": false,
+  "statistical_claim_authorized": false,
+  "validation_decision": "READY",
+  "validation_error_count": 0
+}

@@ -1,0 +1,18 @@
+{
+  "acquisition_record_ref": "benchmarks/finitexo_code_matrix_v0_3/external_sources/source_acquisition_examples/record_valid_external_verified.json",
+  "adaptation_record_ref": "benchmarks/finitexo_code_matrix_v0_3/adaptation_audit/examples/adaptation_clean_external_verified_direct_port.json",
+  "adapted_candidate_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "base_task_ref": "benchmarks/finitexo_code_matrix_v0_4/tasks/frozen_task_001.json",
+  "expansion_candidate_ref": null,
+  "frozen_task_hash": "3b2f575d353b0818c223ac60daa0b6813b7c1b3e8105b9fb9e10c16f33fa05c1",
+  "human_review_ref": null,
+  "known_limitations": ["Inherited from v0.4 candidate freeze.", "No provider execution is authorized."],
+  "non_claims": ["No provider superiority.", "No Xendris superiority.", "No statistical significance."],
+  "promotion_gate_result": "INHERITED_FROM_V0_4",
+  "raw_source_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "source_id": "acq_001",
+  "source_license": "PUBLIC_DOCUMENTATION_COMPATIBLE_REFERENCE_ONLY",
+  "source_origin": "EXTERNAL_ADAPTED_CANDIDATE_FREEZE",
+  "source_url": "https://example.invalid/public-doc-example",
+  "task_id": "fcm_v0_4_3_frozen_task_001"
+}
