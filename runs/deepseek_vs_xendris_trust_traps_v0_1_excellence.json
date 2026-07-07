@@ -1,28 +1,32 @@
 {
-  "checked_sections": [
-    "metadata",
-    "metrics"
-  ],
+  "blockers": [],
   "decision": "READY_FOR_INTERPRETATION",
   "has_blockers": false,
+  "has_warnings": false,
   "is_ready": true,
-  "issues": [],
-  "metadata_present": [
-    "dataset_hash",
-    "execution_mode",
-    "model",
-    "temperature",
-    "max_tokens",
-    "xendris_version",
-    "python_version"
+  "issues": [
+    {
+      "code": "benchmark_local_only",
+      "message": "Report limits interpretation to the benchmark context.",
+      "severity": "NOTE"
+    },
+    {
+      "code": "closed_dataset",
+      "message": "Artifact describes a closed dataset.",
+      "severity": "NOTE"
+    }
   ],
-  "metrics_present": [
-    "total_samples",
-    "average_delta",
-    "average_deepseek_score",
-    "average_xendris_score",
-    "latency",
-    "cost"
+  "notes": [
+    {
+      "code": "benchmark_local_only",
+      "message": "Report limits interpretation to the benchmark context.",
+      "severity": "NOTE"
+    },
+    {
+      "code": "closed_dataset",
+      "message": "Artifact describes a closed dataset.",
+      "severity": "NOTE"
+    }
   ],
-  "report_checks_present": []
+  "warnings": []
 }
