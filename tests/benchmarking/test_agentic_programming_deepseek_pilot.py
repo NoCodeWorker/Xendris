@@ -388,13 +388,38 @@ class TestComparisonMode:
     def test_benchmark_level_blocks_if_provider_disclosure_missing(self):
         from scripts.run_agentic_programming_benchmark import _build_canonical_summary
 
-        results = self._synthetic_results()
+        results = [
+            TaskResult(
+                sample_id="AP-001",
+                agent_variant="base_agent",
+                patch_applied=True,
+                visible_tests_passed=True,
+                hidden_tests_passed=False,
+                api_contract_preserved=True,
+                no_forbidden_files_touched=True,
+                no_false_success_claim=True,
+                minimal_patch=True,
+                security_clean=True,
+                iterations_used=1,
+                error_message=None,
+                patch_content="",
+            ),
+        ]
         scores = {
-            "deepseek_base_agent": {"total_score": 0.5, "tasks_passed": 0, "tasks_total": 1, "pass_rate": 0.0},
-            "deepseek_xendris_agent": {"total_score": 1.0, "tasks_passed": 1, "tasks_total": 1, "pass_rate": 1.0},
+            "base_agent": {"total_score": 0.5, "tasks_passed": 0, "tasks_total": 1, "pass_rate": 0.0},
         }
         decisions = evaluate_excellence_gate(scores)
-        summary = _build_canonical_summary(results, self._config(provider=None), scores, decisions, comparison_mode=True)
+        config = BenchmarkConfig(
+            dataset_path="benchmarks/agentic_programming/v0_1",
+            agent_variants=(AgentVariant.BASE_AGENT,),
+            execution_mode="dry-run",
+            output_dir="/tmp/test_pilot_out",
+            agent_module="xendris.benchmarking.agentic_programming.agents",
+            max_concurrent=1,
+            seed=42,
+            provider=None,
+        )
+        summary = _build_canonical_summary(results, config, scores, decisions, comparison_mode=True)
 
         assert summary["benchmark_level_decision"] == "BLOCKED_FOR_INTERPRETATION"
 

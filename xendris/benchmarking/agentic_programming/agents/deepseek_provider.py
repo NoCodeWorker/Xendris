@@ -90,6 +90,15 @@ def _estimate_cost(prompt_tokens: int, completion_tokens: int, model: str) -> fl
     return (prompt_tokens / 1000 * input_price) + (completion_tokens / 1000 * output_price)
 
 
+def estimate_deepseek_cost(prompt_tokens: int, completion_tokens: int, model: str) -> tuple[float, str]:
+    pricing = {
+        "deepseek-v4-flash": (0.0005, 0.0005),
+    }
+    base = model.split("/")[-1] if "/" in model else model
+    quality = "known_pricing" if base in pricing else "unknown_pricing_fallback"
+    return _estimate_cost(prompt_tokens, completion_tokens, model), quality
+
+
 def build_fix_prompt(
     issue_description: str,
     source_files: dict[str, str],

@@ -12,6 +12,9 @@ class AgentVariant(enum.Enum):
     DEEPSEEK_BASE_AGENT = "deepseek_base_agent"
     DEEPSEEK_XENDRIS_AGENT = "deepseek_xendris_agent"
     DEEPSEEK_XENDRIS_CALIBRATED_AGENT = "deepseek_xendris_calibrated_agent"
+    OPENAI_BASE_AGENT = "openai_base_agent"
+    OPENAI_XENDRIS_AGENT = "openai_xendris_agent"
+    OPENAI_XENDRIS_CALIBRATED_AGENT = "openai_xendris_calibrated_agent"
     ORACLE_AGENT = "oracle_agent"
     PARTIAL_AGENT = "partial_agent"
     BAD_AGENT = "bad_agent"
@@ -23,6 +26,14 @@ class AgentVariant(enum.Enum):
     @classmethod
     def is_deepseek_variant(cls, variant: AgentVariant) -> bool:
         return variant in (cls.DEEPSEEK_BASE_AGENT, cls.DEEPSEEK_XENDRIS_AGENT, cls.DEEPSEEK_XENDRIS_CALIBRATED_AGENT)
+
+    @classmethod
+    def is_openai_variant(cls, variant: AgentVariant) -> bool:
+        return variant in (cls.OPENAI_BASE_AGENT, cls.OPENAI_XENDRIS_AGENT, cls.OPENAI_XENDRIS_CALIBRATED_AGENT)
+
+    @classmethod
+    def is_live_variant(cls, variant: AgentVariant) -> bool:
+        return cls.is_deepseek_variant(variant) or cls.is_openai_variant(variant)
 
 
 @dataclasses.dataclass(frozen=True)
@@ -67,10 +78,19 @@ class TaskResult:
     transport: str | None = None
     latency_ms: float | None = None
     cost_estimate: float | None = None
+    input_tokens: int | None = None
+    output_tokens: int | None = None
+    total_tokens: int | None = None
+    cost_estimate_quality: str | None = None
     unauthorized_dependency: bool | None = None
     signature_preserved: bool | None = None
     calibration_audit: dict | None = None
     xendris_audit: dict | None = None
+    provider_call_attempted: bool | None = None
+    provider_call_succeeded: bool | None = None
+    provider_error_type: str | None = None
+    provider_error_message_redacted: str | None = None
+    block_reason: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         base = dataclasses.asdict(self)
@@ -93,6 +113,14 @@ class BenchmarkConfig:
     max_samples: int | None = None
     max_iterations: int | None = None
     credential_source: str | None = None
+    credential_sources_by_provider: dict[str, str] | None = None
+    model_map: dict[str, str] | None = None
+    task_suite: str | None = None
+
+    def get_model_for_provider(self, provider_key: str) -> str | None:
+        if self.model_map and provider_key in self.model_map:
+            return self.model_map[provider_key]
+        return self.model
 
     def to_dict(self) -> dict[str, Any]:
         base = dataclasses.asdict(self)

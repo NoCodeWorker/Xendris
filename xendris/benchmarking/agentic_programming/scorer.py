@@ -25,6 +25,9 @@ def compute_score_for_results(results: list[TaskResult]) -> float:
     total = 0.0
 
     for r in results:
+        if r.block_reason:
+            total += HARD_PENALTY_CRITICAL_ERROR
+            continue
         if r.error_message and r.patch_applied is False:
             total += HARD_PENALTY_CRITICAL_ERROR
             continue

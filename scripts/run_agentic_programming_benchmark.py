@@ -5,6 +5,8 @@ import json
 import os
 import sys
 import time
+from dataclasses import dataclass
+from typing import Any
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -20,10 +22,24 @@ from xendris.benchmarking.agentic_programming import (
 )
 from xendris.benchmarking.agentic_programming.types import AgentVariant, BenchmarkRunOutput, TaskResult
 from xendris.benchmarking.agentic_programming.agents.deepseek_provider import get_deepseek_api_key
+from xendris.benchmarking.agentic_programming.agents.openai_provider import get_openai_api_key
+from xendris.benchmarking.agentic_programming.runner import (
+    LIVE_DEEPSEEK_AGENTS,
+    LIVE_OPENAI_AGENTS,
+)
 
 
 ORACLE_SCORE = 1.0
 DEEPSEEK_KEY_NAME = "DEEPSEEK_API_KEY"
+OPENAI_KEY_NAME = "OPENAI_API_KEY"
+PROVIDER_KEY_NAMES = {
+    "deepseek": DEEPSEEK_KEY_NAME,
+    "openai": OPENAI_KEY_NAME,
+}
+DEFAULT_PROVIDER_MODELS = {
+    "deepseek": "deepseek-v4-flash",
+    "openai": "gpt-4.1-mini",
+}
 READY = "READY_FOR_INTERPRETATION"
 WARNINGS = "WARNINGS_PRESENT"
 BLOCKED = "BLOCKED_FOR_INTERPRETATION"
@@ -49,13 +65,13 @@ def _parse_env_file_value(path: str, key_name: str = DEEPSEEK_KEY_NAME) -> str |
     return None
 
 
-def load_deepseek_api_key_from_env_files(repo_root: str | None = None) -> dict[str, object]:
-    if os.environ.get(DEEPSEEK_KEY_NAME):
+def load_api_key_from_env_files(key_name: str, repo_root: str | None = None) -> dict[str, object]:
+    if os.environ.get(key_name):
         return {
             "detected": True,
-            "key_name": DEEPSEEK_KEY_NAME,
+            "key_name": key_name,
             "source": "process_env",
-            "credential_source": f"env:{DEEPSEEK_KEY_NAME}",
+            "credential_source": f"env:{key_name}",
         }
 
     root = repo_root or os.getcwd()
@@ -66,22 +82,30 @@ def load_deepseek_api_key_from_env_files(repo_root: str | None = None) -> dict[s
         ("frontend/.env", os.path.join(root, "frontend", ".env")),
     ]
     for source, path in candidates:
-        value = _parse_env_file_value(path)
+        value = _parse_env_file_value(path, key_name)
         if value:
-            os.environ[DEEPSEEK_KEY_NAME] = value
+            os.environ[key_name] = value
             return {
                 "detected": True,
-                "key_name": DEEPSEEK_KEY_NAME,
+                "key_name": key_name,
                 "source": source,
-                "credential_source": f"dotenv:{source}/{DEEPSEEK_KEY_NAME}",
+                "credential_source": f"dotenv:{source}/{key_name}",
             }
 
     return {
         "detected": False,
-        "key_name": DEEPSEEK_KEY_NAME,
+        "key_name": key_name,
         "source": "missing",
         "credential_source": "missing",
     }
+
+
+def load_deepseek_api_key_from_env_files(repo_root: str | None = None) -> dict[str, object]:
+    return load_api_key_from_env_files(DEEPSEEK_KEY_NAME, repo_root)
+
+
+def load_openai_api_key_from_env_files(repo_root: str | None = None) -> dict[str, object]:
+    return load_api_key_from_env_files(OPENAI_KEY_NAME, repo_root)
 
 
 def _compute_category_breakdown(results: list[TaskResult], dataset_path: str) -> dict:
@@ -172,37 +196,72 @@ def _compute_metrics_by_variant(results: list[TaskResult], scores: dict[str, dic
     return metrics
 
 
+def _get_base_variant(variant: str) -> str | None:
+    if variant.startswith("deepseek_"):
+        return "deepseek_base_agent"
+    if variant.startswith("openai_"):
+        return "openai_base_agent"
+    return None
+
+
 def _compute_deltas(scores: dict[str, dict]) -> dict:
-    base_score = None
+    deepseek_base = None
+    openai_base = None
     for variant, data in scores.items():
         if variant == "deepseek_base_agent":
-            base_score = data.get("total_score", 0)
-            break
+            deepseek_base = data.get("total_score", 0)
+        if variant == "openai_base_agent":
+            openai_base = data.get("total_score", 0)
 
     deltas: dict[str, dict] = {}
     for variant, data in scores.items():
         variant_score = data.get("total_score", 0)
-        deltas[variant] = {
+        base_variant = _get_base_variant(variant)
+        base_score = None
+        if base_variant == "deepseek_base_agent":
+            base_score = deepseek_base
+        elif base_variant == "openai_base_agent":
+            base_score = openai_base
+
+        delta_entry: dict = {
             "distance_to_oracle": round(ORACLE_SCORE - variant_score, 4),
-            "delta_vs_deepseek_base": round(variant_score - (base_score or variant_score), 4),
         }
+        if base_score is not None:
+            delta_entry["delta_vs_base"] = round(variant_score - base_score, 4)
+        if deepseek_base is not None:
+            delta_entry["delta_vs_deepseek_base"] = round(variant_score - deepseek_base, 4)
+        deltas[variant] = delta_entry
     return deltas
 
 
 def _blocked_variant_reasons(
     scores: dict[str, dict],
     excellence_decisions: dict[str, str],
+    results: list[TaskResult] | None = None,
 ) -> dict[str, str]:
     reasons: dict[str, str] = {}
+    block_reasons_by_variant: dict[str, str] = {}
+    if results:
+        for r in results:
+            if r.block_reason and r.agent_variant not in block_reasons_by_variant:
+                block_reasons_by_variant[r.agent_variant] = r.block_reason
     for variant, decision in excellence_decisions.items():
         if decision != BLOCKED:
             continue
         data = scores.get(variant, {})
-        reasons[variant] = (
-            "Variant-level interpretation gate blocked this result "
-            f"(score={data.get('total_score')}, pass_rate={data.get('pass_rate')}). "
-            "It is retained for comparison only and is not admitted as positive evidence."
-        )
+        specific_reason = block_reasons_by_variant.get(variant)
+        if specific_reason:
+            reasons[variant] = (
+                f"Result-level gate blocked this variant: {specific_reason}. "
+                f"(score={data.get('total_score')}, pass_rate={data.get('pass_rate')}). "
+                "It is retained for comparison only and is not admitted as positive evidence."
+            )
+        else:
+            reasons[variant] = (
+                "Variant-level interpretation gate blocked this result "
+                f"(score={data.get('total_score')}, pass_rate={data.get('pass_rate')}). "
+                "It is retained for comparison only and is not admitted as positive evidence."
+            )
     return reasons
 
 
@@ -211,14 +270,17 @@ def _evaluate_benchmark_level_decision(summary: dict, comparison_mode: bool) -> 
         "dataset_name",
         "dataset_version",
         "dataset_size",
-        "provider",
         "transport",
-        "model",
         "limitations",
         "no_universal_superiority_warning",
     ]
     missing = [field for field in required_fields if not summary.get(field)]
     if missing:
+        return BLOCKED
+
+    if not summary.get("providers") and not summary.get("provider"):
+        return BLOCKED
+    if not summary.get("models_by_variant") and not summary.get("model"):
         return BLOCKED
 
     warning_text = str(summary.get("no_universal_superiority_warning", "")).lower()
@@ -228,7 +290,7 @@ def _evaluate_benchmark_level_decision(summary: dict, comparison_mode: bool) -> 
     if not summary.get("no_openrouter_used"):
         return BLOCKED
 
-    if summary.get("transport") != "direct" or summary.get("provider") != "deepseek":
+    if summary.get("transport") != "direct":
         return BLOCKED
 
     if not summary.get("total_results") or not summary.get("scores_by_variant"):
@@ -238,6 +300,449 @@ def _evaluate_benchmark_level_decision(summary: dict, comparison_mode: bool) -> 
         return WARNINGS if comparison_mode else BLOCKED
 
     return READY
+
+
+@dataclass(frozen=True)
+class ExecutionIdentity:
+    providers: list[str]
+    transports: list[str]
+    transport: str | None
+    execution_provenance: dict[str, Any]
+
+
+def _empty_benchmark_config() -> BenchmarkConfig:
+    return BenchmarkConfig(
+        dataset_path="", agent_variants=(), execution_mode="dry-run",
+        output_dir="", agent_module="", max_concurrent=1, seed=42,
+    )
+
+
+def resolve_execution_identity(
+    agents: list[str],
+    config: BenchmarkConfig,
+    results: list[TaskResult],
+) -> ExecutionIdentity:
+    # --- Provider resolution: variant prefix > config.provider > result.provider ---
+    providers: list[str] = []
+    has_variant_prefix = False
+
+    if any(v.startswith("deepseek_") for v in agents):
+        providers.append("deepseek")
+        has_variant_prefix = True
+    if any(v.startswith("openai_") for v in agents):
+        providers.append("openai")
+        has_variant_prefix = True
+
+    if not providers and config.provider:
+        providers.append(config.provider)
+
+    if not providers:
+        seen: set[str] = set()
+        for r in results:
+            if r.provider and r.provider not in seen:
+                seen.add(r.provider)
+                providers.append(r.provider)
+
+    # --- Transport resolution: config.transport > result.transport (live only) ---
+    is_live = config.execution_mode == "live"
+    transport: str | None = None
+    if is_live:
+        transport = config.transport
+        if not transport:
+            for r in results:
+                if r.transport:
+                    transport = r.transport
+                    break
+
+    transports: list[str] = [transport] if transport else []
+
+    # --- Provenance: describe which source was actually used ---
+    if has_variant_prefix:
+        provider_source = "variant_name_prefix"
+        config_fallback = False
+        result_fallback = False
+    elif config.provider:
+        provider_source = "config.provider"
+        config_fallback = True
+        result_fallback = False
+    elif any(r.provider for r in results):
+        provider_source = "result.provider"
+        config_fallback = False
+        result_fallback = True
+    else:
+        provider_source = "none"
+        config_fallback = False
+        result_fallback = False
+
+    if config.transport and is_live:
+        transport_source = "explicit_provider_default"
+        transport_result_fallback = False
+    elif any(r.transport for r in results):
+        transport_source = "result.transport"
+        transport_result_fallback = True
+    else:
+        transport_source = "none"
+        transport_result_fallback = False
+
+    execution_provenance: dict[str, Any] = {
+        "provider_source": provider_source,
+        "transport_source": transport_source,
+        "variant_provider_inference": has_variant_prefix,
+        "config_provider_fallback_used": config_fallback,
+        "result_provider_fallback_used": result_fallback,
+        "result_transport_fallback_used": transport_result_fallback,
+    }
+
+    return ExecutionIdentity(
+        providers=providers,
+        transports=transports,
+        transport=transport,
+        execution_provenance=execution_provenance,
+    )
+
+
+def _get_providers_from_variants(
+    agents: list[str],
+    config: BenchmarkConfig | None = None,
+    results: list[TaskResult] | None = None,
+) -> list[str]:
+    _config = config if config is not None else _empty_benchmark_config()
+    _results = results if results is not None else []
+    return resolve_execution_identity(agents, _config, _results).providers
+
+
+@dataclass(frozen=True)
+class ModelSpec:
+    alias: str
+    provider: str
+    model_id: str
+    api_surface: str
+    default_transport: str
+    supports_reasoning: bool
+    supports_structured_output: bool
+
+
+_MODEL_REGISTRY: dict[tuple[str, str], ModelSpec] = {
+    ("openai", "gpt-4.1-mini"): ModelSpec(
+        alias="gpt-4.1-mini",
+        provider="openai",
+        model_id="gpt-4.1-mini",
+        api_surface="chat_completions",
+        default_transport="direct",
+        supports_reasoning=False,
+        supports_structured_output=True,
+    ),
+    ("openai", "gpt-4.1-nano"): ModelSpec(
+        alias="gpt-4.1-nano",
+        provider="openai",
+        model_id="gpt-4.1-nano",
+        api_surface="chat_completions",
+        default_transport="direct",
+        supports_reasoning=False,
+        supports_structured_output=True,
+    ),
+    ("openai", "gpt-5.5"): ModelSpec(
+        alias="gpt-5.5",
+        provider="openai",
+        model_id="gpt-5.5",
+        api_surface="responses",
+        default_transport="direct",
+        supports_reasoning=True,
+        supports_structured_output=True,
+    ),
+    ("deepseek", "deepseek-v4-flash"): ModelSpec(
+        alias="deepseek-v4-flash",
+        provider="deepseek",
+        model_id="deepseek-v4-flash",
+        api_surface="chat_completions",
+        default_transport="direct",
+        supports_reasoning=False,
+        supports_structured_output=True,
+    ),
+}
+
+
+def resolve_model_spec(
+    provider: str | None,
+    model_alias: str | None,
+) -> ModelSpec | None:
+    if not provider or not model_alias:
+        return None
+    return _MODEL_REGISTRY.get((provider, model_alias))
+
+
+def _build_model_identity(
+    config: BenchmarkConfig,
+    providers: list[str],
+    model_str: str,
+) -> dict:
+    provider = providers[0] if providers else config.provider
+    model_alias = config.model or (model_str if model_str != "unknown" else None)
+    spec = resolve_model_spec(provider, model_alias) if provider else None
+    if spec is not None:
+        return {
+            "model_identity": {
+                "provider": spec.provider,
+                "model_alias": spec.alias,
+                "model_id": spec.model_id,
+                "api_surface": spec.api_surface,
+                "default_transport": spec.default_transport,
+                "supports_reasoning": spec.supports_reasoning,
+                "supports_structured_output": spec.supports_structured_output,
+                "resolved": True,
+            }
+        }
+    return {
+        "model_identity": {
+            "provider": provider or "unknown",
+            "model_alias": model_alias,
+            "resolved": False,
+        }
+    }
+
+
+@dataclass(frozen=True)
+class InterpretationAdmissibility:
+    provider_metadata_sufficient: bool
+    transport_metadata_sufficient: bool
+    model_metadata_sufficient: bool
+    admissible: bool
+    limitations: list[str]
+
+
+def evaluate_interpretation_admissibility(
+    identity: ExecutionIdentity,
+    model_identity: dict[str, Any],
+    execution_mode: str,
+) -> InterpretationAdmissibility:
+    ep = identity.execution_provenance
+    limitations: list[str] = []
+
+    is_live = execution_mode == "live"
+
+    provider_source = ep.get("provider_source", "none")
+    transport_source = ep.get("transport_source", "none")
+
+    provider_metadata_sufficient = (
+        provider_source in ("variant_name_prefix", "config.provider")
+        if is_live else False
+    )
+    if is_live and provider_source == "result.provider":
+        provider_metadata_sufficient = False
+        limitations.append("provider_metadata_only_resolved_from_result_level")
+
+    transport_metadata_sufficient = (
+        transport_source == "explicit_provider_default"
+        if is_live else False
+    )
+    if is_live and transport_source == "result.transport":
+        transport_metadata_sufficient = False
+        limitations.append("transport_metadata_only_resolved_from_result_level")
+
+    model_metadata_sufficient = model_identity.get("resolved", False)
+    if not model_metadata_sufficient and is_live:
+        limitations.append("model_identity_not_resolved")
+
+    admissible = provider_metadata_sufficient and transport_metadata_sufficient
+
+    return InterpretationAdmissibility(
+        provider_metadata_sufficient=provider_metadata_sufficient,
+        transport_metadata_sufficient=transport_metadata_sufficient,
+        model_metadata_sufficient=model_metadata_sufficient,
+        admissible=admissible,
+        limitations=limitations,
+    )
+
+
+@dataclass(frozen=True)
+class EvidenceContract:
+    contract_version: str
+    identity_resolved: bool
+    provenance_recorded: bool
+    model_identity_resolved: bool
+    interpretation_admissible: bool
+    scoring_complete: bool
+    decision: str
+    limitations: list[str]
+
+
+def build_evidence_contract(
+    identity: ExecutionIdentity,
+    model_identity: dict[str, Any],
+    interpretation_admissibility: InterpretationAdmissibility,
+    summary: dict,
+    results: list[TaskResult],
+    scores: dict,
+) -> EvidenceContract:
+    limitations: list[str] = []
+
+    identity_resolved = bool(identity.providers) and identity.transport is not None
+
+    ep = identity.execution_provenance
+    provenance_recorded = bool(ep.get("provider_source", "")) and bool(ep.get("transport_source", ""))
+
+    model_identity_resolved = model_identity.get("resolved", False)
+
+    interpretation_admissible = interpretation_admissibility.admissible
+
+    variants_in_results = sorted(set(r.agent_variant for r in results))
+    scores_by_variant = summary.get("scores_by_variant", {}) or {}
+    scoring_complete = bool(scores_by_variant) and all(
+        isinstance(scores_by_variant.get(v), dict) and scores_by_variant[v].get("total_score") is not None
+        for v in variants_in_results
+    )
+
+    limitations.extend(interpretation_admissibility.limitations)
+
+    if not identity_resolved:
+        limitations.append("identity_not_resolved")
+    if not model_identity_resolved:
+        if "model_identity_not_resolved" not in limitations:
+            limitations.append("model_identity_not_resolved")
+    if not scoring_complete:
+        limitations.append("scoring_incomplete")
+
+    if not interpretation_admissible:
+        decision = "BLOCKED"
+    elif (
+        identity_resolved
+        and provenance_recorded
+        and model_identity_resolved
+        and interpretation_admissible
+        and scoring_complete
+        and not limitations
+    ):
+        decision = "INTERPRETABLE"
+    else:
+        decision = "INTERPRETABLE_WITH_LIMITATIONS"
+
+    return EvidenceContract(
+        contract_version="0.1",
+        identity_resolved=identity_resolved,
+        provenance_recorded=provenance_recorded,
+        model_identity_resolved=model_identity_resolved,
+        interpretation_admissible=interpretation_admissible,
+        scoring_complete=scoring_complete,
+        decision=decision,
+        limitations=limitations,
+    )
+
+
+def build_evidence_report_markdown(summary: dict[str, Any]) -> str:
+    lines: list[str] = []
+    def a(val: Any) -> str:
+        return str(val) if val is not None else ""
+
+    lines.append("# Agentic Programming Benchmark Evidence Report")
+    lines.append("")
+
+    ec = summary.get("evidence_contract", {})
+    decision = a(ec.get("decision", "unknown"))
+    lines.append("## Evidence Decision")
+    lines.append("")
+    lines.append(f"Decision: {decision}")
+    lines.append("")
+
+    lines.append("## Execution Identity")
+    lines.append("")
+    ep = summary.get("execution_provenance", {})
+    lines.append(f"- Providers: {a(summary.get('providers', summary.get('provider', 'N/A')))}")
+    lines.append(f"- Transport: {a(summary.get('transport', 'N/A'))}")
+    lines.append(f"- Transports: {a(summary.get('transports', []))}")
+    lines.append(f"- Provider source: {a(ep.get('provider_source', 'N/A'))}")
+    lines.append(f"- Transport source: {a(ep.get('transport_source', 'N/A'))}")
+    lines.append("")
+
+    lines.append("## Model Identity")
+    lines.append("")
+    mi = summary.get("model_identity", {})
+    lines.append(f"- Resolved: {mi.get('resolved', False)}")
+    lines.append(f"- Provider: {a(mi.get('provider', 'N/A'))}")
+    lines.append(f"- Model alias: {a(mi.get('model_alias', 'N/A'))}")
+    lines.append(f"- Model ID: {a(mi.get('model_id', 'N/A'))}")
+    lines.append(f"- API surface: {a(mi.get('api_surface', 'N/A'))}")
+    lines.append(f"- Supports reasoning: {mi.get('supports_reasoning', False)}")
+    lines.append(f"- Supports structured output: {mi.get('supports_structured_output', False)}")
+    lines.append("")
+
+    lines.append("## Interpretation Admissibility")
+    lines.append("")
+    ia = summary.get("interpretation_admissibility", {})
+    lines.append(f"- Provider metadata sufficient: {ia.get('provider_metadata_sufficient', False)}")
+    lines.append(f"- Transport metadata sufficient: {ia.get('transport_metadata_sufficient', False)}")
+    lines.append(f"- Model metadata sufficient: {ia.get('model_metadata_sufficient', False)}")
+    lines.append(f"- Admissible: {ia.get('admissible', False)}")
+    ia_lims = ia.get("limitations", [])
+    if ia_lims:
+        for lim in ia_lims:
+            lines.append(f"  - Limitation: {lim}")
+    else:
+        lines.append("- Limitations: (none)")
+    lines.append("")
+
+    lines.append("## Evidence Contract")
+    lines.append("")
+    lines.append(f"- Contract version: {a(ec.get('contract_version', 'N/A'))}")
+    lines.append(f"- Identity resolved: {ec.get('identity_resolved', False)}")
+    lines.append(f"- Provenance recorded: {ec.get('provenance_recorded', False)}")
+    lines.append(f"- Model identity resolved: {ec.get('model_identity_resolved', False)}")
+    lines.append(f"- Interpretation admissible: {ec.get('interpretation_admissible', False)}")
+    lines.append(f"- Scoring complete: {ec.get('scoring_complete', False)}")
+    lines.append(f"- Decision: {decision}")
+    ec_lims = ec.get("limitations", [])
+    if ec_lims:
+        for lim in ec_lims:
+            lines.append(f"  - Limitation: {lim}")
+    else:
+        lines.append("- Limitations: (none)")
+    lines.append("")
+
+    lines.append("## Score Summary")
+    lines.append("")
+    lines.append(f"- Benchmark name: {a(summary.get('benchmark_name', 'N/A'))}")
+    lines.append(f"- Dataset: {a(summary.get('dataset_name', 'N/A'))}")
+    lines.append(f"- Dataset size: {a(summary.get('dataset_size', 'N/A'))}")
+    lines.append(f"- Execution mode: {a(summary.get('execution_mode', 'N/A'))}")
+    lines.append(f"- Provider mode: {a(summary.get('provider_mode', 'N/A'))}")
+    lines.append(f"- Variants: {a(summary.get('variants', []))}")
+    lines.append("")
+    lines.append("### Scores by Variant")
+    lines.append("")
+    sbv = summary.get("scores_by_variant", {}) or {}
+    if sbv:
+        sorted_variants = sorted(sbv.keys())
+        for variant in sorted_variants:
+            data = sbv[variant]
+            total = data.get("total_score", "N/A")
+            pass_rate = data.get("pass_rate", "N/A")
+            lines.append(f"- **{variant}**: total_score={total}, pass_rate={pass_rate}")
+    else:
+        lines.append("(no scores)")
+    lines.append("")
+
+    lines.append("## Final Interpretation")
+    lines.append("")
+    if decision == "INTERPRETABLE":
+        lines.append(
+            "This benchmark run is interpretable as evidence because execution identity, "
+            "provenance, model identity, interpretation admissibility, and scoring completeness "
+            "are all satisfied."
+        )
+    elif decision == "INTERPRETABLE_WITH_LIMITATIONS":
+        lines.append(
+            "This benchmark run may be interpreted with limitations. "
+            "The limitations listed above must be disclosed when citing the result."
+        )
+    elif decision == "BLOCKED":
+        lines.append(
+            "This benchmark run should not be used as evidence for model or framework "
+            "superiority because the evidence contract is blocked."
+        )
+    else:
+        lines.append(f"Evidence contract decision is '{decision}'. Refer to limitations above.")
+
+    lines.append("")
+    return "\n".join(lines)
 
 
 def _build_canonical_summary(
@@ -253,14 +758,23 @@ def _build_canonical_summary(
     commercial = _compute_commercial_metrics(results)
     metrics_by_variant = _compute_metrics_by_variant(results, scores)
     is_live = config.execution_mode == "live"
-    is_deepseek = any("deepseek" in v for v in agents)
-    transport = config.transport if is_live else None
-    blocked_variant_reasons = _blocked_variant_reasons(scores, excellence_decisions)
+    identity = resolve_execution_identity(agents, config, results)
+    providers = identity.providers
+    transport = identity.transport
+    blocked_variant_reasons = _blocked_variant_reasons(scores, excellence_decisions, results)
     blocked_variants = sorted(blocked_variant_reasons)
+    is_deepseek = "deepseek" in providers
+    is_openai = "openai" in providers
 
-    has_deepseek_variants = any(v in agents for v in ["deepseek_base_agent", "deepseek_xendris_agent", "deepseek_xendris_calibrated_agent"])
+    models_by_variant: dict[str, str | None] = {}
+    for r in results:
+        if r.agent_variant not in models_by_variant:
+            models_by_variant[r.agent_variant] = r.model
 
-    summary = {
+    provider_list_str = ", ".join(providers) if providers else config.provider or "unknown"
+    model_str = config.model or (list(models_by_variant.values())[0] if models_by_variant else "unknown")
+
+    summary: dict = {
         "benchmark_name": "Agentic Programming Reliability",
         "benchmark_version": "v0.1",
         "dataset_name": "Xendris Agentic Programming v0.1",
@@ -297,33 +811,49 @@ def _build_canonical_summary(
         "blocked_variant_reasons": blocked_variant_reasons,
         "comparison_mode": comparison_mode,
         "comparison_interpretation_scope": "Blocked variants are included for comparison only and are not admitted as positive evidence.",
-        "no_universal_superiority_warning": "This benchmark evaluates Xendris variants against a DeepSeek base on a specific closed dataset. No claim of universal superiority over any other model or agent framework is made or implied.",
-        "no_general_coding_superiority_warning": "This benchmark is not evidence of general coding superiority. Results are limited to the closed Agentic Programming v0.1 dataset, provider, model, and configuration.",
+        "no_universal_superiority_warning": "This benchmark evaluates Xendris variants against provider base models on specific closed dataset. No claim of universal superiority over any other model or agent framework is made or implied.",
+        "no_general_coding_superiority_warning": "This benchmark is not evidence of general coding superiority. Results are limited to the closed Agentic Programming v0.1 dataset, providers, models, and configuration.",
         "evidence_interpretation": "Admitted as real-provider pilot evidence for Agentic Programming v0.1 only. Not admissible as evidence of general coding superiority, production readiness, or performance on open-ended programming tasks.",
     }
 
-    if is_live and is_deepseek:
-        summary["provider"] = config.provider
-        summary["model"] = config.model
-        summary["requested_model"] = config.model
-        reported_models = sorted({r.provider_reported_model for r in results if r.provider_reported_model})
-        summary["provider_reported_model"] = reported_models[0] if len(reported_models) == 1 else (reported_models or None)
-        summary["credential_source"] = config.credential_source or "env:DEEPSEEK_API_KEY"
+    if is_live:
+        summary["providers"] = providers
+        summary["transports"] = identity.transports
+        summary["models_by_variant"] = models_by_variant
+        summary["transport"] = transport
         summary["no_openrouter_used"] = True
-        if transport:
-            summary["transport"] = transport
+        if config.credential_sources_by_provider:
+            summary["credential_sources_by_provider"] = config.credential_sources_by_provider
         summary["cost_disclosure"] = "Cost estimates are based on token counts from API responses using published per-token pricing. Actual costs may vary."
         summary["latency_disclosure"] = "Latency is measured as wall-clock time for the API call to complete. Does not include sandbox test execution time."
 
+    if is_live and is_deepseek and not is_openai:
+        summary["provider"] = config.provider or "deepseek"
+        summary["model"] = config.model or model_str
+        summary["credential_source"] = config.credential_source or "env:DEEPSEEK_API_KEY"
+    elif is_live and is_openai and not is_deepseek:
+        summary["provider"] = config.provider or "openai"
+        summary["model"] = config.model or model_str
+        summary["credential_source"] = config.credential_source or "env:OPENAI_API_KEY"
+    elif is_live and is_deepseek and is_openai:
+        summary["provider"] = provider_list_str
+        summary["model"] = model_str
+        if config.credential_sources_by_provider:
+            summary["credential_source"] = "provider_specific"
+
     if is_live:
+        reported_models = sorted({r.provider_reported_model for r in results if r.provider_reported_model})
+        if reported_models:
+            summary["provider_reported_model"] = reported_models[0] if len(reported_models) == 1 else reported_models
+        provider_names = ", ".join(p for p in providers) if providers else config.provider or "unknown"
         summary["limitations"] = [
-            "Execution mode is live: the direct DeepSeek API was called, not OpenRouter.",
+            f"Execution mode is live: direct provider APIs were used ({provider_names}). Not OpenRouter.",
             "Dataset is closed synthetic (20 samples); does not represent real-world programming diversity.",
             "Results are specific to the Agentic Programming v0.1 benchmark and should not be generalized.",
             "Results do not transfer to OpenRouter or any other transport.",
             "Deterministic controls (oracle_agent, partial_agent, bad_agent) are reference baselines only, not evidence of real-provider performance.",
             "Cost/latency estimates depend on API response conditions and may not be reproducible.",
-            "No comparison against Claude, GPT, Codex, or any other model is included. No superior generalization is claimed.",
+            "No comparison against Claude, Codex, Kimi, GLM, or any non-measured model is included. No superior generalization is claimed.",
             "Pre-existing fitz import error in test_master_goal_frontera_c_decision.py is unrelated and persists.",
         ]
     else:
@@ -343,7 +873,71 @@ def _build_canonical_summary(
 
     summary["benchmark_level_decision"] = _evaluate_benchmark_level_decision(summary, comparison_mode)
 
+    summary.update({"execution_provenance": identity.execution_provenance})
+    model_identity = _build_model_identity(config, providers, model_str)
+    summary.update(model_identity)
+
+    admissibility = evaluate_interpretation_admissibility(
+        identity,
+        model_identity.get("model_identity", {}),
+        config.execution_mode,
+    )
+    summary["interpretation_admissibility"] = {
+        "provider_metadata_sufficient": admissibility.provider_metadata_sufficient,
+        "transport_metadata_sufficient": admissibility.transport_metadata_sufficient,
+        "model_metadata_sufficient": admissibility.model_metadata_sufficient,
+        "admissible": admissibility.admissible,
+        "limitations": admissibility.limitations,
+    }
+
+    contract = build_evidence_contract(
+        identity,
+        model_identity.get("model_identity", {}),
+        admissibility,
+        summary,
+        results,
+        scores,
+    )
+    summary["evidence_contract"] = {
+        "contract_version": contract.contract_version,
+        "identity_resolved": contract.identity_resolved,
+        "provenance_recorded": contract.provenance_recorded,
+        "model_identity_resolved": contract.model_identity_resolved,
+        "interpretation_admissible": contract.interpretation_admissible,
+        "scoring_complete": contract.scoring_complete,
+        "decision": contract.decision,
+        "limitations": contract.limitations,
+    }
+
     return summary
+
+
+def _build_execution_provenance(
+    agents: list[str],
+    config: BenchmarkConfig,
+    results: list[TaskResult],
+    resolved_providers: list[str],
+    resolved_transport: str | None,
+) -> dict:
+    identity = resolve_execution_identity(agents, config, results)
+    return {"execution_provenance": identity.execution_provenance}
+
+
+def _get_default_model_for_provider(provider: str) -> str:
+    return DEFAULT_PROVIDER_MODELS.get(provider, "unknown")
+
+
+def _build_provider_model_map(args: argparse.Namespace) -> dict[str, str] | None:
+    if not args.provider_model:
+        return None
+    mapping: dict[str, str] = {}
+    for entry in args.provider_model:
+        if "=" not in entry:
+            print(f"WARNING: --provider-model entries must be provider=model (got '{entry}')")
+            continue
+        provider, model = entry.split("=", 1)
+        mapping[provider.strip()] = model.strip()
+    return mapping or None
 
 
 def main() -> None:
@@ -399,13 +993,19 @@ def main() -> None:
     parser.add_argument(
         "--model",
         default=None,
-        help="Model name (e.g. deepseek-v4-flash)",
+        help="Model name (e.g. deepseek-v4-flash). Ignored per-provider if --provider-model is set.",
+    )
+    parser.add_argument(
+        "--provider-model",
+        nargs="+",
+        default=None,
+        help="Per-provider model mapping: provider=model (e.g. deepseek=deepseek-v4-flash openai=gpt-4.1-mini)",
     )
     parser.add_argument(
         "--transport",
         default=None,
         choices=["direct"],
-        help="Transport for live DeepSeek runs. This pilot supports direct only.",
+        help="Transport for live runs. This pilot supports direct only.",
     )
     parser.add_argument(
         "--budget-usd",
@@ -431,9 +1031,15 @@ def main() -> None:
         help="Exit with non-zero status if any variant is BLOCKED_FOR_INTERPRETATION",
     )
     parser.add_argument(
+        "--task-suite",
+        default=None,
+        choices=["real_world_v0_2"],
+        help="Task suite to run (e.g. real_world_v0_2 for repository-local tasks)",
+    )
+    parser.add_argument(
         "--preflight-only",
         action="store_true",
-        help="Check DeepSeek credential discovery without running the benchmark",
+        help="Check credential discovery without running the benchmark",
     )
     parser.add_argument(
         "--comparison-mode",
@@ -454,47 +1060,109 @@ def main() -> None:
             sys.exit(1)
 
     has_deepseek = any("deepseek" in v for v in raw_variants)
-    credential_metadata = (
-        load_deepseek_api_key_from_env_files()
-        if args.execution_mode == "live" and has_deepseek
-        else {
+    has_openai = any("openai" in v for v in raw_variants)
+    is_live = args.execution_mode == "live"
+    explicit_provider = args.provider
+    explicit_model = args.model
+
+    provider_model_map = _build_provider_model_map(args)
+    model_to_check = provider_model_map or {}
+    if not model_to_check:
+        if has_deepseek:
+            model_to_check["deepseek"] = explicit_model or _get_default_model_for_provider("deepseek")
+        if has_openai:
+            model_to_check["openai"] = explicit_model or _get_default_model_for_provider("openai")
+
+    credential_metadata_list: list[dict[str, object]] = []
+
+    if is_live or (args.preflight_only and explicit_provider):
+        providers_to_check: list[str] = []
+        if has_deepseek:
+            providers_to_check.append("deepseek")
+        if has_openai:
+            providers_to_check.append("openai")
+        if args.preflight_only and explicit_provider and explicit_provider not in providers_to_check:
+            providers_to_check.append(explicit_provider)
+
+        for prov in providers_to_check:
+            if prov == "deepseek":
+                meta = load_deepseek_api_key_from_env_files()
+                credential_metadata_list.append(meta)
+            elif prov == "openai":
+                meta = load_openai_api_key_from_env_files()
+                credential_metadata_list.append(meta)
+
+        if not providers_to_check:
+            credential_metadata_list.append({
+                "detected": False,
+                "key_name": DEEPSEEK_KEY_NAME,
+                "source": "missing",
+                "credential_source": "missing",
+            })
+    else:
+        credential_metadata_list.append({
             "detected": False,
             "key_name": DEEPSEEK_KEY_NAME,
             "source": "missing",
             "credential_source": "missing",
-        }
-    )
+        })
 
     if args.preflight_only:
-        print(f"{DEEPSEEK_KEY_NAME} detected: {str(bool(credential_metadata['detected'])).lower()}")
-        print(f"credential_source: {credential_metadata['credential_source']}")
-        if not credential_metadata["detected"]:
-            sys.exit(1)
-        return
+        success = True
+        for meta in credential_metadata_list:
+            provider = "deepseek" if meta["key_name"] == DEEPSEEK_KEY_NAME else "openai"
+            detected = bool(meta["detected"])
+            model_str = explicit_model or model_to_check.get(provider, _get_default_model_for_provider(provider))
+            print(f"provider: {provider}")
+            print("transport: direct")
+            print(f"model: {model_str}")
+            print(f"key_name: {meta['key_name']}")
+            print(f"{meta['key_name']} detected: {str(detected).lower()}")
+            print(f"  credential_source: {meta['credential_source']}")
+            if not detected:
+                success = False
+        if success:
+            return
+        sys.exit(1)
 
-    if args.execution_mode == "live":
-        if has_deepseek and args.provider != "deepseek":
-            print("ERROR: Live DeepSeek pilot requires --provider deepseek.")
+    if is_live:
+        if args.transport != "direct":
+            print("ERROR: Live provider pilots require --transport direct.")
             sys.exit(1)
-        if has_deepseek and args.transport != "direct":
-            print("ERROR: Live DeepSeek pilot requires --transport direct.")
-            sys.exit(1)
-        if has_deepseek and args.model != "deepseek-v4-flash":
-            print("ERROR: Live DeepSeek pilot requires --model deepseek-v4-flash.")
-            sys.exit(1)
+        for provider_key, provider_model_val in model_to_check.items():
+            if provider_key == "deepseek" and provider_model_val != "deepseek-v4-flash":
+                print(f"ERROR: DeepSeek model must be 'deepseek-v4-flash', got '{provider_model_val}'.")
+                sys.exit(1)
+            if provider_key == "openai" and not provider_model_val:
+                print("ERROR: OpenAI requires a model (default: gpt-4.1-mini).")
+                sys.exit(1)
         if has_deepseek and not get_deepseek_api_key():
-            print("ERROR: Live DeepSeek variants require an API key.")
-            print("ERROR: Live DeepSeek direct variants require DEEPSEEK_API_KEY. Set it in the environment, .env.local, or frontend/.env.local.")
+            print("ERROR: Live DeepSeek direct variants require DEEPSEEK_API_KEY.")
             sys.exit(1)
-        if has_deepseek and args.agent_module == "xendris.benchmarking.agentic_programming.agents" and args.budget_usd is not None:
-            estimated_calls = (len(raw_variants) * (args.max_samples or 20))
+        if has_openai and not get_openai_api_key():
+            print("ERROR: Live OpenAI direct variants require OPENAI_API_KEY.")
+            sys.exit(1)
+        if args.budget_usd is not None:
+            estimated_calls = len(raw_variants) * (args.max_samples or 20)
             estimated_cost = estimated_calls * 0.002
             if estimated_cost > args.budget_usd:
                 print(f"ERROR: Estimated cost (${estimated_cost:.4f}) exceeds budget (${args.budget_usd:.2f}).")
-                print(f"Reduce --max-samples or --variants, or increase --budget-usd.")
+                print("Reduce --max-samples or --variants, or increase --budget-usd.")
                 sys.exit(1)
 
-    transport = args.transport if args.execution_mode == "live" and any("deepseek" in v for v in raw_variants) else None
+    transport = args.transport if is_live and (has_deepseek or has_openai or explicit_provider) else None
+
+    credential_source_str = "; ".join(
+        str(m.get("credential_source", "missing"))
+        for m in credential_metadata_list
+        if m.get("detected")
+    ) or None
+    credential_sources_by_provider: dict[str, str] = {}
+    for meta in credential_metadata_list:
+        if not meta.get("detected"):
+            continue
+        provider = "deepseek" if meta["key_name"] == DEEPSEEK_KEY_NAME else "openai"
+        credential_sources_by_provider[provider] = str(meta.get("credential_source", "missing"))
 
     config = BenchmarkConfig(
         dataset_path=args.dataset_path,
@@ -504,23 +1172,28 @@ def main() -> None:
         agent_module=args.agent_module,
         max_concurrent=args.max_concurrent,
         seed=args.seed,
-        provider=args.provider,
+        provider=args.provider or (",".join(sorted(model_to_check.keys())) if model_to_check else None),
         model=args.model,
         transport=transport,
         budget_usd=args.budget_usd,
         max_samples=args.max_samples,
         max_iterations=args.max_iterations,
-        credential_source=str(credential_metadata["credential_source"]) if credential_metadata["detected"] else None,
+        credential_source=credential_source_str,
+        model_map=provider_model_map if provider_model_map else None,
+        task_suite=args.task_suite,
     )
 
-    print(f"Xendris Agentic Programming Benchmark v0.1")
+    print(f"Xendris Agentic Programming Benchmark")
     print(f"  Dataset: {config.dataset_path}")
     print(f"  Mode: {config.execution_mode}")
+    print(f"  Task Suite: {config.task_suite or 'synthetic v0.1'}")
     print(f"  Variants: {[v.value for v in config.agent_variants]}")
-    if args.provider:
+    if provider_model_map:
+        print(f"  Provider-Model Map: {provider_model_map}")
+    elif args.provider:
         print(f"  Provider: {args.provider}")
-    if args.model:
-        print(f"  Model: {args.model}")
+    if args.model or provider_model_map:
+        print(f"  Model: {args.model or 'per-provider'}")
     if transport:
         print(f"  Transport: {transport}")
     if args.budget_usd:
@@ -555,6 +1228,11 @@ def main() -> None:
         json.dump(summary, f, indent=2, ensure_ascii=False)
     print(f"Summary exported to: {summary_path}")
 
+    evidence_path = os.path.join(args.output_dir, "evidence_report.md")
+    with open(evidence_path, "w", encoding="utf-8") as f:
+        f.write(build_evidence_report_markdown(summary))
+    print(f"Evidence report written to: {evidence_path}")
+
     print()
     print("=== Scores ===")
     for variant, data in scores.items():
@@ -563,7 +1241,8 @@ def main() -> None:
     print()
     print("=== Deltas ===")
     for variant, delta in deltas.items():
-        print(f"  {variant}: distance_to_oracle={delta['distance_to_oracle']}, delta_vs_deepseek_base={delta['delta_vs_deepseek_base']}")
+        base_str = f", delta_vs_base={delta.get('delta_vs_base', 'N/A')}"
+        print(f"  {variant}: distance_to_oracle={delta['distance_to_oracle']}{base_str}")
 
     print()
     print("=== Excellence Gate ===")

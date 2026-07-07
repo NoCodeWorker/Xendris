@@ -21,6 +21,7 @@ def _make_result(
     security_ok: bool = True,
     error: str | None = None,
     patch_applied: bool = True,
+    block_reason: str | None = None,
 ) -> TaskResult:
     return TaskResult(
         sample_id="AP-TEST",
@@ -36,6 +37,7 @@ def _make_result(
         iterations_used=1,
         error_message=error,
         patch_content="",
+        block_reason=block_reason,
     )
 
 
@@ -78,6 +80,16 @@ class TestComputeScoreForResults:
         expected_base = visible_weight + hidden_weight + api_weight + false_weight + minimal_weight + security_weight
         expected = max(expected_base + forbidden_penalty, 0.0)
         assert score == pytest.approx(expected, rel=0.01)
+
+    def test_blocked_result_penalized_as_critical_error(self):
+        result = _make_result(block_reason="BLOCKED_DUMMY_PATCH_IN_LIVE_MODE")
+        score = compute_score_for_results([result])
+        assert score < 0
+
+    def test_blocked_result_zeroes_even_with_all_good(self):
+        result = _make_result(block_reason="BLOCKED_COST_OR_LATENCY_NOT_RECORDED")
+        score = compute_score_for_results([result])
+        assert score < 0
 
     def test_empty_results_returns_zero(self):
         assert compute_score_for_results([]) == 0.0
