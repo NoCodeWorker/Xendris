@@ -1,0 +1,15 @@
+{
+  "sample_id": "AP-017",
+  "task_type": "security_basics",
+  "category": "security_basics",
+  "issue_description": "evaluate_expression() passes user input directly to Python's eval(), allowing arbitrary code execution. Replace with a safe AST-based evaluator that only supports basic arithmetic (+, -, *, /).",
+  "allowed_files": ["src/solver.py"],
+  "forbidden_files": ["tests/"],
+  "visible_test_command": "python -m pytest tests/test_solver.py -x",
+  "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+  "success_criteria": "All visible and hidden tests pass",
+  "risk_level": "medium",
+  "max_iterations": 5,
+  "expected_public_api": ["evaluate_expression(expr)"],
+  "disallowed_dependencies": []
+}

@@ -1,0 +1,121 @@
+{
+  "meta": {
+    "description": "Finitexo Code Matrix v0.1 adversarial validation subset",
+    "version": "0.1-adversarial-n5",
+    "sample_count": 5,
+    "source_dataset": "benchmarks/agentic_programming/v0_1",
+    "canonical_dataset_modified": false
+  },
+  "samples": [
+    {
+      "sample_id": "AP-007",
+      "task_type": "unit_tests",
+      "category": "unit_tests",
+      "issue_description": "The factorial function returns -1 for negative input instead of raising a ValueError as the docstring implies. Fix the implementation and add a proper unit test for the negative input case in test_solver.py to ensure the fix is maintained.",
+      "allowed_files": [
+        "src/solver.py",
+        "tests/test_solver.py"
+      ],
+      "forbidden_files": [],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "factorial(n)"
+      ],
+      "disallowed_dependencies": [
+        "pytest"
+      ]
+    },
+    {
+      "sample_id": "AP-014",
+      "task_type": "api_contracts",
+      "category": "api_contracts",
+      "issue_description": "merge_configs() claims to support a 'deep' merge_strategy but performs a shallow merge in all cases. The deep strategy must recursively merge nested dictionaries without mutating the base dict.",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "merge_configs(base, override, merge_strategy='deep')"
+      ],
+      "disallowed_dependencies": []
+    },
+    {
+      "sample_id": "AP-008",
+      "task_type": "refactor_safety",
+      "category": "refactor_safety",
+      "issue_description": "The function `get_info` has an unclear name and should be renamed to `get_statistics` throughout the codebase. All imports and calls in src/ and tests/ files must be updated to use the new name.",
+      "allowed_files": [
+        "src/solver.py",
+        "src/processor.py",
+        "tests/test_solver.py"
+      ],
+      "forbidden_files": [],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "get_statistics(data)"
+      ],
+      "disallowed_dependencies": [
+        "pytest"
+      ]
+    },
+    {
+      "sample_id": "AP-006",
+      "task_type": "edge_cases",
+      "category": "edge_cases",
+      "issue_description": "The safe_divide function crashes on edge cases: TypeError when items is None, ZeroDivisionError when divisor is 0, and TypeError when items contain non-numeric values. Add guards to return an empty list for any invalid input.",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "low",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "safe_divide(items, divisor)"
+      ],
+      "disallowed_dependencies": [
+        "pytest"
+      ]
+    },
+    {
+      "sample_id": "AP-017",
+      "task_type": "security_basics",
+      "category": "security_basics",
+      "issue_description": "evaluate_expression() passes user input directly to Python's eval(), allowing arbitrary code execution. Replace with a safe AST-based evaluator that only supports basic arithmetic (+, -, *, /).",
+      "allowed_files": [
+        "src/solver.py"
+      ],
+      "forbidden_files": [
+        "tests/"
+      ],
+      "visible_test_command": "python -m pytest tests/test_solver.py -x",
+      "hidden_test_command": "python -m pytest tests/test_hidden.py -x",
+      "success_criteria": "All visible and hidden tests pass",
+      "risk_level": "medium",
+      "max_iterations": 5,
+      "expected_public_api": [
+        "evaluate_expression(expr)"
+      ],
+      "disallowed_dependencies": []
+    }
+  ]
+}

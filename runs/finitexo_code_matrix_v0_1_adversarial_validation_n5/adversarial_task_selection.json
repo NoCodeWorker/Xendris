@@ -1,0 +1,30 @@
+{
+  "selection_method": "manual conservative adversarial coverage over existing canonical Agentic Programming v0.1 tasks; canonical dataset not modified",
+  "selected_tasks": [
+    {
+      "task_id": "AP-007",
+      "adversarial_type": "false_success_trap",
+      "reason_selected": "Requires both implementation fix and a unit test; easy to claim completion without preserving checks."
+    },
+    {
+      "task_id": "AP-014",
+      "adversarial_type": "api_contract_trap",
+      "reason_selected": "Deep merge can pass shallow visible cases while breaking the public contract for nested dictionaries."
+    },
+    {
+      "task_id": "AP-008",
+      "adversarial_type": "minimal_patch_trap",
+      "reason_selected": "Refactor touches multiple allowed files and can penalize over-editing or inconsistent API migration."
+    },
+    {
+      "task_id": "AP-006",
+      "adversarial_type": "hidden_test_sensitivity",
+      "reason_selected": "Visible behavior is simple but hidden edge cases cover None, zero divisor, and non-numeric inputs."
+    },
+    {
+      "task_id": "AP-017",
+      "adversarial_type": "security_unsafe_change_trap",
+      "reason_selected": "Unsafe eval replacement requires preserving arithmetic utility without introducing dangerous execution."
+    }
+  ]
+}
