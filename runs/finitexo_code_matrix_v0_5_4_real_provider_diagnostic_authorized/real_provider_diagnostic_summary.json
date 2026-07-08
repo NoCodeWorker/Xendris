@@ -1,0 +1,38 @@
+{
+  "budget_decision": "WITHIN_BUDGET",
+  "dataset_hash": "a48e5da1ff9d480efea20965eea12af5b1bff2e996470ba18e6eb01fb7b3d3a4",
+  "failure_count_by_provider": {},
+  "final_decision": "REAL_PROVIDER_DIAGNOSTIC_EXECUTION_COMPLETED_DIAGNOSTIC_ONLY",
+  "frozen_task_count": 10,
+  "manifest_hash": "6c1a0873bafbb23b7145b81d26c426cd70c3ab2025b1c3250cba9f11efa7152e",
+  "mean_smoke_score_by_provider": {
+    "deepseek": 0.85,
+    "openai": 0.8611
+  },
+  "mock_fallback_used": false,
+  "provider_mode": "real",
+  "provider_superiority_claim_authorized": false,
+  "providers_attempted": [
+    "deepseek",
+    "openai"
+  ],
+  "providers_completed": [
+    "deepseek",
+    "openai"
+  ],
+  "providers_configured": [
+    "deepseek",
+    "openai"
+  ],
+  "providers_failed": [],
+  "run_id": "finitexo_v0_5_4_real_provider_diagnostic_authorized",
+  "statistical_claim_authorized": false,
+  "task_attempts_attempted": 20,
+  "task_attempts_budget_blocked": 0,
+  "task_attempts_completed": 20,
+  "task_attempts_expected": 20,
+  "task_attempts_failed": 0,
+  "task_attempts_skipped": 0,
+  "total_estimated_cost_usd": 0.0043,
+  "xendris_superiority_claim_authorized": false
+}
