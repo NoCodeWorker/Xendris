@@ -1,0 +1,16 @@
+{
+  "blockers": [
+    "explicit real provider confirmation missing",
+    "provider API key missing for: deepseek, openai"
+  ],
+  "can_execute": false,
+  "dataset_hash": "a48e5da1ff9d480efea20965eea12af5b1bff2e996470ba18e6eb01fb7b3d3a4",
+  "decision": "REAL_PROVIDER_SMOKE_READY_CONFIGURATION_MISSING_NO_EXECUTION",
+  "frozen_task_count": 10,
+  "manifest_hash": "6c1a0873bafbb23b7145b81d26c426cd70c3ab2025b1c3250cba9f11efa7152e",
+  "provider_key_status": {
+    "deepseek": "MISSING",
+    "openai": "MISSING"
+  },
+  "warnings": []
+}

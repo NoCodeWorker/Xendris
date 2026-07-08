@@ -1,0 +1,15 @@
+{
+  "dataset_hash": "a48e5da1ff9d480efea20965eea12af5b1bff2e996470ba18e6eb01fb7b3d3a4",
+  "decision": "APPROVED_FOR_EXPLICIT_REAL_PROVIDER_DIAGNOSTIC_EXECUTION",
+  "env_files_read": false,
+  "finding_count": 0,
+  "findings": [],
+  "frozen_task_count": 10,
+  "gate_name": "Finitexo Code Matrix v0.5.2 Release Gate",
+  "manifest_hash": "6c1a0873bafbb23b7145b81d26c426cd70c3ab2025b1c3250cba9f11efa7152e",
+  "provider_superiority_claim_authorized": false,
+  "real_providers_executed": false,
+  "secrets_found": false,
+  "statistical_claim_authorized": false,
+  "xendris_superiority_claim_authorized": false
+}

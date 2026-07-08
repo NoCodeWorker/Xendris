@@ -1,0 +1,32 @@
+{
+  "budget_cap_usd": 0.5,
+  "budget_decision": "BLOCKED",
+  "dataset_hash": "a48e5da1ff9d480efea20965eea12af5b1bff2e996470ba18e6eb01fb7b3d3a4",
+  "dataset_version": "v0.4.3",
+  "external_benchmark_validation_claim_authorized": false,
+  "failure_count_by_provider": {},
+  "final_decision": "REAL_PROVIDER_SMOKE_CONFIGURATION_MISSING_NO_EXECUTION",
+  "frozen_task_count": 10,
+  "manifest_hash": "6c1a0873bafbb23b7145b81d26c426cd70c3ab2025b1c3250cba9f11efa7152e",
+  "mean_smoke_score_by_provider": {},
+  "mock_fallback_used": false,
+  "provider_mode": "real",
+  "provider_superiority_claim_authorized": false,
+  "providers_attempted": [],
+  "providers_completed": [],
+  "providers_configured": [
+    "deepseek",
+    "openai"
+  ],
+  "providers_failed": [],
+  "real_provider_configuration_status": "REAL_PROVIDER_SMOKE_CONFIGURATION_MISSING_NO_EXECUTION",
+  "run_id": "finitexo_v0_5_2_real_provider_execution",
+  "statistical_claim_authorized": false,
+  "task_attempts_budget_blocked": 0,
+  "task_attempts_completed": 0,
+  "task_attempts_failed": 0,
+  "task_attempts_skipped": 20,
+  "task_attempts_total": 0,
+  "total_estimated_cost_usd": 0.0,
+  "xendris_superiority_claim_authorized": false
+}
