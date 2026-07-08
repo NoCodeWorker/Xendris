@@ -1,0 +1,30 @@
+{
+  "dataset_hash_verified": true,
+  "diagnostic_only": true,
+  "false_success_claims_detected": 0,
+  "final_decision": "REAL_PROVIDER_SCORING_CONSISTENCY_APPROVED_DIAGNOSTIC_ONLY",
+  "findings": [],
+  "findings_count": 0,
+  "formula_valid": true,
+  "gate": "finitexo_code_matrix_v0_5_6_real_provider_scoring_consistency",
+  "manifest_hash_verified": true,
+  "metadata_rows_checked": 20,
+  "provider_score_counts": {
+    "deepseek": 10,
+    "openai": 10
+  },
+  "provider_superiority_claim_authorized": false,
+  "provider_symmetry_valid": true,
+  "providers": [
+    "deepseek",
+    "openai"
+  ],
+  "recomputation_attempted": true,
+  "recomputation_failures": 0,
+  "responses_checked": 20,
+  "score_range_valid": true,
+  "scores_checked": 20,
+  "source_final_decision": "REAL_PROVIDER_DIAGNOSTIC_EXECUTION_COMPLETED_DIAGNOSTIC_ONLY",
+  "statistical_claim_authorized": false,
+  "xendris_superiority_claim_authorized": false
+}
