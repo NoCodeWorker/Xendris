@@ -1,0 +1,12 @@
+{
+  "dataset_hash": "a48e5da1ff9d480efea20965eea12af5b1bff2e996470ba18e6eb01fb7b3d3a4",
+  "diagnostic_only": true,
+  "final_decision": "REAL_PROVIDER_CONTROLLED_RUN_BLOCKED_INSUFFICIENT_TASKS",
+  "manifest_hash": "6c1a0873bafbb23b7145b81d26c426cd70c3ab2025b1c3250cba9f11efa7152e",
+  "providers_expected": [
+    "deepseek",
+    "openai"
+  ],
+  "run_id": "finitexo_v0_6_0_real_provider_controlled_run_n30",
+  "task_ids": []
+}

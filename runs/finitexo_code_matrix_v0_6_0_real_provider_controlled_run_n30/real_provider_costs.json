@@ -1,0 +1,9 @@
+{
+  "actual_cost_usd": 0.0,
+  "budget_cap_usd": 0.5,
+  "budget_decision": "BLOCKED",
+  "cost_breakdown_usd": {
+    "total": 0.0
+  },
+  "soft_target_usd": 0.2
+}

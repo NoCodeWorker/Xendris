@@ -1,0 +1,11 @@
+{
+  "providers_attempted": [],
+  "providers_completed": [],
+  "providers_expected": [
+    "deepseek",
+    "openai"
+  ],
+  "task_attempts_attempted": 0,
+  "task_attempts_expected": 60,
+  "task_attempts_skipped": 60
+}
