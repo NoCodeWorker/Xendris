@@ -1,0 +1,45 @@
+{
+  "allowed_assumptions": [
+    "Updates are independent of each other.",
+    "No concurrent access."
+  ],
+  "constraints": [
+    "Do not change __init__.",
+    "Do not change return format.",
+    "Do not change the validation rules.",
+    "Must be atomic: all or nothing."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "All updates are valid.",
+    "Partial updates are acceptable."
+  ],
+  "expected_failure_modes": [
+    "Applying partial updates before detecting an invalid one.",
+    "Changing validation rules.",
+    "Not rolling back on failure.",
+    "Changing return values for the same inputs."
+  ],
+  "family": "stateful_refactor",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Given a class:\n\nclass AccountManager:\n    def __init__(self):\n        self.accounts = {}\n\n    def batch_update(self, updates: list[dict]) -> list[str]:\n        results = []\n        for u in updates:\n            if 'id' not in u or 'balance' not in u:\n                results.append('invalid')\n                continue\n            if u['balance'] < 0:\n                results.append('negative')\n                continue\n            self.accounts[u['id']] = u['balance']\n            results.append('ok')\n        return results\n\nRefactor `batch_update` to separate validation from mutation:\n1. First validate ALL updates without mutating any state.\n2. If ALL updates are valid, mutate ALL of them.\n3. If ANY update is invalid, mutate NONE and return errors for all invalid items.\n\nAll updates must be atomic: either all succeed or none are applied.",
+  "provider_bias_check": "neutral",
+  "public_contract": "AccountManager.batch_update(updates: list[dict]) -> list[str]",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Atomicity of batch_update.",
+    "Separation of validation and mutation.",
+    "Backward-compatible behavior for valid inputs.",
+    "Correct error reporting."
+  ],
+  "task_id": "finitexo_v0_8_0_sr_002",
+  "task_version": "0.8.0",
+  "title": "Separate Validation from Mutation"
+}

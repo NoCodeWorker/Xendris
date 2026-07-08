@@ -1,0 +1,45 @@
+{
+  "allowed_assumptions": [
+    "Vectors are lists of floats.",
+    "Input is not modified externally during processing."
+  ],
+  "constraints": [
+    "Each vector's L2 norm must be computed exactly once.",
+    "Do not copy vectors unnecessarily.",
+    "Zero vectors must not cause division by zero."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "No zero vectors.",
+    "All vectors have the same length.",
+    "Norm can be recomputed freely (no caching needed)."
+  ],
+  "expected_failure_modes": [
+    "Computing the norm of the same vector multiple times.",
+    "Division by zero for zero vectors.",
+    "Creating unnecessary intermediate copies.",
+    "Modifying input vectors."
+  ],
+  "family": "performance_constraints",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Implement `normalize_vectors(vectors: list[list[float]]) -> list[list[float]]`.\n\nNormalize each vector to unit length (L2 norm).\n\nConstraints:\n- Compute each vector's norm exactly once; do not recompute.\n- Do not create unnecessary intermediate lists.\n- Use a single pass per vector where possible.\n\nHandle:\n- Zero vectors (all zeros) — return the zero vector unchanged.\n- Empty vectors — return empty vector.\n- Empty list of vectors — return [].\n- Vectors with different lengths — normalize each independently.\n- Negative values in vectors.",
+  "provider_bias_check": "neutral",
+  "public_contract": "normalize_vectors(vectors) -> list[list[float]] (each norm computed once)",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Each norm computed once.",
+    "No unnecessary copies.",
+    "Zero vector handling.",
+    "Empty input handling."
+  ],
+  "task_id": "finitexo_v0_8_0_pc_006",
+  "task_version": "0.8.0",
+  "title": "Batch Normalization Without Unnecessary Loops"
+}

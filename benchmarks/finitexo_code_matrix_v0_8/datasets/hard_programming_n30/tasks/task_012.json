@@ -1,0 +1,45 @@
+{
+  "allowed_assumptions": [
+    "Keys are strings.",
+    "Values are integers.",
+    "Thread safety is not required."
+  ],
+  "constraints": [
+    "The module-level `compute` function must remain importable and callable.",
+    "A class version must be available for per-instance caching.",
+    "The computation and caching logic must be identical."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "There is only one consumer.",
+    "Module-level caching is fine for all use cases."
+  ],
+  "expected_failure_modes": [
+    "Removing the module-level function.",
+    "Changing computation logic.",
+    "Not providing per-instance isolation.",
+    "Breaking existing imports."
+  ],
+  "family": "stateful_refactor",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Given a module that caches results at module level:\n\n_cache = {}\n\ndef compute(key: str, value: int) -> int:\n    if key not in _cache:\n        _cache[key] = value * 2\n    return _cache[key]\n\nMultiple consumers sharing this module experience unexpected interference because one consumer's cached values affect another's results.\n\nRefactor using a class so that each consumer has its own cache instance:\n- `__init__(self)` initializes an empty cache.\n- `compute(self, key: str, value: int) -> int` uses the instance cache.\n- The computation logic remains the same (value * 2, cached by key).\n- Existing code using `compute(key, value)` as a module function should still work by providing a backward-compatible module-level wrapper that creates a default global instance.",
+  "provider_bias_check": "neutral",
+  "public_contract": "module-level compute(key, value) -> int works as before; class-level also available.",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Per-instance cache isolation.",
+    "Backward-compatible module-level API.",
+    "Identical computation logic.",
+    "No leak between instances."
+  ],
+  "task_id": "finitexo_v0_8_0_sr_006",
+  "task_version": "0.8.0",
+  "title": "Avoid Global-State Leakage"
+}

@@ -1,0 +1,45 @@
+{
+  "allowed_assumptions": [
+    "Record values for key fields are hashable.",
+    "keys contains valid field names."
+  ],
+  "constraints": [
+    "Must NOT use nested loops for comparison.",
+    "Use a dict-based grouping approach.",
+    "Do not modify input records."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "All records have all key fields.",
+    "No None values.",
+    "keys is never empty."
+  ],
+  "expected_failure_modes": [
+    "Using O(n²) nested loop approach.",
+    "Not handling missing key fields.",
+    "Not handling None values correctly.",
+    "Returning singletons (records with no duplicates)."
+  ],
+  "family": "performance_constraints",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Implement `find_duplicates(records: list[dict], keys: list[str]) -> list[list[dict]]`.\n\nFind groups of records that are duplicates based on a subset of fields (the `keys` parameter).\nTwo records are duplicates if all values for the specified keys are equal.\nReturn a list of groups, where each group contains the records that are duplicates of each other.\nRecords with unique key combinations are not returned.\n\nConstraint: Must use a hash map (dict), not nested loops.\nComplexity must be O(n) average, not O(n²).\n\nHandle: keys list empty (treat as no grouping, return []), records missing one of the key fields (use None as default), None values in key fields (treat as a valid comparison value).",
+  "provider_bias_check": "neutral",
+  "public_contract": "find_duplicates(records, keys) -> list[list[dict]] with O(n) average complexity",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "O(n) average time complexity.",
+    "Correct duplicate detection.",
+    "Handling missing keys and None.",
+    "Empty keys edge case."
+  ],
+  "task_id": "finitexo_v0_8_0_pc_001",
+  "task_version": "0.8.0",
+  "title": "Avoid O(n²) Duplicate Scanning"
+}

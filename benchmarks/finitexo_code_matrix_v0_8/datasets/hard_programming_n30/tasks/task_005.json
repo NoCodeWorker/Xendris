@@ -1,0 +1,46 @@
+{
+  "allowed_assumptions": [
+    "Markers are not escaped.",
+    "Text is Unicode.",
+    "Markers do not span more than two lines."
+  ],
+  "constraints": [
+    "Errors must reference character position in the original string.",
+    "Segments must be in order of appearance.",
+    "Do not raise exceptions for malformed input; report errors in the result."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "Input is always valid.",
+    "No nesting.",
+    "Markers are always closed."
+  ],
+  "expected_failure_modes": [
+    "Raising exceptions instead of reporting errors.",
+    "Not handling nested markers correctly.",
+    "Incorrect error positions.",
+    "Losing content inside malformed markers."
+  ],
+  "family": "algorithmic_reasoning",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Implement `parse_markup(text: str) -> dict` that parses a simple markup format.\n\nMarkup patterns:\n- `**text**` → {'type': 'bold', 'content': 'text'}\n- `[[link]]` → {'type': 'link', 'content': 'link'}\n- `{{cite}}`  → {'type': 'cite', 'content': 'cite'}\n\nReturn a dict:\n{'segments': [...], 'errors': [{'position': int, 'description': str}, ...]}\n\nMalformed cases to handle:\n- Unclosed `**` — produce a segment of type 'text' up to the unclosed marker.\n- Nested markers inside each other (e.g., `**[[text]]**`) — keep outer, convert inner to plain text within the outer.\n- Empty markers (`****`, `[[]]`) — produce an error but still include an empty segment.\n- Markers split across lines — treat as invalid, produce error.\n- Regular text with no markers — single text segment, no errors.",
+  "provider_bias_check": "neutral",
+  "public_contract": "parse_markup(text: str) -> dict",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Correct parsing of valid markup.",
+    "Graceful error reporting for malformed input.",
+    "Correct nesting behavior.",
+    "Position tracking in errors."
+  ],
+  "task_id": "finitexo_v0_8_0_ar_005",
+  "task_version": "0.8.0",
+  "title": "Parser-Like Transformation with Malformed Input"
+}

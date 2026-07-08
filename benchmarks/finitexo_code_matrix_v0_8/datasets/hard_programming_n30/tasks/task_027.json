@@ -1,0 +1,44 @@
+{
+  "allowed_assumptions": [
+    "Typical dict values are strings, numbers, lists, dicts.",
+    "Cache may grow up to reasonable size."
+  ],
+  "constraints": [
+    "Must avoid redundant serialization for identical content.",
+    "Key ordering must not affect cache hits.",
+    "Do not pre-serialize all objects; cache on first access."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "Dict keys are always in the same order.",
+    "All values are hashable.",
+    "json.dumps is always fast enough without caching."
+  ],
+  "expected_failure_modes": [
+    "Cache miss for identical content with different key ordering.",
+    "Raising on unhashable values instead of falling back.",
+    "Using object identity instead of deep equality.",
+    "Cache growing unbounded without limit."
+  ],
+  "family": "performance_constraints",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Implement a class `CachingSerializer`:\n- `__init__(self)` — initializes an empty cache.\n- `serialize(self, obj: dict) -> str` — serialize a dict to JSON, caching by object identity (use a deterministic fingerprint of the dict contents, not reference identity).\n\nIf the same dict content (deep equality) has been serialized before, return the cached string.\nDo not use json.dumps on the same content twice when it can be served from cache.\n\nHandle:\n- Dicts with keys in different orders — treat as equal (sort keys before fingerprinting).\n- Unhashable values inside dicts — fall back to json.dumps without caching.\n- Empty dict.\n- Nested dicts.",
+  "provider_bias_check": "neutral",
+  "public_contract": "CachingSerializer.serialize(obj: dict) -> str with caching",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Correct cache hit detection (deep equality, key-order independent).",
+    "Fallback for unhashable values.",
+    "Cache used before serialization, not after."
+  ],
+  "task_id": "finitexo_v0_8_0_pc_003",
+  "task_version": "0.8.0",
+  "title": "Avoid Repeated Serialization with Caching"
+}

@@ -1,0 +1,45 @@
+{
+  "allowed_assumptions": [
+    "Config files are valid JSON.",
+    "Nested values are dicts, not lists."
+  ],
+  "constraints": [
+    "Existing callers must see no difference for flat configs.",
+    "Nested keys produce UPPER_CASE with underscore separator.",
+    "Do not introduce any new public methods."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "Configs are always flat.",
+    "No mixed flat+nested configs exist.",
+    "Case does not matter."
+  ],
+  "expected_failure_modes": [
+    "Breaking existing key names for flat configs.",
+    "Not handling mixed flat and nested configs.",
+    "Using dot in key names instead of underscore.",
+    "Incorrect case transformation for nested values."
+  ],
+  "family": "stateful_refactor",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Given a config loader:\n\nclass ConfigLoader:\n    def load(self, path: str) -> dict:\n        raw = json.load(open(path))\n        return {k.upper(): v for k, v in raw.items()}\n\nExtend it to support nested config sections using dot notation.\nFor example, a config file with:\n{\n  \"database\": {\"host\": \"localhost\", \"port\": 5432},\n  \"debug\": true\n}\n\nShould produce:\n{\n  \"DATABASE_HOST\": \"localhost\",\n  \"DATABASE_PORT\": 5432,\n  \"DEBUG\": true\n}\n\nExisting flat keys must still work: {'host': 'localhost'} -> {'HOST': 'localhost'}.\nDo not break existing callers that rely on key names without dots.",
+  "provider_bias_check": "neutral",
+  "public_contract": "ConfigLoader.load(path: str) -> dict (backward-compatible keys)",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Backward compatibility for flat configs.",
+    "Correct flattening of nested configs.",
+    "No new public API.",
+    "Consistent naming convention."
+  ],
+  "task_id": "finitexo_v0_8_0_sr_003",
+  "task_version": "0.8.0",
+  "title": "Preserve Backward-Compatible Config Loading"
+}

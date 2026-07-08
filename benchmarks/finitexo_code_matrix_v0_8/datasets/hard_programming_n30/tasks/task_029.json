@@ -1,0 +1,45 @@
+{
+  "allowed_assumptions": [
+    "predicate is a callable that returns bool.",
+    "items is indexable."
+  ],
+  "constraints": [
+    "Do not create intermediate lists (e.g., list comprehension then filter).",
+    "Use a single pass with generator where possible.",
+    "Preserve original order."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "A list comprehension is always the best approach.",
+    "predicate never uses the index argument.",
+    "items is always small."
+  ],
+  "expected_failure_modes": [
+    "Creating unnecessary intermediate lists.",
+    "Not passing the correct index to predicate.",
+    "Using two passes where one suffices.",
+    "Not preserving order."
+  ],
+  "family": "performance_constraints",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Implement `filter_with_index(items: list, predicate: callable) -> list`.\n\nFilter items where `predicate(item, index)` returns True.\nThe predicate receives both the item and its original index.\n\nConstraint: Use a generator expression or lazy evaluation approach.\nDo not create unnecessary intermediate lists.\nIf the predicate only depends on the item (ignores index), the implementation should still be efficient.\n\nHandle: empty list, predicate that never matches, predicate that matches all, predicate that uses the index for conditional logic, predicate that raises an exception (let it propagate).",
+  "provider_bias_check": "neutral",
+  "public_contract": "filter_with_index(items, predicate) -> list (no unnecessary intermediate copies)",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Single-pass filtering.",
+    "Correct index passing to predicate.",
+    "No unnecessary intermediate allocations.",
+    "Order preservation."
+  ],
+  "task_id": "finitexo_v0_8_0_pc_005",
+  "task_version": "0.8.0",
+  "title": "Memory-Conscious Filtering with Index Awareness"
+}

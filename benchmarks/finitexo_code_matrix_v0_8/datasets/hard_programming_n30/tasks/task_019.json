@@ -1,0 +1,43 @@
+{
+  "allowed_assumptions": [
+    "Existing callers pass at most one argument.",
+    "New callers may pass keyword arguments."
+  ],
+  "constraints": [
+    "Default parameter must be False.",
+    "Original callers with positional args must not break.",
+    "Original callers with no second arg must not break."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "All callers will be updated.",
+    "The return type change does not matter."
+  ],
+  "expected_failure_modes": [
+    "Changing default behavior.",
+    "Breaking callers that pass `lookup('a')`.",
+    "Incorrect return type for structured mode.",
+    "Removing existing data entries."
+  ],
+  "family": "api_design_consistency",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Given a function:\n\ndef lookup(key: str) -> str:\n    data = {'a': 'result_a', 'b': 'result_b'}\n    return data.get(key, 'not_found')\n\nExtend it to support optional structured results:\n`lookup(key: str, structured: bool = False) -> str | dict`\n\nWhen `structured=False` (default), behavior must be identical to the original.\nWhen `structured=True`, return `{'found': bool, 'value': str | None, 'key': str}`.\n\nExisting callers that call `lookup('a')` or `lookup('a', False)` must see no change.\nAdd at least 2 more entries to the data dict.",
+  "provider_bias_check": "neutral",
+  "public_contract": "lookup(key: str, structured: bool = False) -> str | dict (backward-compatible default)",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Backward compatibility of default.",
+    "Correct structured result shape.",
+    "No regression for existing callers."
+  ],
+  "task_id": "finitexo_v0_8_0_ad_001",
+  "task_version": "0.8.0",
+  "title": "Add Optional Structured Result Without Breaking Callers"
+}

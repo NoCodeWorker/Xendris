@@ -1,0 +1,46 @@
+{
+  "allowed_assumptions": [
+    "Keys are strings.",
+    "Values are any hashable object."
+  ],
+  "constraints": [
+    "Must be O(1) or O(log n) average for get and put.",
+    "Do not use OrderedDict or built-in LRU cache.",
+    "Do not leak internal state."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "Values are never None.",
+    "Capacity is always large.",
+    "All keys are accessed at least once."
+  ],
+  "expected_failure_modes": [
+    "Evicting wrong item when frequencies are equal.",
+    "Not updating frequency on get.",
+    "Resetting frequency on put of existing key incorrectly.",
+    "Using O(n) eviction scan."
+  ],
+  "family": "algorithmic_reasoning",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Implement a class `BoundedCache` with:\n- `__init__(self, capacity: int)` — raises ValueError if capacity < 1.\n- `get(self, key: str) -> object | None` — returns value or None.\n- `put(self, key: str, value: object) -> None` — inserts or updates.\n\nEviction policy when at capacity:\n1. Prefer to evict items with the lowest access frequency.\n2. Among items with the same frequency, evict the least recently used.\n3. On `put` of an existing key, update the value and reset its frequency to 1.\n4. On `get` of an existing key, increment its frequency by 1.\n\nHandle: capacity=1, updating existing keys, repeated gets on the same key, putting None as a value (valid), key with empty string (valid).",
+  "provider_bias_check": "neutral",
+  "public_contract": "BoundedCache.get(key) -> object | None; BoundedCache.put(key, value) -> None",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Correct eviction policy (frequency then recency).",
+    "Time complexity of operations.",
+    "Correct handling of capacity=1.",
+    "Updating existing key resets frequency to 1.",
+    "Edge cases."
+  ],
+  "task_id": "finitexo_v0_8_0_ar_003",
+  "task_version": "0.8.0",
+  "title": "Bounded Cache Eviction Logic"
+}

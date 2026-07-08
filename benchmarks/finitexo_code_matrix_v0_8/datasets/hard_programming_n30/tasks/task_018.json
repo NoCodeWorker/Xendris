@@ -1,0 +1,44 @@
+{
+  "allowed_assumptions": [
+    "Keys are strings.",
+    "Values of the same key have comparable types."
+  ],
+  "constraints": [
+    "Use a stable sorting approach.",
+    "Do not modify input records."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "All records have all keys.",
+    "No missing fields.",
+    "missing_behavior is always 'end'."
+  ],
+  "expected_failure_modes": [
+    "Not stable for equal keys.",
+    "Treating None as missing instead of as a value.",
+    "Not handling empty keys list.",
+    "Incorrect missing_behavior for cascading keys."
+  ],
+  "family": "edge_case_handling",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Implement `sort_records(records: list[dict], keys: list[str], missing_behavior: str = 'end') -> list[dict]`.\n\nSort records by multiple keys in order of priority (first key is primary).\nIf `missing_behavior` is `'end'`, records missing a sort key sort to the end of that sort level.\nIf `missing_behavior` is `'begin'`, they sort to the beginning.\n\nExample:\nrecords = [{'name': 'Bob'}, {'name': 'Alice', 'age': 30}, {'name': 'Charlie'}]\nsort_records(records, ['name'], 'end')\n-> [{'name': 'Alice', 'age': 30}, {'name': 'Bob'}, {'name': 'Charlie'}]\nsort_records(records, ['age', 'name'], 'end')\n-> [{'name': 'Alice', 'age': 30}, {'name': 'Bob'}, {'name': 'Charlie'}]  (Bob and Charlie have no age)\n\nRules:\n- Must be a stable sort (preserve input order for equal keys).\n- Missing means the key is not in the record dict.\n- None as a value is not missing; it is a valid value.\n- Handle: empty record list, empty keys list (return as-is), all records missing the primary key, mixed types in values.",
+  "provider_bias_check": "neutral",
+  "public_contract": "sort_records(records, keys, missing_behavior='end') -> list[dict]",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Correct multi-key sort order.",
+    "Stable property.",
+    "Missing field handling (end vs begin).",
+    "None as a valid value vs missing key."
+  ],
+  "task_id": "finitexo_v0_8_0_ec_006",
+  "task_version": "0.8.0",
+  "title": "Stable Multi-Key Sort with Missing Fields"
+}

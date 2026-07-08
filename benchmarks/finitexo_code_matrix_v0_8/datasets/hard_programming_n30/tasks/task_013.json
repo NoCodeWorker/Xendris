@@ -1,0 +1,44 @@
+{
+  "allowed_assumptions": [
+    "Records are dicts or None.",
+    "Values are floats or None."
+  ],
+  "constraints": [
+    "Return type must be identical for all inputs (same keys, same types).",
+    "Do not raise exceptions for invalid records; skip gracefully."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "Input is never None.",
+    "All records have all fields.",
+    "At least one record has a non-null value."
+  ],
+  "expected_failure_modes": [
+    "Raising on None input.",
+    "Incorrect count when some values are None.",
+    "Division by zero when all values are None.",
+    "Inconsistent return type keys."
+  ],
+  "family": "edge_case_handling",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Implement `process_batch(records: list | None) -> dict`.\n\nEach record is a dict with optional fields: `name` (str), `value` (float), `tags` (list[str]).\n\nReturn a dict:\n{'count': int, 'sum': float, 'mean': float, 'names': list[str], 'tag_frequencies': dict[str, int]}\n\nRules:\n- If `records` is None or empty, return `{'count': 0, 'sum': 0.0, 'mean': 0.0, 'names': [], 'tag_frequencies': {}}`.\n- If a record has `value` as None, skip it in sum/mean calculation but count it in `count`.\n- If a record has `name` as None or missing, exclude it from `names`.\n- If `tags` is None or missing, treat as empty list.\n- `mean` is `sum / count_of_non_null_values`; if all values are None, mean is 0.0.\n- Return types must be consistent regardless of inputs.",
+  "provider_bias_check": "neutral",
+  "public_contract": "process_batch(records) -> dict with consistent shape",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Graceful handling of empty/None inputs.",
+    "Correct counting with null values.",
+    "Consistent return shape.",
+    "No exceptions for edge cases."
+  ],
+  "task_id": "finitexo_v0_8_0_ec_001",
+  "task_version": "0.8.0",
+  "title": "Batch Processing with Empty and Null Inputs"
+}

@@ -1,0 +1,45 @@
+{
+  "allowed_assumptions": [
+    "Fields are separated by commas.",
+    "Quotes are double quotes (`\"`)."
+  ],
+  "constraints": [
+    "Do not use the csv module.",
+    "Errors must include the 1-indexed line number.",
+    "Do not raise exceptions; report errors in the result."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "All lines are well-formed.",
+    "No quoted fields.",
+    "No header row."
+  ],
+  "expected_failure_modes": [
+    "Raising exceptions on malformed lines.",
+    "Not handling quoted fields with commas.",
+    "Incorrect line numbers in errors.",
+    "Including blank lines as records or errors."
+  ],
+  "family": "edge_case_handling",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Implement `parse_partial_csv(text: str) -> dict`.\n\nParse a simple CSV-like format where each line has: `id, name, value`.\nFields may be quoted with double quotes. Quoted fields may contain commas.\n\nReturn a dict:\n{'records': [{'id': str, 'name': str, 'value': str}, ...], 'errors': [{'line': int, 'description': str}, ...]}\n\nHandle:\n- Lines with fewer than 3 fields: record an error, skip the line.\n- Lines with more than 3 fields: include first 3 fields, record a warning (not an error).\n- Completely blank lines: skip silently, no error.\n- Quoted fields with embedded commas: parse correctly.\n- Unclosed quotes: treat as error, include partial content.\n- Header row: if first line is 'id,name,value', skip it as header.",
+  "provider_bias_check": "neutral",
+  "public_contract": "parse_partial_csv(text: str) -> dict with 'records' and 'errors' keys",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Correct parsing of well-formed lines.",
+    "Graceful error recovery for malformed lines.",
+    "Correct quoted field handling.",
+    "Header line detection."
+  ],
+  "task_id": "finitexo_v0_8_0_ec_004",
+  "task_version": "0.8.0",
+  "title": "Partial Malformed Record Parsing"
+}

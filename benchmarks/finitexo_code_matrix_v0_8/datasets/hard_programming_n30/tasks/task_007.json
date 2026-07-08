@@ -1,0 +1,45 @@
+{
+  "allowed_assumptions": [
+    "No new states or events need to be added.",
+    "Thread safety is not required."
+  ],
+  "constraints": [
+    "Do not change __init__ signature.",
+    "Do not add public methods.",
+    "transition must return exactly the same strings for the same inputs.",
+    "Use a data structure (dict or list) for the transition table, not if/elif chains."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "The transition table must be a dict lookup only.",
+    "Error handling should be changed."
+  ],
+  "expected_failure_modes": [
+    "Changing return strings.",
+    "Adding or removing valid transitions.",
+    "Not handling invalid transitions identically.",
+    "Changing __init__ behavior."
+  ],
+  "family": "stateful_refactor",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "You are given a state machine implemented as:\n\nclass StateMachine:\n    def __init__(self):\n        self.state = 'idle'\n\n    def transition(self, event: str) -> str:\n        if self.state == 'idle' and event == 'start':\n            self.state = 'running'\n            return 'started'\n        elif self.state == 'running' and event == 'pause':\n            self.state = 'paused'\n            return 'paused'\n        elif self.state == 'running' and event == 'stop':\n            self.state = 'stopped'\n            return 'stopped'\n        elif self.state == 'paused' and event == 'resume':\n            self.state = 'running'\n            return 'resumed'\n        elif self.state == 'paused' and event == 'stop':\n            self.state = 'stopped'\n            return 'stopped'\n        else:\n            return 'invalid_transition'\n\nRefactor this into a table-driven state machine using a transition table.\nThe `transition` method must accept the same signature and return the same types.\nThe external behavior must be identical for all valid and invalid transitions.",
+  "provider_bias_check": "neutral",
+  "public_contract": "StateMachine.transition(event: str) -> str (identical behavior)",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Behavioral equivalence.",
+    "Table-driven approach.",
+    "No new public API surface.",
+    "All valid transitions preserved."
+  ],
+  "task_id": "finitexo_v0_8_0_sr_001",
+  "task_version": "0.8.0",
+  "title": "Refactor State Transitions"
+}

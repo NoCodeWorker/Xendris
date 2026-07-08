@@ -1,0 +1,42 @@
+{
+  "allowed_assumptions": [
+    "json module is imported.",
+    "path is a valid filesystem path."
+  ],
+  "constraints": [
+    "Only catch FileNotFoundError, json.JSONDecodeError, PermissionError.",
+    "Return error dict format must be identical for caught exceptions.",
+    "Unexpected exceptions must propagate (not be caught)."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "All errors must be caught.",
+    "Only FileNotFoundError can occur."
+  ],
+  "expected_failure_modes": [
+    "Still catching Exception broadly.",
+    "Not propagating unexpected exceptions.",
+    "Changing the error dict format."
+  ],
+  "family": "api_design_consistency",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Given a function:\n\ndef load_and_process(path: str) -> dict:\n    try:\n        with open(path) as f:\n            data = json.load(f)\n        return {'status': 'ok', 'data': data}\n    except Exception as e:\n        return {'status': 'error', 'message': str(e)}\n\nAudit and refactor: catch only the exceptions that are expected (FileNotFoundError, json.JSONDecodeError, PermissionError).\nFor all other exceptions, re-raise them (do not catch).\nPreserve the function's external contract: for the expected exceptions, return the same error dict format. For unexpected exceptions, let them propagate.",
+  "provider_bias_check": "neutral",
+  "public_contract": "load_and_process(path) -> dict (for expected errors); raises for unexpected errors",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Specific exception handling.",
+    "Error propagation for unexpected exceptions.",
+    "Preserved error dict format."
+  ],
+  "task_id": "finitexo_v0_8_0_ad_006",
+  "task_version": "0.8.0",
+  "title": "Avoid Broad Exception Swallowing"
+}

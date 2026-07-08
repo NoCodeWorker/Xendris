@@ -1,0 +1,44 @@
+{
+  "allowed_assumptions": [
+    "Keys are hashable.",
+    "Pairs are always (key, value) tuples."
+  ],
+  "constraints": [
+    "Do not modify input lists.",
+    "Resolver order: values in the list passed to resolver should be in order of appearance."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "No duplicate keys.",
+    "Values are never None.",
+    "resolver is always provided."
+  ],
+  "expected_failure_modes": [
+    "Excluding keys with None values.",
+    "Calling resolver with wrong argument order.",
+    "Not handling empty lists.",
+    "Not preserving order for resolver callback."
+  ],
+  "family": "edge_case_handling",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Implement `merge_dicts(lists: list[list], resolver: callable | None = None) -> dict`.\n\nEach element of `lists` is a list of `(key, value)` pairs.\nMerge all pairs into a single dict.\n\nRules:\n- If a key appears only once, keep its value.\n- If a key appears multiple times:\n  - If `resolver` is provided, call `resolver(key, [value1, value2, ...])` and use its return.\n  - If `resolver` is None, keep the first occurrence's value.\n- Keys with None as value should still be included (None is a valid value).\n- Handle: empty lists of pairs, empty outer list, None resolver, resolver that returns None.",
+  "provider_bias_check": "neutral",
+  "public_contract": "merge_dicts(lists: list[list], resolver: callable | None = None) -> dict",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Correct handling of duplicates without resolver.",
+    "Correct resolver invocation.",
+    "Including None-valued keys.",
+    "Empty inputs."
+  ],
+  "task_id": "finitexo_v0_8_0_ec_002",
+  "task_version": "0.8.0",
+  "title": "Merge with Duplicate Keys and Resolver"
+}

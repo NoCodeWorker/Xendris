@@ -1,0 +1,45 @@
+{
+  "allowed_assumptions": [
+    "Records are hashable.",
+    "key_fn is deterministic for the same input."
+  ],
+  "constraints": [
+    "Must be stable: within-group order equals original order.",
+    "Do not modify the input list.",
+    "Groups must be in tie_breaker order if provided, else in order of first appearance."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "key_fn never returns None.",
+    "key_fn never raises.",
+    "tie_breaker is always provided."
+  ],
+  "expected_failure_modes": [
+    "Losing original order within groups.",
+    "Not handling None keys.",
+    "Crashing when key_fn raises on a record instead of skipping it.",
+    "Incorrect group ordering without tie_breaker."
+  ],
+  "family": "algorithmic_reasoning",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Implement `group_stable(records, key_fn, tie_breaker=None)`.\n\nGroup records by `key_fn(record)`. Within each group, preserve original order.\nIf `tie_breaker` is provided, it is a function `(key) -> comparable` that determines the order of groups: groups are sorted by `tie_breaker(key)`.\nWithin a group, records remain in original order.\n\nReturn a list of groups, each group being a dict:\n{'key': key, 'records': [record, ...]}\n\nHandle: key_fn returning None (group as 'None' key), tie_breaker returning non-comparable types consistently, empty record list, key_fn raising an exception (skip that record and continue).",
+  "provider_bias_check": "neutral",
+  "public_contract": "group_stable(records: list, key_fn: callable, tie_breaker: callable | None) -> list[dict]",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Stable grouping.",
+    "Tie-breaker sorting of groups.",
+    "Handling None keys and exceptions.",
+    "Empty input."
+  ],
+  "task_id": "finitexo_v0_8_0_ar_004",
+  "task_version": "0.8.0",
+  "title": "Stable Grouping with Tie-Breaking"
+}

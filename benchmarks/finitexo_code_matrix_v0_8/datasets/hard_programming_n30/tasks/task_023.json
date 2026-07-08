@@ -1,0 +1,43 @@
+{
+  "allowed_assumptions": [
+    "Values may be non-numeric types (causing TypeError).",
+    "divisor may be zero."
+  ],
+  "constraints": [
+    "Only catch ZeroDivisionError and TypeError.",
+    "Let all other exceptions propagate.",
+    "Do not change the return type or logic for handled exceptions."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "All exceptions should be caught.",
+    "Only ZeroDivisionError can occur."
+  ],
+  "expected_failure_modes": [
+    "Still catching Exception broadly.",
+    "Not letting unexpected exceptions propagate.",
+    "Changing behavior for ZeroDivisionError.",
+    "Changing behavior for TypeError."
+  ],
+  "family": "api_design_consistency",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Given a function:\n\ndef safe_divide_all(values: list, divisor: float) -> list:\n    results = []\n    for v in values:\n        try:\n            results.append(v / divisor)\n        except Exception:\n            results.append(None)\n    return results\n\nThe bare `except Exception` is too broad. Refactor to catch only the specific exceptions that can actually occur during division: ZeroDivisionError and TypeError.\nFor any other exception, let it propagate.\nFor ZeroDivisionError and TypeError, return None for that element and continue.\nDo NOT change the function's external behavior for ZeroDivisionError and TypeError cases.",
+  "provider_bias_check": "neutral",
+  "public_contract": "safe_divide_all(values, divisor) -> list (identical for ZeroDivisionError/TypeError; raises for others)",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Specific exception handling only.",
+    "Correct propagation of unexpected errors.",
+    "Identical behavior for handled cases."
+  ],
+  "task_id": "finitexo_v0_8_0_ad_005",
+  "task_version": "0.8.0",
+  "title": "Clarify Error Handling: Replace Bare Except"
+}

@@ -1,0 +1,45 @@
+{
+  "allowed_assumptions": [
+    "Join key values are hashable.",
+    "No self-referencing needed."
+  ],
+  "constraints": [
+    "Must use an index (dict) on the right list.",
+    "Must NOT use nested loops.",
+    "Output must preserve left record order."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "Every record has both keys.",
+    "Each left key matches at most one right key.",
+    "The right list is always small enough for nested loops."
+  ],
+  "expected_failure_modes": [
+    "Using O(n×m) nested loop approach.",
+    "Not handling missing join keys.",
+    "Not preserving left order.",
+    "Not including all right matches for a left record."
+  ],
+  "family": "performance_constraints",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Implement `join(left: list[dict], right: list[dict], left_key: str, right_key: str) -> list[dict]`.\n\nPerform an inner join on two lists of dicts.\nFor each record in `left`, find all matching records in `right` where `record[left_key] == right_record[right_key]`.\nReturn a list of merged dicts (all keys from left + all keys from right, prefixed with 'right_' to avoid collisions).\n\nConstraint: Must use a dict-based lookup index (not nested loops).\nComplexity must be O(n + m) average, not O(n × m).\n\nHandle: left or right being empty, records with missing join key (skip that record), multiple matches in right for a single left record (include all combinations).",
+  "provider_bias_check": "neutral",
+  "public_contract": "join(left, right, left_key, right_key) -> list[dict] with O(n+m) average complexity",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "O(n+m) time complexity.",
+    "Correct join logic.",
+    "Missing key handling.",
+    "Order preservation."
+  ],
+  "task_id": "finitexo_v0_8_0_pc_002",
+  "task_version": "0.8.0",
+  "title": "Use Indexing/Map-Based Lookup for Join"
+}

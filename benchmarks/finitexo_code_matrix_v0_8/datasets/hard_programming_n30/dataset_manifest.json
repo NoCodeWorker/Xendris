@@ -1,0 +1,225 @@
+{
+  "dataset_hash": "5554e273ecc30b4fd222763e68466b37f784e2a419e842fbaea48249360e2841",
+  "dataset_name": "finitexo_code_matrix_hard_programming_n30",
+  "dataset_version": "0.8.0",
+  "families": [
+    "algorithmic_reasoning",
+    "stateful_refactor",
+    "edge_case_handling",
+    "api_design_consistency",
+    "performance_constraints"
+  ],
+  "task_count": 30,
+  "tasks": [
+    {
+      "content_hash": "68201b9597111182887679b5a8b424ff21f6ea1f41963b8b0799e07ad374ae90",
+      "difficulty": "hard",
+      "family": "algorithmic_reasoning",
+      "task_id": "finitexo_v0_8_0_ar_001",
+      "title": "Interval Merging with Conflict Rules"
+    },
+    {
+      "content_hash": "e66ccaef7b847316d218285b1965e6a9f19c1766d8e3fcec64988e5614ad36f2",
+      "difficulty": "hard",
+      "family": "algorithmic_reasoning",
+      "task_id": "finitexo_v0_8_0_ar_002",
+      "title": "Dependency Ordering with Cycle Reporting"
+    },
+    {
+      "content_hash": "4c4fd8be79562387adf6706017c8782f6c5a2589f416ae9db240b71d1bdbbc59",
+      "difficulty": "hard",
+      "family": "algorithmic_reasoning",
+      "task_id": "finitexo_v0_8_0_ar_003",
+      "title": "Bounded Cache Eviction Logic"
+    },
+    {
+      "content_hash": "67dee5de9778599d55f6766a7c2a8cd3561eb846be8d197270d6c61ac0de4916",
+      "difficulty": "hard",
+      "family": "algorithmic_reasoning",
+      "task_id": "finitexo_v0_8_0_ar_004",
+      "title": "Stable Grouping with Tie-Breaking"
+    },
+    {
+      "content_hash": "563927fb6fde3e76f1bf592a5662dbf2f995f6a389fa5af2c7def80e7472efea",
+      "difficulty": "hard",
+      "family": "algorithmic_reasoning",
+      "task_id": "finitexo_v0_8_0_ar_005",
+      "title": "Parser-Like Transformation with Malformed Input"
+    },
+    {
+      "content_hash": "6f60ad6557552cd4f5ef4bf3b11ca28de18526a6805d63eee74e34ee3b655c18",
+      "difficulty": "hard",
+      "family": "algorithmic_reasoning",
+      "task_id": "finitexo_v0_8_0_ar_006",
+      "title": "Diff/Patch Planning with Invariants"
+    },
+    {
+      "content_hash": "62a741d1d88b96297ae3cb5e36c7cf39cca59a4cd37183f8892e20fc0396e82a",
+      "difficulty": "hard",
+      "family": "stateful_refactor",
+      "task_id": "finitexo_v0_8_0_sr_001",
+      "title": "Refactor State Transitions"
+    },
+    {
+      "content_hash": "da5ef26fcd167cb7ed7a32eec80205063fdcf703e370d98dfde1e1d59ab88e95",
+      "difficulty": "hard",
+      "family": "stateful_refactor",
+      "task_id": "finitexo_v0_8_0_sr_002",
+      "title": "Separate Validation from Mutation"
+    },
+    {
+      "content_hash": "c45a04159698e70c480b8df0320e53d3759e7b40dbf4d4d3301a627211df2136",
+      "difficulty": "hard",
+      "family": "stateful_refactor",
+      "task_id": "finitexo_v0_8_0_sr_003",
+      "title": "Preserve Backward-Compatible Config Loading"
+    },
+    {
+      "content_hash": "4c5c02e7e53c2ab1ddf0e5a454bb76627cf8440055c9200ae0b52399f7dd1160",
+      "difficulty": "hard",
+      "family": "stateful_refactor",
+      "task_id": "finitexo_v0_8_0_sr_004",
+      "title": "Fix Shared Mutable Default"
+    },
+    {
+      "content_hash": "bbb224a2200a7d60366d9ad049a56b5f9d25c5f3c139ce2674d3f8acf05937e9",
+      "difficulty": "hard",
+      "family": "stateful_refactor",
+      "task_id": "finitexo_v0_8_0_sr_005",
+      "title": "Make Retry State Explicit"
+    },
+    {
+      "content_hash": "def3658453f027fac7ca2f670d4a056a38e9cf8808ac66f0e9607b3720860559",
+      "difficulty": "hard",
+      "family": "stateful_refactor",
+      "task_id": "finitexo_v0_8_0_sr_006",
+      "title": "Avoid Global-State Leakage"
+    },
+    {
+      "content_hash": "2b887d7dff0d240322937c0d51b702b9073ba666da69ea8db3b7b00f16d39315",
+      "difficulty": "hard",
+      "family": "edge_case_handling",
+      "task_id": "finitexo_v0_8_0_ec_001",
+      "title": "Batch Processing with Empty and Null Inputs"
+    },
+    {
+      "content_hash": "23816a616701fdb8b44eef9495d3087a89fc53cd6067f9d3bddc387bd4b95b18",
+      "difficulty": "hard",
+      "family": "edge_case_handling",
+      "task_id": "finitexo_v0_8_0_ec_002",
+      "title": "Merge with Duplicate Keys and Resolver"
+    },
+    {
+      "content_hash": "06ae4141b62f42ada45161fc01727534124f0c9fbd94abde0330361778468880",
+      "difficulty": "hard",
+      "family": "edge_case_handling",
+      "task_id": "finitexo_v0_8_0_ec_003",
+      "title": "Case-Insensitive Processing with Casing Preservation"
+    },
+    {
+      "content_hash": "c1eed2d20b411092e8670b5756f0e9a9cd01e61fc5f363890e892bb1263af097",
+      "difficulty": "hard",
+      "family": "edge_case_handling",
+      "task_id": "finitexo_v0_8_0_ec_004",
+      "title": "Partial Malformed Record Parsing"
+    },
+    {
+      "content_hash": "4e02cc5bd8e3c064e595a170424758736e4922516214c0e08dbc97fda2ffc313",
+      "difficulty": "hard",
+      "family": "edge_case_handling",
+      "task_id": "finitexo_v0_8_0_ec_005",
+      "title": "Timezone-Like Ordering Without External Libraries"
+    },
+    {
+      "content_hash": "ab8300ffa666f0cc156e196b75e8c7d0ff1d50386af665355d6f91485b132eb5",
+      "difficulty": "hard",
+      "family": "edge_case_handling",
+      "task_id": "finitexo_v0_8_0_ec_006",
+      "title": "Stable Multi-Key Sort with Missing Fields"
+    },
+    {
+      "content_hash": "ffea4609c4a7df21fe2e3f6ceb0bd367d97c3022c230d063bd155c865898a4fd",
+      "difficulty": "hard",
+      "family": "api_design_consistency",
+      "task_id": "finitexo_v0_8_0_ad_001",
+      "title": "Add Optional Structured Result Without Breaking Callers"
+    },
+    {
+      "content_hash": "fad362e269563abcdaf2b0daffd14db977d6a819870447b5589e520160a81d14",
+      "difficulty": "hard",
+      "family": "api_design_consistency",
+      "task_id": "finitexo_v0_8_0_ad_002",
+      "title": "Preserve JSON Schema Shape in Transformation Pipeline"
+    },
+    {
+      "content_hash": "32066f848b76f98bfc1253d7cc54da04cb79608a3c794221e3ec9d91e1b895f3",
+      "difficulty": "hard",
+      "family": "api_design_consistency",
+      "task_id": "finitexo_v0_8_0_ad_003",
+      "title": "Avoid Changing Exported Names"
+    },
+    {
+      "content_hash": "373d9ca0b9a0f08d888978551c68431210fe30f7131ae41fe4bf6f79885f2bac",
+      "difficulty": "hard",
+      "family": "api_design_consistency",
+      "task_id": "finitexo_v0_8_0_ad_004",
+      "title": "Maintain Backward-Compatible Defaults When Adding Parameters"
+    },
+    {
+      "content_hash": "c3f52b8a1c0eb3f55f497bee8c686d21dba50414d9723bf40d62125de691f53d",
+      "difficulty": "hard",
+      "family": "api_design_consistency",
+      "task_id": "finitexo_v0_8_0_ad_005",
+      "title": "Clarify Error Handling: Replace Bare Except"
+    },
+    {
+      "content_hash": "1147ea4b4250008cbedcb9736a6492086aa6e937baf862d54cd209170e60a7a2",
+      "difficulty": "hard",
+      "family": "api_design_consistency",
+      "task_id": "finitexo_v0_8_0_ad_006",
+      "title": "Avoid Broad Exception Swallowing"
+    },
+    {
+      "content_hash": "465e1245aaa85c8984ddf21c74face00b9283d413c2d6e7c77da5124e888ebfc",
+      "difficulty": "hard",
+      "family": "performance_constraints",
+      "task_id": "finitexo_v0_8_0_pc_001",
+      "title": "Avoid O(n²) Duplicate Scanning"
+    },
+    {
+      "content_hash": "66ad8ce8bc0fa38cda1940c6898ef1769564b5ff7e58a7e9a749452d0fb04eb7",
+      "difficulty": "hard",
+      "family": "performance_constraints",
+      "task_id": "finitexo_v0_8_0_pc_002",
+      "title": "Use Indexing/Map-Based Lookup for Join"
+    },
+    {
+      "content_hash": "e8e0c313e5dd397f364cebd4914f435325c0e4edf247f52f0ee4c8ccfd4a5240",
+      "difficulty": "hard",
+      "family": "performance_constraints",
+      "task_id": "finitexo_v0_8_0_pc_003",
+      "title": "Avoid Repeated Serialization with Caching"
+    },
+    {
+      "content_hash": "984d75a0a6126057d9f2deb9062b884bd7a10e906905cc6ffa91b4b30ef8683a",
+      "difficulty": "hard",
+      "family": "performance_constraints",
+      "task_id": "finitexo_v0_8_0_pc_004",
+      "title": "Streaming-Friendly Aggregation"
+    },
+    {
+      "content_hash": "75b15c4779736a6c2641a3bb325b18a19dbe44c0a7581694734cd932a4886b90",
+      "difficulty": "hard",
+      "family": "performance_constraints",
+      "task_id": "finitexo_v0_8_0_pc_005",
+      "title": "Memory-Conscious Filtering with Index Awareness"
+    },
+    {
+      "content_hash": "caf47784b9c2cd9530a4832bca3cad99eee280e8d685d2b96e4c7b626326b5f7",
+      "difficulty": "hard",
+      "family": "performance_constraints",
+      "task_id": "finitexo_v0_8_0_pc_006",
+      "title": "Batch Normalization Without Unnecessary Loops"
+    }
+  ]
+}

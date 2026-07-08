@@ -1,0 +1,44 @@
+{
+  "allowed_assumptions": [
+    "sort_order is always a string when provided."
+  ],
+  "constraints": [
+    "Default parameter value must be 'asc'.",
+    "Behavior with default must be identical to original.",
+    "Raise ValueError for invalid sort_order values.",
+    "Add a docstring describing the parameter."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "Default sort_order will never be used.",
+    "sort_order is always valid."
+  ],
+  "expected_failure_modes": [
+    "Changing default behavior.",
+    "Not raising for invalid sort_order.",
+    "Not adding parameter documentation.",
+    "Adding parameter before existing optional parameters."
+  ],
+  "family": "api_design_consistency",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Given a function:\n\ndef fetch_items(page: int = 1, limit: int = 20) -> list:\n    start = (page - 1) * limit\n    end = start + limit\n    all_items = [f'item_{i}' for i in range(100)]\n    return all_items[start:end]\n\nAdd a new parameter `sort_order: str = 'asc'` that controls result ordering.\nThe default `'asc'` must produce identical behavior to the original function.\nDocument what values are valid for sort_order in a docstring.\nIf sort_order is not 'asc' or 'desc', raise ValueError.",
+  "provider_bias_check": "neutral",
+  "public_contract": "fetch_items(page=1, limit=20, sort_order='asc') -> list (backward-compatible default)",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Behavioral equivalence with default.",
+    "Correct error handling for invalid sort_order.",
+    "Documentation present.",
+    "Parameter position (after existing optional params)."
+  ],
+  "task_id": "finitexo_v0_8_0_ad_004",
+  "task_version": "0.8.0",
+  "title": "Maintain Backward-Compatible Defaults When Adding Parameters"
+}

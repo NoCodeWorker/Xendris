@@ -1,0 +1,44 @@
+{
+  "allowed_assumptions": [
+    "Tasks are strings.",
+    "Thread safety is not required."
+  ],
+  "constraints": [
+    "Constructor signature must remain `__init__(self, tasks: list = [])`.",
+    "Existing callers that pass a list explicitly must not notice any change.",
+    "Instances created without arguments must have independent lists."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "No one passes an explicit list.",
+    "The default is never used."
+  ],
+  "expected_failure_modes": [
+    "Changing constructor signature.",
+    "Breaking explicit list passing.",
+    "Still sharing state after fix.",
+    "Using a sentinel incorrectly."
+  ],
+  "family": "stateful_refactor",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Given a class with a mutable default argument:\n\nclass TaskTracker:\n    def __init__(self, tasks: list = []):\n        self.tasks = tasks\n\n    def add_task(self, task: str) -> None:\n        self.tasks.append(task)\n\n    def list_tasks(self) -> list:\n        return self.tasks\n\nThe mutable default causes unexpected sharing between instances.\nFix it so each instance has its own list.\nDo not change the external behavior of any public method.\nDo not change the constructor signature.\nExisting callers that pass an explicit list must still work.",
+  "provider_bias_check": "neutral",
+  "public_contract": "All public methods behave identically except shared default is fixed.",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Correct fix for mutable default.",
+    "Backward compatibility of constructor.",
+    "Independence of instances.",
+    "No behavioral change for explicit list callers."
+  ],
+  "task_id": "finitexo_v0_8_0_sr_004",
+  "task_version": "0.8.0",
+  "title": "Fix Shared Mutable Default"
+}

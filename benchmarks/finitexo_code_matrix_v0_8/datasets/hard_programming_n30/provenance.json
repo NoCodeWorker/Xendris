@@ -1,0 +1,17 @@
+{
+  "dataset": "finitexo_code_matrix_hard_programming_n30",
+  "dataset_hash": "5554e273ecc30b4fd222763e68466b37f784e2a419e842fbaea48249360e2841",
+  "description": "Hard programming dataset n=30 for reduced ceiling effects. Not a trap dataset. Not Xendris-favoring. Not a superiority benchmark.",
+  "family_counts": {
+    "algorithmic_reasoning": 6,
+    "api_design_consistency": 6,
+    "edge_case_handling": 6,
+    "performance_constraints": 6,
+    "stateful_refactor": 6
+  },
+  "generated_at": "2026-07-08T12:24:08.570674+00:00",
+  "generation_script": "generate_hard_programming_n30.py",
+  "manifest_hash": "3cfa4e904c0cf5918da4483c1e656fd8cf9b8e231bc5487b45e86eabb2ff1c54",
+  "total_tasks": 30,
+  "version": "0.8.0"
+}

@@ -1,0 +1,43 @@
+{
+  "allowed_assumptions": [
+    "No external code relies on _internal_helper being present."
+  ],
+  "constraints": [
+    "Do not rename or remove process or cleanup.",
+    "Do not change their signatures.",
+    "Do not add new public names.",
+    "Behavior must be identical for all inputs."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "New public functions can be added.",
+    "Function signatures can be modified."
+  ],
+  "expected_failure_modes": [
+    "Renaming existing public functions.",
+    "Adding new public names.",
+    "Changing function behavior.",
+    "Removing existing public functions from __init__.py exports."
+  ],
+  "family": "api_design_consistency",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Given a module:\n\n# utils.py\ndef _internal_helper(x):\n    return x * 2\n\ndef process(data: list) -> list:\n    return [_internal_helper(d) for d in data]\n\ndef cleanup(data: list) -> list:\n    return [d for d in data if d is not None]\n\n# __init__.py exports: process, cleanup\n\nRefactor the internal implementation: replace `_internal_helper` with a more efficient approach using a comprehension with inline logic.\nYou MUST keep the `process` and `cleanup` function signatures and behavior identical.\nDo not add any new public names to the module.",
+  "provider_bias_check": "neutral",
+  "public_contract": "The module exports exactly process and cleanup with unchanged signatures.",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Public API unchanged.",
+    "No new public names.",
+    "Behavioral equivalence."
+  ],
+  "task_id": "finitexo_v0_8_0_ad_003",
+  "task_version": "0.8.0",
+  "title": "Avoid Changing Exported Names"
+}

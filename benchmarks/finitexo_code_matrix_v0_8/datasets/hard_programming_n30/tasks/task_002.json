@@ -1,0 +1,46 @@
+{
+  "allowed_assumptions": [
+    "Task IDs are unique strings.",
+    "depends_on may be None."
+  ],
+  "constraints": [
+    "Return a single cycle, not all cycles.",
+    "Cycle list should show the cyclic path start to finish.",
+    "Tasks with missing dependencies should be listed in order but placed after available tasks."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "No cycles.",
+    "All dependencies exist.",
+    "Only one connected component."
+  ],
+  "expected_failure_modes": [
+    "Not detecting cycles correctly.",
+    "Reporting order even when a cycle exists.",
+    "Not handling missing dependencies.",
+    "Stack overflow on large inputs."
+  ],
+  "family": "algorithmic_reasoning",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Implement `resolve_dependencies(tasks)` that accepts a list of task dicts.\nEach task has `{'id': str, 'depends_on': list[str]}`.\n\nReturn a dict with:\n- `'order': list[str]` — a valid topological order of task IDs (if acyclic).\n- `'cycle': list[str] | None` — if a cycle is detected, return one cycle as a list of task IDs forming the cycle, and set `'order'` to an empty list.\n\nHandle: tasks with no dependencies, multiple disconnected components, tasks that depend on non-existent IDs (treat as missing dependency, skip that task), empty task list, None dependencies (treat as empty list).",
+  "provider_bias_check": "neutral",
+  "public_contract": "resolve_dependencies(tasks: list[dict]) -> dict",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Correct topological order for acyclic graphs.",
+    "Correct cycle detection.",
+    "Handling missing dependencies.",
+    "Multiple disconnected components.",
+    "Edge cases: empty, single task, self-dependency."
+  ],
+  "task_id": "finitexo_v0_8_0_ar_002",
+  "task_version": "0.8.0",
+  "title": "Dependency Ordering with Cycle Reporting"
+}

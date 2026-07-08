@@ -1,0 +1,45 @@
+{
+  "allowed_assumptions": [
+    "Dict values are JSON-serializable.",
+    "Keys are strings without dots."
+  ],
+  "constraints": [
+    "Do not modify input dicts.",
+    "Paths should be dot-separated: 'key.subkey.leaf'.",
+    "Invariant violations take priority: if a path is invariant, report violation even if value matches."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "No nesting.",
+    "All keys are in both dicts.",
+    "No invariants to check."
+  ],
+  "expected_failure_modes": [
+    "Reporting intermediate container nodes as changes.",
+    "Not detecting nested invariant violations.",
+    "Missing keys where value is None vs absent.",
+    "Incorrect path formatting."
+  ],
+  "family": "algorithmic_reasoning",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Implement `compute_diff(a: dict, b: dict, invariants: list[str]) -> dict`.\n\nGiven two nested dicts `a` and `b`, compute a minimal diff that transforms `a` into `b`.\nReturn a dict with:\n- `'changes'`: list of change objects, each with `{'path': str, 'type': 'add'|'remove'|'modify', 'old_value': ..., 'new_value': ...}`\n- `'invariant_violations'`: list of paths where a change was attempted but the key is in `invariants`\n- `'is_compatible'`: bool — True if no invariant violations\n\nRules:\n- Changes should be recursive: nested dict changes are at their full dotted path.\n- Only report leaf changes (not intermediate nodes that are containers).\n- If a key is in `invariants`, any change to it or its descendants is a violation.\n- Handle: keys present in `a` but not `b` (removal), keys in `b` but not `a` (addition), keys in both with different values (modification), nested dicts that are structurally identical, empty dicts.",
+  "provider_bias_check": "neutral",
+  "public_contract": "compute_diff(a: dict, b: dict, invariants: list[str]) -> dict",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Correct recursive diff.",
+    "Invariant enforcement.",
+    "Correct change types (add/remove/modify).",
+    "Path correctness."
+  ],
+  "task_id": "finitexo_v0_8_0_ar_006",
+  "task_version": "0.8.0",
+  "title": "Diff/Patch Planning with Invariants"
+}

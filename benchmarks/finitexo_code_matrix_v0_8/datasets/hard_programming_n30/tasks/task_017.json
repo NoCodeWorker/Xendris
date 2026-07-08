@@ -1,0 +1,45 @@
+{
+  "allowed_assumptions": [
+    "Timestamp format is ISO 8601-like.",
+    "Offsets are in whole hours."
+  ],
+  "constraints": [
+    "Do not import datetime, dateutil, pytz, or similar.",
+    "Must be stable sort.",
+    "Invalid strings must not cause exceptions."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "All timestamps are valid.",
+    "No timezone offsets.",
+    "No None values."
+  ],
+  "expected_failure_modes": [
+    "Using banned libraries.",
+    "Incorrect offset conversion to UTC.",
+    "Exception on invalid timestamp.",
+    "Not stable for equal UTC times."
+  ],
+  "family": "edge_case_handling",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Implement `sort_timestamps(timestamps: list[str]) -> list[str]`.\n\nEach timestamp is a string like: `'2024-01-15T10:30:00+05:00'` or `'2024-01-15T10:30:00Z'`.\nSort chronologically. Do not use datetime libraries (no datetime, dateutil, pytz).\n\nRules:\n- `Z` means UTC (+00:00).\n- Timestamps without offset are assumed UTC.\n- Offsets range from -12:00 to +14:00.\n- Invalid timestamp strings: sort to the end, in their original relative order.\n- Duplicate timestamps with different offsets: order by their actual UTC equivalent, and for equal UTC times, preserve input order (stable).\n- Handle: empty list, None in list (sort None to end), timestamps with different precision (some with seconds, some without).",
+  "provider_bias_check": "neutral",
+  "public_contract": "sort_timestamps(timestamps: list[str | None]) -> list[str | None]",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Correct chronological order.",
+    "Offset to UTC conversion.",
+    "Stable sort property.",
+    "Handling invalid and None inputs."
+  ],
+  "task_id": "finitexo_v0_8_0_ec_005",
+  "task_version": "0.8.0",
+  "title": "Timezone-Like Ordering Without External Libraries"
+}

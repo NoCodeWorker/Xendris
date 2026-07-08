@@ -1,0 +1,44 @@
+{
+  "allowed_assumptions": [
+    "Values are floats or None.",
+    "add is called sequentially."
+  ],
+  "constraints": [
+    "Do not store all values; only maintain running aggregates.",
+    "Must handle empty state correctly."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "At least one value is added before current() is called.",
+    "All values are positive.",
+    "Memory can store all values."
+  ],
+  "expected_failure_modes": [
+    "Storing all values instead of running aggregates.",
+    "Incorrect running mean (not updating correctly).",
+    "Returning 0.0 or None for min/max when empty (wrong).",
+    "Counting None as a value."
+  ],
+  "family": "performance_constraints",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Implement a class `StreamingAggregator`:\n- `__init__(self)` — initializes counters to zero.\n- `add(self, value: float) -> None` — add a single value to the aggregate.\n- `current(self) -> dict` — return `{'count': int, 'sum': float, 'mean': float, 'min': float | None, 'max': float | None}` based on all values seen so far.\n\nThe aggregator must process values one at a time without storing the entire dataset.\nIt should compute running statistics in O(1) memory per operation.\n\nHandle:\n- No values added yet: count=0, sum=0.0, mean=0.0, min=None, max=None.\n- Single value: min and max equal the value.\n- Negative values.\n- Adding None (skip it, do not count).",
+  "provider_bias_check": "neutral",
+  "public_contract": "StreamingAggregator.add(value) -> None; .current() -> dict (O(1) memory)",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "O(1) memory usage.",
+    "Correct running statistics.",
+    "Empty state handling.",
+    "None value handling."
+  ],
+  "task_id": "finitexo_v0_8_0_pc_004",
+  "task_version": "0.8.0",
+  "title": "Streaming-Friendly Aggregation"
+}

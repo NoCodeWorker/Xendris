@@ -1,0 +1,44 @@
+{
+  "allowed_assumptions": [
+    "fn is a callable with no arguments.",
+    "Exceptions are subclasses of Exception."
+  ],
+  "constraints": [
+    "Do not change the `run` method signature (task_id, fn).",
+    "Do not use module-level or class-level mutable state.",
+    "Retry behavior (3 attempts, return first success, re-raise on final failure) must be preserved."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "Retry state does not matter.",
+    "run is called sequentially per task_id."
+  ],
+  "expected_failure_modes": [
+    "Changing retry count.",
+    "Still using global state.",
+    "Changing error behavior (e.g., returning None instead of raising).",
+    "Changing the run method signature."
+  ],
+  "family": "stateful_refactor",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Given a retry utility:\n\nclass RetryHandler:\n    _attempts: dict = {}\n\n    @classmethod\n    def run(cls, task_id: str, fn: callable) -> object:\n        if task_id not in cls._attempts:\n            cls._attempts[task_id] = 0\n        cls._attempts[task_id] += 1\n        try:\n            return fn()\n        except Exception:\n            if cls._attempts[task_id] < 3:\n                return cls.run(task_id, fn)\n            raise\n\nRefactor to make retry state explicit:\n- Remove the class-level `_attempts` dict.\n- Pass retry state as a parameter or use instance-level state.\n- The refactored version must preserve the retry behavior: max 3 attempts per task_id, return first success, re-raise after 3 failures.",
+  "provider_bias_check": "neutral",
+  "public_contract": "RetryHandler.run(task_id, fn) -> object with identical retry behavior.",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Elimination of implicit global state.",
+    "Behavioral equivalence of retry logic.",
+    "Preserved error behavior.",
+    "Clean separation of state."
+  ],
+  "task_id": "finitexo_v0_8_0_sr_005",
+  "task_version": "0.8.0",
+  "title": "Make Retry State Explicit"
+}

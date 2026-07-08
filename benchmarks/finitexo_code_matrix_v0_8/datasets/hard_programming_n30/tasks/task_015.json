@@ -1,0 +1,45 @@
+{
+  "allowed_assumptions": [
+    "lower() is acceptable for comparison.",
+    "Mixed Unicode and ASCII is possible."
+  ],
+  "constraints": [
+    "Do not modify the input list.",
+    "Preserve original order of first occurrences.",
+    "None values are distinct from string 'None'."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "All strings are ASCII.",
+    "No None values.",
+    "No empty strings."
+  ],
+  "expected_failure_modes": [
+    "Not preserving original casing.",
+    "Incorrect handling of None values.",
+    "Not maintaining order.",
+    "Case-insensitive comparison not working for edge Unicode cases."
+  ],
+  "family": "edge_case_handling",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Implement `dedup_preserve_case(items: list[str]) -> list[str]`.\n\nRemove duplicates from a list of strings, comparing case-insensitively.\nPreserve the original casing of the first occurrence.\n\nExample:\nInput: ['Foo', 'bar', 'FOO', 'Bar', 'baz']\nOutput: ['Foo', 'bar', 'baz']\n\nRules:\n- Comparison must be case-insensitive but Unicode-aware (lower() is acceptable).\n- Preserve the casing of the first occurrence.\n- Maintain original order of first occurrences.\n- Handle: empty list, None in list (treat None as a distinct value, compared by identity), empty strings, strings with only different case.",
+  "provider_bias_check": "neutral",
+  "public_contract": "dedup_preserve_case(items: list[str | None]) -> list[str | None]",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "Correct case-insensitive dedup.",
+    "Casing preservation.",
+    "Order preservation.",
+    "None and empty string handling."
+  ],
+  "task_id": "finitexo_v0_8_0_ec_003",
+  "task_version": "0.8.0",
+  "title": "Case-Insensitive Processing with Casing Preservation"
+}

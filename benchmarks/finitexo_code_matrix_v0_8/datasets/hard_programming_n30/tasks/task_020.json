@@ -1,0 +1,43 @@
+{
+  "allowed_assumptions": [
+    "record is always a dict.",
+    "record['id'] exists for valid calls."
+  ],
+  "constraints": [
+    "All existing output keys must be present with the same names.",
+    "All existing output key types must remain the same.",
+    "New field must be a string."
+  ],
+  "difficulty": "hard",
+  "disallowed_assumptions": [
+    "The output schema can change.",
+    "Existing fields can be modified."
+  ],
+  "expected_failure_modes": [
+    "Removing or renaming an existing field.",
+    "Changing an existing field's type.",
+    "Not adding the new field.",
+    "Changing error behavior for missing id."
+  ],
+  "family": "api_design_consistency",
+  "prohibited_claims": [
+    "Model superiority — not authorized by this task.",
+    "Production readiness — not evaluated here.",
+    "External benchmark validity — not measured.",
+    "Provider ranking — diagnostic-only.",
+    "Wrapper improvement without paired comparison — not measured."
+  ],
+  "prompt": "Given a transformation pipeline:\n\ndef transform(record: dict) -> dict:\n    return {\n        'id': record['id'],\n        'type': record.get('type', 'unknown'),\n        'value': record['value'] * 2 if 'value' in record else None,\n        'tags': record.get('tags', []),\n    }\n\nModify this function to also compute a `'summary'` field: a string combining id, type, and value info.\nYou must NOT remove, rename, or change the type of any existing field.\nThe new `'summary'` field must be a string. Add it to the returned dict.\nIf `'id'` is missing, raise KeyError (preserve original error behavior).",
+  "provider_bias_check": "neutral",
+  "public_contract": "transform(record: dict) -> dict with all original keys plus 'summary'",
+  "requires_code_execution": false,
+  "requires_external_access": false,
+  "scoring_focus": [
+    "All original keys present and unchanged.",
+    "New field correctly added.",
+    "Error behavior preserved."
+  ],
+  "task_id": "finitexo_v0_8_0_ad_002",
+  "task_version": "0.8.0",
+  "title": "Preserve JSON Schema Shape in Transformation Pipeline"
+}
