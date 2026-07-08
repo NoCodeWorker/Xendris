@@ -611,6 +611,65 @@ def test_blocked_preflight_writes_gate_with_preflight_payload(tmp_path):
 
 
 # ---------------------------------------------------------------------------
+# Provider Call Order Guard
+# ---------------------------------------------------------------------------
+
+def test_provider_call_order_guard(tmp_path, monkeypatch):
+    import benchmarks.finitexo_code_matrix_v0_10.cost_frontier_model_step.cost_frontier_runner as _cf_runner
+
+    def _fail(*args, **kwargs):
+        raise AssertionError("Provider was called before authorized preflight gate")
+
+    monkeypatch.setattr(_cf_runner, "direct_provider_adapter", _fail)
+
+    dataset = _make_dataset(tmp_path)
+    out = tmp_path / "out_order_guard"
+    cfg = CostFrontierConfig(
+        dataset_path=dataset,
+        output_dir=out,
+        expected_dataset_hash=_file_hash(dataset / "dataset_hashes.json"),
+        expected_manifest_hash=_file_hash(dataset / "dataset_manifest.json"),
+        expected_attempts=180,
+        expected_task_count=30,
+        allow_overwrite=True,
+        environ={"DEEPSEEK_API_KEY": "present", "OPENAI_API_KEY": "present"},
+    )
+
+    result = run_cost_frontier(cfg)
+
+    assert result["final_decision"] == COST_FRONTIER_DECISIONS["BLOCKED"]
+
+    assert (out / "preflight.json").exists()
+    assert (out / "gate.json").exists()
+    assert (out / "summary.json").exists()
+    assert (out / "report.md").exists()
+
+    summary = json.loads((out / "summary.json").read_text(encoding="utf-8"))
+    assert summary["final_decision"] == COST_FRONTIER_DECISIONS["BLOCKED"]
+    assert summary["total_attempted"] == 0
+    assert summary["providers_called"] is False
+    assert summary.get("blocked_reason") == "preflight"
+
+    gate = json.loads((out / "gate.json").read_text(encoding="utf-8"))
+    assert gate["final_decision"] == COST_FRONTIER_DECISIONS["BLOCKED"]
+    assert "preflight" in gate
+    assert gate["preflight"]["can_execute"] is False
+
+    assert not (out / "responses.jsonl").exists()
+    assert not (out / "scores.jsonl").exists()
+    assert not (out / "runtime_traces.jsonl").exists()
+    assert not (out / "calibration_traces.jsonl").exists()
+    assert not (out / "cost_frontier.json").exists()
+    assert not (out / "costs.json").exists()
+
+    assert result.get("summary", {}).get("providers_called") is False
+    assert len(result.get("records", [])) == 0
+    assert len(result.get("scored", [])) == 0
+    assert len(result.get("traces", [])) == 0
+    assert len(result.get("calibration_traces", [])) == 0
+
+
+# ---------------------------------------------------------------------------
 # No provider calls in tests
 # ---------------------------------------------------------------------------
 
