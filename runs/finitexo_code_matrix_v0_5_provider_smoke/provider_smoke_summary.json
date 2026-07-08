@@ -1,0 +1,35 @@
+{
+  "budget_cap_usd": 0.5,
+  "budget_decision": "WITHIN_BUDGET",
+  "dataset_hash": "a48e5da1ff9d480efea20965eea12af5b1bff2e996470ba18e6eb01fb7b3d3a4",
+  "dataset_version": "v0.4.3",
+  "failure_count_by_provider": {},
+  "final_decision": "PROVIDER_SMOKE_DRY_RUN_COMPLETED_NO_REAL_PROVIDER_CLAIM",
+  "frozen_task_count": 10,
+  "manifest_hash": "6c1a0873bafbb23b7145b81d26c426cd70c3ab2025b1c3250cba9f11efa7152e",
+  "mean_smoke_score_by_provider": {
+    "mock_provider": 1.0
+  },
+  "provider_mode": "mock",
+  "provider_superiority_claim_authorized": false,
+  "providers_attempted": [
+    "mock_provider"
+  ],
+  "providers_completed": [
+    "mock_provider"
+  ],
+  "providers_failed": [],
+  "run_id": "finitexo_v0_5_mock_smoke",
+  "scoring_limitations": [
+    "Smoke diagnostics only.",
+    "No hidden tests executed by this scorer.",
+    "No statistical claim authorized.",
+    "No provider superiority claim authorized."
+  ],
+  "statistical_claim_authorized": false,
+  "task_attempts_completed": 10,
+  "task_attempts_failed": 0,
+  "task_attempts_total": 10,
+  "total_estimated_cost_usd": 0.0001,
+  "xendris_superiority_claim_authorized": false
+}
