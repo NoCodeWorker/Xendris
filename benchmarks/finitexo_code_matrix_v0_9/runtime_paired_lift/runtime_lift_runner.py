@@ -663,6 +663,72 @@ def _run_language_selection(response_text: str, claims: dict[str, str]) -> tuple
     return allowed, blocked
 
 
+def _calibrated_claim_classification(
+    response_text: str,
+    calibration_prompt: str,
+) -> dict[str, str]:
+    claims: dict[str, str] = {}
+    for line in response_text.split("."):
+        lower = line.strip().lower()
+        if not lower:
+            continue
+        if "claim" in lower or "assert" in lower:
+            key = line.strip()[:60]
+            claims[key] = "diagnostic_signal_only"
+    return claims or {"diagnostic_stub": "diagnostic_signal_only"}
+
+
+def _calibrated_evidence_resolution(
+    response_text: str,
+    calibration_prompt: str,
+) -> dict[str, str]:
+    evidence: dict[str, str] = {}
+    for line in response_text.split("."):
+        lower = line.strip().lower()
+        if not lower:
+            continue
+        if "evidence" in lower or "example" in lower or "source" in lower:
+            key = line.strip()[:60]
+            evidence[key] = "diagnostic_signal_only"
+    return evidence or {"diagnostic_stub": "diagnostic_signal_only"}
+
+
+def _calibrated_confidence_banding(response_text: str) -> str:
+    if not response_text.strip():
+        return "uncertain"
+    length = len(response_text.split())
+    if length > 100:
+        return "moderate"
+    elif length > 30:
+        return "high"
+    return "low"
+
+
+def _calibrated_language_selection(
+    response_text: str,
+) -> tuple[list[str], list[str]]:
+    blocked: list[str] = []
+    for b in ["sk-", "secret", "api_key", "password", "token"]:
+        if b in response_text.lower():
+            blocked.append(b)
+    safe_lines = [
+        l for l in response_text.split("\n")
+        if not any(b in l.lower() for b in ["sk-", "secret", "api_key"])
+    ]
+    allowed = safe_lines if safe_lines else [response_text]
+    return allowed, blocked
+
+
+def _perform_calibration_pass(
+    response_text: str,
+    claims: dict[str, str],
+    evidence: dict[str, str],
+    confidence_band: str,
+    allowed_lang: list[str],
+) -> str:
+    return _produce_calibrated_final(response_text, claims, evidence, confidence_band, allowed_lang, [])
+
+
 def _produce_calibrated_final(
     response_text: str,
     claims: dict[str, str],
