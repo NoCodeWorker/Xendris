@@ -1,0 +1,24 @@
+{
+  "allowed_files": [
+    "dedupe.py"
+  ],
+  "base_content_hash": "faaa338c18dd26e527ea9e6384b8bf6d4147430655e26ef695f0add179e50381",
+  "base_task_id": "fcm_v0_4_3_frozen_task_008",
+  "base_task_version": "0.4.3",
+  "content_hash": "6d73a931c5aac4dcfbf48966612ad0f3e65826c41fe94901b259c39cbb5cd680",
+  "expected_behavior": "Deduplicate local values while preserving first occurrence order and documented limitations.",
+  "forbidden_files": [
+    "tests/test_dedupe.py"
+  ],
+  "hidden_tests_description": "Checks unhashable values, stable order, empty input, and no input mutation.",
+  "network_required": false,
+  "prompt": "Fix dedupe_stable so duplicate hashable values are removed while first occurrence order is preserved.",
+  "secrets_required": false,
+  "source_origin": "CONTROLLED_RUN_N30_GENERATED",
+  "task_id": "cr_n30_task_023",
+  "task_version": "0.6.0",
+  "track_id": "fcm_v0_4_3_frozen_task_008_B",
+  "validation_oracle": "visible_and_hidden_unit_tests_with_api_contract_check",
+  "variant_label": "B",
+  "visible_tests_description": "dedupe_stable([1,1,2]) returns [1,2]."
+}

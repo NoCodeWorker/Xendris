@@ -1,0 +1,9 @@
+{
+  "base_dataset_hash": "a48e5da1ff9d480efea20965eea12af5b1bff2e996470ba18e6eb01fb7b3d3a4",
+  "base_manifest_hash": "6c1a0873bafbb23b7145b81d26c426cd70c3ab2025b1c3250cba9f11efa7152e",
+  "dataset_hash": "04758231d91333a3785693b05587740f27fa7b05a2d3e77c42a73fbd3184f010",
+  "dataset_name": "Finitexo Code Matrix Controlled Run n=30",
+  "dataset_version": "0.6.0",
+  "frozen_task_count": 30,
+  "manifest_hash": "073d3982c2fe79fdf59822e6c75585d61f6274b684396d67dfcaa94b159b8519"
+}

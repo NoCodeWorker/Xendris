@@ -1,0 +1,24 @@
+{
+  "allowed_files": [
+    "resolver.py"
+  ],
+  "base_content_hash": "8d64e5a97d8f4a4efc6981d6a9a33a388784380700a494f0bc5ee1a310a1cec1",
+  "base_task_id": "fcm_v0_4_3_frozen_task_005",
+  "base_task_version": "0.4.3",
+  "content_hash": "60c1c3b54ea3b77b529d9bdf03f3f34326a6650131b3be10358d13780864eaf9",
+  "expected_behavior": "Resolve a bounded public documentation edge case with documented limitations.",
+  "forbidden_files": [
+    "tests/test_resolver.py"
+  ],
+  "hidden_tests_description": "Checks missing keys, fallback values, and type preservation.",
+  "network_required": false,
+  "prompt": "Fix resolve_option so missing keys use the documented fallback without mutating input mappings.",
+  "secrets_required": false,
+  "source_origin": "CONTROLLED_RUN_N30_GENERATED",
+  "task_id": "cr_n30_task_013",
+  "task_version": "0.6.0",
+  "track_id": "fcm_v0_4_3_frozen_task_005_A",
+  "validation_oracle": "visible_and_hidden_unit_tests_with_api_contract_check",
+  "variant_label": "A",
+  "visible_tests_description": "resolve_option({}, 'theme', 'light') returns 'light'."
+}

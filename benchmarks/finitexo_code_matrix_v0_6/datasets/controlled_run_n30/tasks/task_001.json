@@ -1,0 +1,25 @@
+{
+  "allowed_files": [
+    "helper.py"
+  ],
+  "base_content_hash": "3b2f575d353b0818c223ac60daa0b6813b7c1b3e8105b9fb9e10c16f33fa05c1",
+  "base_task_id": "fcm_v0_4_3_frozen_task_001",
+  "base_task_version": "0.4.3",
+  "content_hash": "b63a36c3f4d7ceefce5ba5e58c6e248cf260d5e131749d9b2ddb8bb7203ed344",
+  "expected_behavior": "Normalize a documented string edge case into a local helper contract while preserving the public API.",
+  "forbidden_files": [
+    "tests/test_helper.py",
+    "README.md"
+  ],
+  "hidden_tests_description": "Checks empty strings, whitespace-only values, repeated normalized inputs, and preservation of the public helper contract.",
+  "network_required": false,
+  "prompt": "Fix helper so it normalizes documented string inputs without changing the public function signature.",
+  "secrets_required": false,
+  "source_origin": "CONTROLLED_RUN_N30_GENERATED",
+  "task_id": "cr_n30_task_001",
+  "task_version": "0.6.0",
+  "track_id": "fcm_v0_4_3_frozen_task_001_A",
+  "validation_oracle": "visible_and_hidden_unit_tests_with_api_contract_check",
+  "variant_label": "A",
+  "visible_tests_description": "helper('example') returns 'example' and preserves the helper(value: str) API contract."
+}

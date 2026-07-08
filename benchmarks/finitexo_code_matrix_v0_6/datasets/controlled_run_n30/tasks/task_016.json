@@ -1,0 +1,24 @@
+{
+  "allowed_files": [
+    "parser.py"
+  ],
+  "base_content_hash": "b2253ef0fde6bd11f854143153e043387811278bbdfcaa7d07bf7ff9d6dd2fb5",
+  "base_task_id": "fcm_v0_4_3_frozen_task_006",
+  "base_task_version": "0.4.3",
+  "content_hash": "9aff17cfda54080698c8099dd1af9df7feaa4565c883b724915b69a83b1d24a2",
+  "expected_behavior": "Parse a documented local value format without changing the public parser API.",
+  "forbidden_files": [
+    "tests/test_parser.py"
+  ],
+  "hidden_tests_description": "Checks blank strings, separators, malformed values, and return type stability.",
+  "network_required": false,
+  "prompt": "Fix parse_pair so 'a=b' returns ('a', 'b') and malformed strings return None.",
+  "secrets_required": false,
+  "source_origin": "CONTROLLED_RUN_N30_GENERATED",
+  "task_id": "cr_n30_task_016",
+  "task_version": "0.6.0",
+  "track_id": "fcm_v0_4_3_frozen_task_006_A",
+  "validation_oracle": "visible_and_hidden_unit_tests_with_api_contract_check",
+  "variant_label": "A",
+  "visible_tests_description": "parse_pair('a=b') returns ('a', 'b')."
+}

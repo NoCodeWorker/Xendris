@@ -1,0 +1,24 @@
+{
+  "allowed_files": [
+    "coerce.py"
+  ],
+  "base_content_hash": "fa77fe58489a9003494161e07212131d77751ca2b29dd92128f1ae5cf28843a1",
+  "base_task_id": "fcm_v0_4_3_frozen_task_004",
+  "base_task_version": "0.4.3",
+  "content_hash": "80ca4962060c70516fdb15193cfc68357b2f079bd1a5644307a623f0c2f6f504",
+  "expected_behavior": "Coerce a public issue shape into a deterministic local API normalization task.",
+  "forbidden_files": [
+    "tests/test_coerce.py"
+  ],
+  "hidden_tests_description": "Checks scalar, list, tuple, and None input handling.",
+  "network_required": false,
+  "prompt": "Fix coerce_list so scalar inputs become one-item lists and list inputs remain unchanged.",
+  "secrets_required": false,
+  "source_origin": "CONTROLLED_RUN_N30_GENERATED",
+  "task_id": "cr_n30_task_012",
+  "task_version": "0.6.0",
+  "track_id": "fcm_v0_4_3_frozen_task_004_C",
+  "validation_oracle": "visible_and_hidden_unit_tests_with_api_contract_check",
+  "variant_label": "C",
+  "visible_tests_description": "coerce_list(3) returns [3]."
+}

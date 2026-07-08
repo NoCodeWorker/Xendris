@@ -1,0 +1,29 @@
+{
+  "authorized_claims": [
+    "Diagnostic controlled-run n=30 generated deterministically from v0.4.3 frozen tasks.",
+    "No model superiority claim authorized.",
+    "No provider ranking claim authorized.",
+    "No external benchmark validation claim authorized."
+  ],
+  "base_dataset": "benchmarks\\finitexo_code_matrix_v0_4_3",
+  "base_dataset_hash": "a48e5da1ff9d480efea20965eea12af5b1bff2e996470ba18e6eb01fb7b3d3a4",
+  "blocked_claims": [
+    "model superiority demonstrated",
+    "provider ranking established",
+    "external benchmark performance validated",
+    "statistical significance established",
+    "production-readiness proven"
+  ],
+  "dataset_hash": "04758231d91333a3785693b05587740f27fa7b05a2d3e77c42a73fbd3184f010",
+  "generated_at": "2026-07-08T00:00:00Z",
+  "generator": "benchmarks/finitexo_code_matrix_v0_6/datasets/controlled_run_n30/generate_dataset.py",
+  "manifest_hash": "073d3982c2fe79fdf59822e6c75585d61f6274b684396d67dfcaa94b159b8519",
+  "method": "Each of the 10 v0.4.3 frozen tasks replicated 3 times (A, B, C variants)",
+  "reproducibility": "Run generate_dataset.py again with same base to reproduce identical hashes.",
+  "task_count": 30,
+  "variant_labels": [
+    "A",
+    "B",
+    "C"
+  ]
+}

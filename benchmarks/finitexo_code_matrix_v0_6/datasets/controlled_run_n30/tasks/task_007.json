@@ -1,0 +1,24 @@
+{
+  "allowed_files": [
+    "formatter.py"
+  ],
+  "base_content_hash": "5b1071f5c0b0e084f4412add450f8af942ecf3121db5569f63e6ddefd43f9435",
+  "base_task_id": "fcm_v0_4_3_frozen_task_003",
+  "base_task_version": "0.4.3",
+  "content_hash": "c0f039839ae36db007af8b8f4a01458ff05329db0fa8042f01500454479f1d93",
+  "expected_behavior": "Apply a small public-documentation behavior to a local formatter helper while preserving the public contract.",
+  "forbidden_files": [
+    "tests/test_formatter.py"
+  ],
+  "hidden_tests_description": "Checks whitespace, idempotence, and contract preservation.",
+  "network_required": false,
+  "prompt": "Fix format_value so documented string inputs are normalized consistently without changing the function signature.",
+  "secrets_required": false,
+  "source_origin": "CONTROLLED_RUN_N30_GENERATED",
+  "task_id": "cr_n30_task_007",
+  "task_version": "0.6.0",
+  "track_id": "fcm_v0_4_3_frozen_task_003_A",
+  "validation_oracle": "visible_and_hidden_unit_tests_with_api_contract_check",
+  "variant_label": "A",
+  "visible_tests_description": "format_value(' example ') returns 'example'."
+}

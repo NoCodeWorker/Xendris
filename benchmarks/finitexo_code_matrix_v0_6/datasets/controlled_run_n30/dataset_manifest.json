@@ -1,0 +1,36 @@
+{
+  "authorized_claims": [
+    "Diagnostic controlled-run n=30 generated deterministically from v0.4.3 frozen tasks.",
+    "No model superiority claim authorized.",
+    "No provider ranking claim authorized.",
+    "No external benchmark validation claim authorized."
+  ],
+  "base_dataset_hash": "a48e5da1ff9d480efea20965eea12af5b1bff2e996470ba18e6eb01fb7b3d3a4",
+  "base_dataset_path": "benchmarks\\finitexo_code_matrix_v0_4_3",
+  "base_manifest_hash": "6c1a0873bafbb23b7145b81d26c426cd70c3ab2025b1c3250cba9f11efa7152e",
+  "benchmark_name": "Finitexo Code Matrix",
+  "benchmark_version": "v0.6.0",
+  "blocked_claims": [
+    "model superiority demonstrated",
+    "provider ranking established",
+    "external benchmark performance validated",
+    "statistical significance established",
+    "production-readiness proven"
+  ],
+  "dataset_name": "Finitexo Code Matrix Controlled Run n=30",
+  "dataset_status": "GENERATED",
+  "dataset_type": "CONTROLLED_RUN_N30",
+  "dataset_version": "0.6.0",
+  "external_superiority_claim_authorized": false,
+  "frozen_task_count": 30,
+  "generation_method": "deterministic_replication_with_variant_ids",
+  "manifest_hash": "073d3982c2fe79fdf59822e6c75585d61f6274b684396d67dfcaa94b159b8519",
+  "model_comparison_allowed": false,
+  "provider_execution_allowed": true,
+  "statistical_claim_authorized": false,
+  "variant_labels": [
+    "A",
+    "B",
+    "C"
+  ]
+}

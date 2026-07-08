@@ -1,0 +1,24 @@
+{
+  "allowed_files": [
+    "pagination.py"
+  ],
+  "base_content_hash": "3844a95d144bac8824f916923c1a5d76566b170ef3dc3e9c69cdb2961b8ab610",
+  "base_task_id": "fcm_v0_4_3_frozen_task_007",
+  "base_task_version": "0.4.3",
+  "content_hash": "b3a5fb8f150bbc5d595dd0b7ea322601748bbf2424bf682479bab0275e6c7225",
+  "expected_behavior": "Normalize pagination inputs from an adapted issue shape while preserving public API behavior.",
+  "forbidden_files": [
+    "tests/test_pagination.py"
+  ],
+  "hidden_tests_description": "Checks negative page numbers, zero page size, beyond-end pages, and no input mutation.",
+  "network_required": false,
+  "prompt": "Fix paginate so invalid pages are handled deterministically without changing the public function signature.",
+  "secrets_required": false,
+  "source_origin": "CONTROLLED_RUN_N30_GENERATED",
+  "task_id": "cr_n30_task_021",
+  "task_version": "0.6.0",
+  "track_id": "fcm_v0_4_3_frozen_task_007_C",
+  "validation_oracle": "visible_and_hidden_unit_tests_with_api_contract_check",
+  "variant_label": "C",
+  "visible_tests_description": "paginate([1,2,3], page=1, per_page=2) returns [1,2]."
+}

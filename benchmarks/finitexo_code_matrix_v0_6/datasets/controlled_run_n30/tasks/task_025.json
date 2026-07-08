@@ -1,0 +1,24 @@
+{
+  "allowed_files": [
+    "ranges.py"
+  ],
+  "base_content_hash": "fcdee035b574510fa6d06a99725ed5564517ea9cc2742acf268cd8a8a5623426",
+  "base_task_id": "fcm_v0_4_3_frozen_task_009",
+  "base_task_version": "0.4.3",
+  "content_hash": "277b768325ce46e8c55b6923b6418cfc6529fd05ef483e44638dc2026b5848ec",
+  "expected_behavior": "Normalize inclusive range boundaries while preserving the adapted API contract.",
+  "forbidden_files": [
+    "tests/test_ranges.py"
+  ],
+  "hidden_tests_description": "Checks reversed boundaries, equal boundaries, negative values, and step handling.",
+  "network_required": false,
+  "prompt": "Fix inclusive_range so it handles reversed boundaries deterministically and preserves the public API.",
+  "secrets_required": false,
+  "source_origin": "CONTROLLED_RUN_N30_GENERATED",
+  "task_id": "cr_n30_task_025",
+  "task_version": "0.6.0",
+  "track_id": "fcm_v0_4_3_frozen_task_009_A",
+  "validation_oracle": "visible_and_hidden_unit_tests_with_api_contract_check",
+  "variant_label": "A",
+  "visible_tests_description": "inclusive_range(1, 3) returns [1,2,3]."
+}

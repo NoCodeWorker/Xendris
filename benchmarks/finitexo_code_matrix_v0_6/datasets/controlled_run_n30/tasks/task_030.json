@@ -1,0 +1,24 @@
+{
+  "allowed_files": [
+    "scope.py"
+  ],
+  "base_content_hash": "1107174d9ed188ded3a9ffca63360ba9f6d36858f27aa1117a47d3195a492912",
+  "base_task_id": "fcm_v0_4_3_frozen_task_010",
+  "base_task_version": "0.4.3",
+  "content_hash": "bfff352369909faf141f7071a11c5b5bdd6e25d2026917502ffb28bcfbb76043",
+  "expected_behavior": "Normalize a simplified adapted requirement after local human review approval.",
+  "forbidden_files": [
+    "tests/test_scope.py"
+  ],
+  "hidden_tests_description": "Checks exact scope preservation, empty values, malformed values, and public API stability.",
+  "network_required": false,
+  "prompt": "Fix normalize_scope so a scalar scope becomes a one-item list and list input remains stable.",
+  "secrets_required": false,
+  "source_origin": "CONTROLLED_RUN_N30_GENERATED",
+  "task_id": "cr_n30_task_030",
+  "task_version": "0.6.0",
+  "track_id": "fcm_v0_4_3_frozen_task_010_C",
+  "validation_oracle": "visible_and_hidden_unit_tests_with_api_contract_check",
+  "variant_label": "C",
+  "visible_tests_description": "normalize_scope('read') returns ['read']."
+}

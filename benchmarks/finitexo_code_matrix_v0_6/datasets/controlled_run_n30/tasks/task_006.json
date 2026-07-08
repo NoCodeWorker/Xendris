@@ -1,0 +1,25 @@
+{
+  "allowed_files": [
+    "normalizer.py"
+  ],
+  "base_content_hash": "9c8cd3985928db6492168d2486b829ce6300c17447b6433578be274a843763e0",
+  "base_task_id": "fcm_v0_4_3_frozen_task_002",
+  "base_task_version": "0.4.3",
+  "content_hash": "6d38197ca724bdd56bd2cde1491825f1a7666f714d42481779f9e61b91c40bef",
+  "expected_behavior": "Normalize scalar input shape while preserving the existing public API behavior.",
+  "forbidden_files": [
+    "tests/test_normalizer.py",
+    "docs/normalization_rules.md"
+  ],
+  "hidden_tests_description": "Checks scalar input, list input, tuple input, None handling, and preservation of normalized output shape.",
+  "network_required": false,
+  "prompt": "Fix normalize so scalar inputs become one-item lists while existing list inputs remain stable. Preserve the public API.",
+  "secrets_required": false,
+  "source_origin": "CONTROLLED_RUN_N30_GENERATED",
+  "task_id": "cr_n30_task_006",
+  "task_version": "0.6.0",
+  "track_id": "fcm_v0_4_3_frozen_task_002_C",
+  "validation_oracle": "visible_and_hidden_unit_tests_with_api_contract_check",
+  "variant_label": "C",
+  "visible_tests_description": "normalize(3) returns [3] and preserves the normalize(value) API contract."
+}
