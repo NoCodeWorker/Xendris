@@ -134,6 +134,15 @@ def compute_paired_lift(
     # runtime vs wrapper
     result.update(_pair_lift("deepseek_wrapper", "deepseek_runtime", "deepseek_runtime_vs_wrapper"))
     result.update(_pair_lift("openai_wrapper", "openai_runtime", "openai_runtime_vs_wrapper"))
+    # calibrated_runtime vs base
+    result.update(_pair_lift("deepseek_base", "deepseek_calibrated_runtime", "deepseek_calibrated_runtime_vs_base"))
+    result.update(_pair_lift("openai_base", "openai_calibrated_runtime", "openai_calibrated_runtime_vs_base"))
+    # calibrated_runtime vs wrapper
+    result.update(_pair_lift("deepseek_wrapper", "deepseek_calibrated_runtime", "deepseek_calibrated_runtime_vs_wrapper"))
+    result.update(_pair_lift("openai_wrapper", "openai_calibrated_runtime", "openai_calibrated_runtime_vs_wrapper"))
+    # calibrated_runtime vs runtime
+    result.update(_pair_lift("deepseek_runtime", "deepseek_calibrated_runtime", "deepseek_calibrated_runtime_vs_runtime"))
+    result.update(_pair_lift("openai_runtime", "openai_calibrated_runtime", "openai_calibrated_runtime_vs_runtime"))
 
     # Component lifts
     if aggregates:
@@ -145,6 +154,12 @@ def compute_paired_lift(
             ("runtime_vs_base_openai", "openai_runtime", "openai_base"),
             ("runtime_vs_wrapper_deepseek", "deepseek_runtime", "deepseek_wrapper"),
             ("runtime_vs_wrapper_openai", "openai_runtime", "openai_wrapper"),
+            ("calibrated_vs_base_deepseek", "deepseek_calibrated_runtime", "deepseek_base"),
+            ("calibrated_vs_base_openai", "openai_calibrated_runtime", "openai_base"),
+            ("calibrated_vs_wrapper_deepseek", "deepseek_calibrated_runtime", "deepseek_wrapper"),
+            ("calibrated_vs_wrapper_openai", "openai_calibrated_runtime", "openai_wrapper"),
+            ("calibrated_vs_runtime_deepseek", "deepseek_calibrated_runtime", "deepseek_runtime"),
+            ("calibrated_vs_runtime_openai", "openai_calibrated_runtime", "openai_runtime"),
         ]:
             comp_lift: dict[str, float] = {}
             for comp in components:
@@ -180,7 +195,10 @@ def aggregate_by_family_variant(
         if family not in family_scores:
             continue
         variant_means: dict[str, float] = {}
-        for variant_name in ("deepseek_base", "deepseek_wrapper", "deepseek_runtime", "openai_base", "openai_wrapper", "openai_runtime"):
+        for variant_name in (
+            "deepseek_base", "deepseek_wrapper", "deepseek_runtime", "deepseek_calibrated_runtime",
+            "openai_base", "openai_wrapper", "openai_runtime", "openai_calibrated_runtime",
+        ):
             vals = family_scores[family].get(variant_name, [])
             variant_means[variant_name] = sum(vals) / len(vals) if vals else 0.0
         result[family] = variant_means
@@ -197,22 +215,36 @@ def compute_family_lift(
         ds_wrapper_lift = variants.get("deepseek_wrapper", 0.0) - variants.get("deepseek_base", 0.0)
         ds_runtime_lift = variants.get("deepseek_runtime", 0.0) - variants.get("deepseek_base", 0.0)
         ds_runtime_vs_wrapper = variants.get("deepseek_runtime", 0.0) - variants.get("deepseek_wrapper", 0.0)
+        ds_calibrated_vs_base = variants.get("deepseek_calibrated_runtime", 0.0) - variants.get("deepseek_base", 0.0)
+        ds_calibrated_vs_wrapper = variants.get("deepseek_calibrated_runtime", 0.0) - variants.get("deepseek_wrapper", 0.0)
+        ds_calibrated_vs_runtime = variants.get("deepseek_calibrated_runtime", 0.0) - variants.get("deepseek_runtime", 0.0)
         oa_wrapper_lift = variants.get("openai_wrapper", 0.0) - variants.get("openai_base", 0.0)
         oa_runtime_lift = variants.get("openai_runtime", 0.0) - variants.get("openai_base", 0.0)
         oa_runtime_vs_wrapper = variants.get("openai_runtime", 0.0) - variants.get("openai_wrapper", 0.0)
+        oa_calibrated_vs_base = variants.get("openai_calibrated_runtime", 0.0) - variants.get("openai_base", 0.0)
+        oa_calibrated_vs_wrapper = variants.get("openai_calibrated_runtime", 0.0) - variants.get("openai_wrapper", 0.0)
+        oa_calibrated_vs_runtime = variants.get("openai_calibrated_runtime", 0.0) - variants.get("openai_runtime", 0.0)
         family_lift[family] = {
             "deepseek_base_mean": round(variants.get("deepseek_base", 0.0), 6),
             "deepseek_wrapper_mean": round(variants.get("deepseek_wrapper", 0.0), 6),
             "deepseek_runtime_mean": round(variants.get("deepseek_runtime", 0.0), 6),
+            "deepseek_calibrated_runtime_mean": round(variants.get("deepseek_calibrated_runtime", 0.0), 6),
             "openai_base_mean": round(variants.get("openai_base", 0.0), 6),
             "openai_wrapper_mean": round(variants.get("openai_wrapper", 0.0), 6),
             "openai_runtime_mean": round(variants.get("openai_runtime", 0.0), 6),
+            "openai_calibrated_runtime_mean": round(variants.get("openai_calibrated_runtime", 0.0), 6),
             "deepseek_wrapper_lift_vs_base": round(ds_wrapper_lift, 6),
             "deepseek_runtime_lift_vs_base": round(ds_runtime_lift, 6),
             "deepseek_runtime_lift_vs_wrapper": round(ds_runtime_vs_wrapper, 6),
+            "deepseek_calibrated_lift_vs_base": round(ds_calibrated_vs_base, 6),
+            "deepseek_calibrated_lift_vs_wrapper": round(ds_calibrated_vs_wrapper, 6),
+            "deepseek_calibrated_lift_vs_runtime": round(ds_calibrated_vs_runtime, 6),
             "openai_wrapper_lift_vs_base": round(oa_wrapper_lift, 6),
             "openai_runtime_lift_vs_base": round(oa_runtime_lift, 6),
             "openai_runtime_lift_vs_wrapper": round(oa_runtime_vs_wrapper, 6),
+            "openai_calibrated_lift_vs_base": round(oa_calibrated_vs_base, 6),
+            "openai_calibrated_lift_vs_wrapper": round(oa_calibrated_vs_wrapper, 6),
+            "openai_calibrated_lift_vs_runtime": round(oa_calibrated_vs_runtime, 6),
         }
 
     def _mean_lift(key: str) -> float:
@@ -225,9 +257,15 @@ def compute_family_lift(
         "overall_deepseek_wrapper_lift_vs_base_mean": _mean_lift("deepseek_wrapper_lift_vs_base"),
         "overall_deepseek_runtime_lift_vs_base_mean": _mean_lift("deepseek_runtime_lift_vs_base"),
         "overall_deepseek_runtime_lift_vs_wrapper_mean": _mean_lift("deepseek_runtime_lift_vs_wrapper"),
+        "overall_deepseek_calibrated_lift_vs_base_mean": _mean_lift("deepseek_calibrated_lift_vs_base"),
+        "overall_deepseek_calibrated_lift_vs_wrapper_mean": _mean_lift("deepseek_calibrated_lift_vs_wrapper"),
+        "overall_deepseek_calibrated_lift_vs_runtime_mean": _mean_lift("deepseek_calibrated_lift_vs_runtime"),
         "overall_openai_wrapper_lift_vs_base_mean": _mean_lift("openai_wrapper_lift_vs_base"),
         "overall_openai_runtime_lift_vs_base_mean": _mean_lift("openai_runtime_lift_vs_base"),
         "overall_openai_runtime_lift_vs_wrapper_mean": _mean_lift("openai_runtime_lift_vs_wrapper"),
+        "overall_openai_calibrated_lift_vs_base_mean": _mean_lift("openai_calibrated_lift_vs_base"),
+        "overall_openai_calibrated_lift_vs_wrapper_mean": _mean_lift("openai_calibrated_lift_vs_wrapper"),
+        "overall_openai_calibrated_lift_vs_runtime_mean": _mean_lift("openai_calibrated_lift_vs_runtime"),
     }
 
 

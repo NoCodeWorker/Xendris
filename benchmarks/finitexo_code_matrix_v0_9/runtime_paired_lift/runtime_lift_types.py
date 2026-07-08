@@ -130,6 +130,36 @@ class RuntimeVariantAggregate:
         }
 
 
+@dataclass
+class CalibrationTrace:
+    task_id: str
+    provider_name: str
+    variant_name: str
+    initial_response: str
+    claim_classification: dict[str, str] | None = None
+    evidence_status: dict[str, str] | None = None
+    confidence_band: str | None = None
+    allowed_language: list[str] | None = None
+    blocked_language: list[str] | None = None
+    final_calibrated_response: str = ""
+    estimated_cost_usd: float | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "task_id": self.task_id,
+            "provider_name": self.provider_name,
+            "variant_name": self.variant_name,
+            "initial_response": self.initial_response,
+            "claim_classification": self.claim_classification,
+            "evidence_status": self.evidence_status,
+            "confidence_band": self.confidence_band,
+            "allowed_language": self.allowed_language,
+            "blocked_language": self.blocked_language,
+            "final_calibrated_response": self.final_calibrated_response,
+            "estimated_cost_usd": self.estimated_cost_usd,
+        }
+
+
 AUDIT_COMPONENTS = [
     "response_present",
     "follows_task_format",

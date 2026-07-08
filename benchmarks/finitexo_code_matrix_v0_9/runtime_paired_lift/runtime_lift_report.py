@@ -56,6 +56,28 @@ def build_runtime_lift_report(summary: dict[str, Any]) -> str:
     _add(f"| Cost delta | ${lift.get('deepseek_runtime_vs_wrapper_cost_delta', 'N/A')} | ${lift.get('openai_runtime_vs_wrapper_cost_delta', 'N/A')} |")
     _add("")
 
+    _add("## Lift Summary (Calibrated Runtime vs Base)")
+    _add("")
+    _add(f"| Metric | DeepSeek | OpenAI |")
+    _add(f"|---|---|---|")
+    _add(f"| Calibrated Runtime vs Base lift | {lift.get('deepseek_calibrated_runtime_vs_base_mean_lift', 'N/A')} | {lift.get('openai_calibrated_runtime_vs_base_mean_lift', 'N/A')} |")
+    _add(f"| Cost delta | ${lift.get('deepseek_calibrated_runtime_vs_base_cost_delta', 'N/A')} | ${lift.get('openai_calibrated_runtime_vs_base_cost_delta', 'N/A')} |")
+    _add("")
+
+    _add("## Lift Summary (Calibrated Runtime vs Wrapper)")
+    _add("")
+    _add(f"| Metric | DeepSeek | OpenAI |")
+    _add(f"|---|---|---|")
+    _add(f"| Calibrated vs Wrapper lift | {lift.get('deepseek_calibrated_runtime_vs_wrapper_mean_lift', 'N/A')} | {lift.get('openai_calibrated_runtime_vs_wrapper_mean_lift', 'N/A')} |")
+    _add("")
+
+    _add("## Lift Summary (Calibrated Runtime vs Runtime)")
+    _add("")
+    _add(f"| Metric | DeepSeek | OpenAI |")
+    _add(f"|---|---|---|")
+    _add(f"| Calibrated vs Runtime lift | {lift.get('deepseek_calibrated_runtime_vs_runtime_mean_lift', 'N/A')} | {lift.get('openai_calibrated_runtime_vs_runtime_mean_lift', 'N/A')} |")
+    _add("")
+
     _add("## Variant Aggregates")
     _add("")
     _add("| Variant | Mean Score | Min | Max | Verified | Cost |")
@@ -76,21 +98,25 @@ def build_runtime_lift_report(summary: dict[str, Any]) -> str:
     if fl_families:
         _add("## Family Lift")
         _add("")
-        _add("| Family | DS Base | DS Wrap | DS Runtime | OA Base | OA Wrap | OA Runtime | DS Wrap Lift | DS Runtime Lift | OA Wrap Lift | OA Runtime Lift |")
-        _add("|---|---|---|---|---|---|---|---|---|---|")
+        _add("| Family | DS Base | DS Wrap | DS Runtime | DS Calibrated | OA Base | OA Wrap | OA Runtime | OA Calibrated | DS Wrap Lift | DS Runtime Lift | DS Calibrated Lift | OA Wrap Lift | OA Runtime Lift | OA Calibrated Lift |")
+        _add("|---|---|---|---|---|---|---|---|---|---|---|---|---|---|")
         for family, data in fl_families.items():
             _add(
                 f"| {family} "
                 f"| {data.get('deepseek_base_mean', 0):.4f} "
                 f"| {data.get('deepseek_wrapper_mean', 0):.4f} "
                 f"| {data.get('deepseek_runtime_mean', 0):.4f} "
+                f"| {data.get('deepseek_calibrated_runtime_mean', 0):.4f} "
                 f"| {data.get('openai_base_mean', 0):.4f} "
                 f"| {data.get('openai_wrapper_mean', 0):.4f} "
                 f"| {data.get('openai_runtime_mean', 0):.4f} "
+                f"| {data.get('openai_calibrated_runtime_mean', 0):.4f} "
                 f"| {data.get('deepseek_wrapper_lift_vs_base', 0):.6f} "
                 f"| {data.get('deepseek_runtime_lift_vs_base', 0):.6f} "
+                f"| {data.get('deepseek_calibrated_lift_vs_base', 0):.6f} "
                 f"| {data.get('openai_wrapper_lift_vs_base', 0):.6f} "
-                f"| {data.get('openai_runtime_lift_vs_base', 0):.6f} |"
+                f"| {data.get('openai_runtime_lift_vs_base', 0):.6f} "
+                f"| {data.get('openai_calibrated_lift_vs_base', 0):.6f} |"
             )
         _add("")
 

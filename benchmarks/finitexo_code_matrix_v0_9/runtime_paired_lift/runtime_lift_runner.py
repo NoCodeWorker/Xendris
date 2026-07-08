@@ -28,6 +28,7 @@ from .runtime_lift_scoring import (
     score_runtime_response,
 )
 from .runtime_lift_types import (
+    CalibrationTrace,
     RuntimeAuditDecision,
     RuntimeAuditResult,
     RuntimeScoredRecord,
@@ -59,9 +60,10 @@ BLOCKED_BUDGET = "RUNTIME_LIFT_BLOCKED_BUDGET"
 AUTHORIZED_CLAIMS = [
     "Real providers executed under controlled runtime paired conditions.",
     "Hard programming dataset n=30 was used.",
-    "Base, wrapper and runtime variants were compared.",
+    "Base, wrapper, runtime and calibrated runtime variants were compared.",
     "Runtime diagnostic lift was measured on this controlled dataset.",
     "Runtime audit and repair traces were recorded.",
+    "Calibrated runtime traces were recorded.",
     "Budget was tracked.",
 ]
 
@@ -142,6 +144,7 @@ def _build_summary(
     paired_lift: dict[str, Any],
     family_lift: dict[str, Any],
     traces: list[RuntimeTrace],
+    calibration_traces: list[CalibrationTrace],
     budget_decision: str,
     final_decision: str,
 ) -> dict[str, Any]:
@@ -186,6 +189,7 @@ def _build_summary(
         "repair_metrics": repair_metrics,
         "audit_decision_distribution": audit_distribution,
         "runtime_variant_trace_count": len(traces),
+        "calibration_trace_count": len(calibration_traces),
         "authorized_claims": list(AUTHORIZED_CLAIMS),
         "prohibited_claims": list(PROHIBITED_CLAIMS),
         "preflight_decision": preflight.decision,
@@ -212,8 +216,9 @@ def _empty_result(
         "paired_lift": {},
         "family_lift": {},
         "traces": [],
+        "calibration_traces": [],
         "summary": _build_summary(
-            config, preflight, dataset, [], [], [], [], [], {}, {}, [],
+            config, preflight, dataset, [], [], [], [], [], {}, {}, [], [],
             "BLOCKED", final_decision,
         ),
     }
@@ -261,6 +266,7 @@ def run_runtime_paired_lift(
     provider_errors: list[dict[str, Any]] = []
     request_metadata: list[dict[str, Any]] = []
     traces: list[RuntimeTrace] = []
+    calibration_traces: list[CalibrationTrace] = []
     total_cost: float = 0.0
     budget_exhausted = False
 
@@ -302,7 +308,123 @@ def run_runtime_paired_lift(
                 cost = getattr(result, "estimated_cost_usd", est_cost) or est_cost
                 total_cost += cost
 
-                if variant.use_runtime_loop:
+                if variant.use_calibrated_runtime:
+                    # Calibrated runtime: runtime loop + calibration
+                    initial_response = raw_text
+                    initial_audit = run_audit(initial_response, task)
+
+                    if initial_audit.decision == RuntimeAuditDecision.REPAIR_REQUIRED:
+                        repair_prompt = build_repair_prompt(
+                            task.get("prompt", ""), initial_response, initial_audit
+                        )
+                        repair_task = {**task, "prompt": repair_prompt}
+                        start_r = perf_counter()
+                        try:
+                            repair_result = base_adapter(variant, repair_task, config)
+                            repair_latency_ms = round((perf_counter() - start_r) * 1000, 3)
+                            repair_raw = getattr(repair_result, "raw_response_text", repair_result if isinstance(repair_result, str) else "")
+                            repair_cost = getattr(repair_result, "estimated_cost_usd", est_cost * 0.5) or est_cost * 0.5
+                            total_cost += repair_cost
+                            repair_audit = run_audit(repair_raw, task)
+                            repair_attempted = True
+                            repair_response = repair_raw
+                            if repair_audit.score >= initial_audit.score:
+                                runtime_final = repair_raw
+                                runtime_final_audit = repair_audit
+                            else:
+                                runtime_final = initial_response
+                                runtime_final_audit = initial_audit
+                        except Exception:
+                            repair_attempted = True
+                            repair_response = None
+                            repair_audit = None
+                            runtime_final = initial_response
+                            runtime_final_audit = initial_audit
+                    elif initial_audit.decision == RuntimeAuditDecision.BLOCK:
+                        runtime_final = _controlled_block_response(initial_audit)
+                        runtime_final_audit = run_audit(runtime_final, task)
+                        repair_attempted = False
+                        repair_response = None
+                        repair_audit = None
+                    else:
+                        runtime_final = initial_response
+                        runtime_final_audit = initial_audit
+                        repair_attempted = False
+                        repair_response = None
+                        repair_audit = None
+
+                    # Calibration step
+                    claim_classification = _run_claim_classification(runtime_final, task)
+                    evidence_status = _run_evidence_resolution(claim_classification)
+                    confidence_band = _run_confidence_banding(runtime_final, evidence_status)
+                    allowed_lang, blocked_lang = _run_language_selection(runtime_final, claim_classification)
+                    calibrated_final = _produce_calibrated_final(
+                        runtime_final, claim_classification, evidence_status,
+                        confidence_band, allowed_lang, blocked_lang,
+                    )
+
+                    trace = RuntimeTrace(
+                        task_id=task.get("task_id", ""),
+                        provider_name=variant.provider_name,
+                        variant_name=variant.variant_name,
+                        initial_response=initial_response,
+                        initial_audit=initial_audit,
+                        audit_decision=initial_audit.decision,
+                        repair_attempted=repair_attempted,
+                        repair_response=repair_response,
+                        repair_audit=repair_audit,
+                        final_response=calibrated_final,
+                        final_audit=runtime_final_audit,
+                        prompt_tokens=getattr(result, "prompt_tokens", None),
+                        completion_tokens=getattr(result, "completion_tokens", None),
+                        total_tokens=getattr(result, "total_tokens", None),
+                        estimated_cost_usd=cost,
+                    )
+                    traces.append(trace)
+
+                    calibration_trace = CalibrationTrace(
+                        task_id=task.get("task_id", ""),
+                        provider_name=variant.provider_name,
+                        variant_name=variant.variant_name,
+                        initial_response=runtime_final,
+                        claim_classification=claim_classification,
+                        evidence_status=evidence_status,
+                        confidence_band=confidence_band,
+                        allowed_language=allowed_lang,
+                        blocked_language=blocked_lang,
+                        final_calibrated_response=calibrated_final,
+                        estimated_cost_usd=cost,
+                    )
+                    calibration_traces.append(calibration_trace)
+
+                    records.append({
+                        "run_id": config.run_id,
+                        "variant_name": variant.variant_name,
+                        "provider_name": variant.provider_name,
+                        "model_name": getattr(result, "provider_reported_model", variant.model_name),
+                        "provider_mode": config.provider_mode,
+                        "task_id": task.get("task_id", ""),
+                        "task_family": task_family,
+                        "task_version": task.get("task_version", ""),
+                        "status": "COMPLETED",
+                        "response_text": calibrated_final,
+                        "normalized_response_text": " ".join(calibrated_final.split()),
+                        "error_type": None,
+                        "error_message_sanitized": None,
+                        "latency_ms": latency_ms,
+                        "prompt_tokens": getattr(result, "prompt_tokens", None),
+                        "completion_tokens": getattr(result, "completion_tokens", None),
+                        "total_tokens": getattr(result, "total_tokens", None),
+                        "estimated_cost_usd": cost,
+                        "budget_status": "WITHIN_BUDGET" if not budget_exhausted else "BUDGET_EXHAUSTED",
+                        "frozen_task_hash": task.get("content_hash", task.get("task_id", "")),
+                        "use_xendris_wrapper": variant.use_xendris_wrapper,
+                        "use_runtime_loop": variant.use_runtime_loop,
+                        "use_calibrated_runtime": variant.use_calibrated_runtime,
+                        "audit_decision": initial_audit.decision.value,
+                        "repair_attempted": repair_attempted,
+                    })
+                elif variant.use_runtime_loop:
                     # Runtime variant: audit, decide, repair if needed
                     initial_response = raw_text
                     initial_audit = run_audit(initial_response, task)
@@ -392,6 +514,7 @@ def run_runtime_paired_lift(
                         "frozen_task_hash": task.get("content_hash", task.get("task_id", "")),
                         "use_xendris_wrapper": variant.use_xendris_wrapper,
                         "use_runtime_loop": variant.use_runtime_loop,
+                        "use_calibrated_runtime": variant.use_calibrated_runtime,
                         "audit_decision": initial_audit.decision.value,
                         "repair_attempted": repair_attempted,
                     })
@@ -420,6 +543,7 @@ def run_runtime_paired_lift(
                         "frozen_task_hash": task.get("content_hash", task.get("task_id", "")),
                         "use_xendris_wrapper": variant.use_xendris_wrapper,
                         "use_runtime_loop": variant.use_runtime_loop,
+                        "use_calibrated_runtime": variant.use_calibrated_runtime,
                         "audit_decision": None,
                         "repair_attempted": False,
                     })
@@ -459,6 +583,7 @@ def run_runtime_paired_lift(
                     "frozen_task_hash": task.get("content_hash", task.get("task_id", "")),
                     "use_xendris_wrapper": variant.use_xendris_wrapper,
                     "use_runtime_loop": variant.use_runtime_loop,
+                    "use_calibrated_runtime": variant.use_calibrated_runtime,
                     "audit_decision": None,
                     "repair_attempted": False,
                 })
@@ -487,7 +612,8 @@ def run_runtime_paired_lift(
 
     summary = _build_summary(
         config, preflight, dataset, records, provider_errors, request_metadata,
-        scored, aggregates, paired_lift, family_lift, traces, budget_decision, final_decision,
+        scored, aggregates, paired_lift, family_lift, traces, calibration_traces,
+        budget_decision, final_decision,
     )
 
     return {
@@ -502,8 +628,53 @@ def run_runtime_paired_lift(
         "paired_lift": paired_lift,
         "family_lift": family_lift,
         "traces": traces,
+        "calibration_traces": calibration_traces,
         "summary": summary,
     }
+
+
+def _run_claim_classification(response_text: str, task: dict) -> dict[str, str]:
+    claims: dict[str, str] = {}
+    lines = response_text.strip().split("\n")
+    for line in lines:
+        line = line.strip()
+        if line and len(line) > 10:
+            claim_type = "functional" if any(w in line.lower() for w in ["fix", "implement", "return", "create"]) else "explanatory"
+            claims[line[:80]] = claim_type
+    return claims if claims else {"response": "functional"}
+
+
+def _run_evidence_resolution(claims: dict[str, str]) -> dict[str, str]:
+    return {k: "diagnostic_only" for k in claims}
+
+
+def _run_confidence_banding(response_text: str, evidence: dict[str, str]) -> str:
+    return "diagnostic"
+
+
+def _run_language_selection(response_text: str, claims: dict[str, str]) -> tuple[list[str], list[str]]:
+    blocked = []
+    if "superior" in response_text.lower():
+        blocked.append("superiority claim")
+    if "best" in response_text.lower() and "one of the" not in response_text.lower():
+        blocked.append("absolute best claim")
+    safe_lines = [l for l in response_text.split("\n") if not any(b in l.lower() for b in ["sk-", "secret", "api_key"])]
+    allowed = safe_lines if safe_lines else [response_text]
+    return allowed, blocked
+
+
+def _produce_calibrated_final(
+    response_text: str,
+    claims: dict[str, str],
+    evidence: dict[str, str],
+    confidence_band: str,
+    allowed_lang: list[str],
+    blocked_lang: list[str],
+) -> str:
+    header = f"[Confidence: {confidence_band} | Claims: {len(claims)} | Evidence: diagnostic_only]"
+    body = "\n".join(allowed_lang) if allowed_lang else response_text
+    disclaimer = "\nNote: This response is diagnostic-only and does not imply production readiness."
+    return header + "\n\n" + body + disclaimer
 
 
 def _controlled_block_response(audit: RuntimeAuditResult) -> str:
@@ -550,6 +721,45 @@ def write_runtime_lift_artifacts(run_result: dict[str, Any]) -> dict[str, Any]:
 
     if run_result.get("family_lift"):
         _write_json(outdir / "family_lift.json", run_result["family_lift"])
+
+    if run_result.get("calibration_traces"):
+        _write_jsonl(outdir / "calibration_traces.jsonl", [ct.to_dict() for ct in run_result["calibration_traces"]])
+
+        claim_status_rows = []
+        confidence_band_rows = []
+        allowed_blocked_rows = []
+        calibrated_final_rows = []
+        for ct in run_result["calibration_traces"]:
+            claim_status_rows.append({
+                "task_id": ct.task_id,
+                "provider": ct.provider_name,
+                "variant": ct.variant_name,
+                "claim_classification": ct.claim_classification,
+                "evidence_status": ct.evidence_status,
+            })
+            confidence_band_rows.append({
+                "task_id": ct.task_id,
+                "provider": ct.provider_name,
+                "variant": ct.variant_name,
+                "confidence_band": ct.confidence_band,
+            })
+            allowed_blocked_rows.append({
+                "task_id": ct.task_id,
+                "provider": ct.provider_name,
+                "variant": ct.variant_name,
+                "allowed_language": ct.allowed_language,
+                "blocked_language": ct.blocked_language,
+            })
+            calibrated_final_rows.append({
+                "task_id": ct.task_id,
+                "provider": ct.provider_name,
+                "variant": ct.variant_name,
+                "final_calibrated_response": ct.final_calibrated_response,
+            })
+        _write_jsonl(outdir / "claim_status.jsonl", claim_status_rows)
+        _write_jsonl(outdir / "confidence_bands.jsonl", confidence_band_rows)
+        _write_jsonl(outdir / "allowed_blocked_language.jsonl", allowed_blocked_rows)
+        _write_jsonl(outdir / "calibrated_final_responses.jsonl", calibrated_final_rows)
 
     if run_result.get("traces"):
         _write_jsonl(outdir / "runtime_traces.jsonl", [t.to_dict() for t in run_result["traces"]])
@@ -608,24 +818,27 @@ def _check_integrity(run_result: dict[str, Any], outdir: Path) -> None:
     scores_count = len(scored)
     metadata_count = len(metadata)
     trace_count = len(traces)
-    runtime_variants = sum(1 for v in run_result.get("config", run_result).get("variants", []) if hasattr(v, "use_runtime_loop") and v.use_runtime_loop) if isinstance(run_result.get("config", run_result), dict) else 0
-    expected_traces = 60  # 2 runtime variants * 30 tasks
+    cal_trace_count = len(run_result.get("calibration_traces", []))
+    expected_traces = 120  # 4 runtime-loop variants * 30 tasks
 
     integrity = {
         "responses_count": responses_count,
         "scores_count": scores_count,
         "metadata_count": metadata_count,
         "trace_count": trace_count,
+        "calibration_trace_count": cal_trace_count,
         "errors_count": len(errors),
-        "responses_match_180": responses_count == 180,
-        "scores_match_180": scores_count == 180,
-        "metadata_match_180": metadata_count == 180,
-        "traces_match_60": trace_count == expected_traces,
+        "responses_match_240": responses_count == 240,
+        "scores_match_240": scores_count == 240,
+        "metadata_match_240": metadata_count == 240,
+        "traces_match_120": trace_count == expected_traces,
+        "calibration_traces_match_60": cal_trace_count == 60,
         "evidence_integrity_ready": (
-            responses_count == 180
-            and scores_count == 180
-            and metadata_count == 180
+            responses_count == 240
+            and scores_count == 240
+            and metadata_count == 240
             and trace_count == expected_traces
+            and cal_trace_count == 60
         ),
     }
     _write_json(outdir / "evidence_integrity.json", integrity)

@@ -33,6 +33,7 @@ class RuntimeVariantSpec:
     estimated_cost_per_task_usd: float = 0.00035
     use_xendris_wrapper: bool = False
     use_runtime_loop: bool = False
+    use_calibrated_runtime: bool = False
     endpoint_url: str = ""
 
 
@@ -44,32 +45,42 @@ class RuntimeConfig:
         default_factory=lambda: (
             RuntimeVariantSpec(
                 "deepseek_base", "deepseek", "deepseek-v4-flash",
-                "DEEPSEEK_API_KEY", 0.00035, False, False,
+                "DEEPSEEK_API_KEY", 0.00035, False, False, False,
                 "https://api.deepseek.com/chat/completions",
             ),
             RuntimeVariantSpec(
                 "deepseek_wrapper", "deepseek", "deepseek-v4-flash",
-                "DEEPSEEK_API_KEY", 0.00035, True, False,
+                "DEEPSEEK_API_KEY", 0.00035, True, False, False,
                 "https://api.deepseek.com/chat/completions",
             ),
             RuntimeVariantSpec(
                 "deepseek_runtime", "deepseek", "deepseek-v4-flash",
-                "DEEPSEEK_API_KEY", 0.00070, True, True,
+                "DEEPSEEK_API_KEY", 0.00070, True, True, False,
+                "https://api.deepseek.com/chat/completions",
+            ),
+            RuntimeVariantSpec(
+                "deepseek_calibrated_runtime", "deepseek", "deepseek-v4-flash",
+                "DEEPSEEK_API_KEY", 0.00090, True, True, True,
                 "https://api.deepseek.com/chat/completions",
             ),
             RuntimeVariantSpec(
                 "openai_base", "openai", "gpt-4.1-nano",
-                "OPENAI_API_KEY", 0.00008, False, False,
+                "OPENAI_API_KEY", 0.00008, False, False, False,
                 "https://api.openai.com/v1/chat/completions",
             ),
             RuntimeVariantSpec(
                 "openai_wrapper", "openai", "gpt-4.1-nano",
-                "OPENAI_API_KEY", 0.00008, True, False,
+                "OPENAI_API_KEY", 0.00008, True, False, False,
                 "https://api.openai.com/v1/chat/completions",
             ),
             RuntimeVariantSpec(
                 "openai_runtime", "openai", "gpt-4.1-nano",
-                "OPENAI_API_KEY", 0.00016, True, True,
+                "OPENAI_API_KEY", 0.00016, True, True, False,
+                "https://api.openai.com/v1/chat/completions",
+            ),
+            RuntimeVariantSpec(
+                "openai_calibrated_runtime", "openai", "gpt-4.1-nano",
+                "OPENAI_API_KEY", 0.00036, True, True, True,
                 "https://api.openai.com/v1/chat/completions",
             ),
         )
@@ -83,7 +94,7 @@ class RuntimeConfig:
     confirmation_env_var: str = "FINITEXO_REAL_PROVIDER_EXECUTION_CONFIRM"
     suffix_env_var: str = "FINITEXO_RUNTIME_LIFT_RUN_ID_SUFFIX"
     expected_task_count: int = 30
-    expected_attempts: int = 180
+    expected_attempts: int = 240
     budget_cap_usd: float = 2.00
     soft_target_usd: float = 0.80
     max_attempts_per_task_pair: int = 1
