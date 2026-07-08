@@ -112,6 +112,27 @@ def test_config_defaults():
     assert len(config.providers) == 2
 
 
+def test_config_dataset_path_points_to_v0_6_n30():
+    config = ControlledRunConfig()
+    assert "v0_6" in str(config.dataset_path)
+    assert "controlled_run_n30" in str(config.dataset_path)
+    assert "v0_4_3" not in str(config.dataset_path)
+
+
+def test_config_has_v0_6_0_dataset_hashes():
+    config = ControlledRunConfig()
+    assert config.expected_dataset_hash == "04758231d91333a3785693b05587740f27fa7b05a2d3e77c42a73fbd3184f010"
+    assert config.expected_manifest_hash == "073d3982c2fe79fdf59822e6c75585d61f6274b684396d67dfcaa94b159b8519"
+
+
+def test_config_expected_task_count_and_attempts():
+    config = ControlledRunConfig()
+    assert config.expected_task_count == 30
+    assert len(config.providers) == 2
+    expected_attempts = config.expected_task_count * len(config.providers)
+    assert expected_attempts == 60
+
+
 # ---------------------------------------------------------------------------
 # Preflight gate
 # ---------------------------------------------------------------------------
@@ -177,6 +198,50 @@ def test_preflight_passes_with_all_conditions(tmp_path):
     assert pf.decision == "CONTROLLED_RUN_PREFLIGHT_READY"
     assert pf.task_attempts_expected == 60
     assert pf.task_count == 30
+
+
+def test_preflight_blocks_task_count_10_regression(tmp_path):
+    """Regression: v0.6.0 must reject n=10 (the v0.4.3 size)."""
+    cfg = _config(tmp_path, task_count=10)
+    pf = evaluate_controlled_run_preflight(cfg, "ds-hash", "mf-hash", 10)
+    assert pf.can_execute is False
+    assert "insufficient_tasks" in pf.blockers
+    assert pf.task_count == 10
+
+
+def test_preflight_reports_v0_6_0_dataset_hash_when_mismatched(tmp_path):
+    """Preflight should detect when dataset hash doesn't match v0.6.0 expected hash."""
+    cfg = _config(tmp_path, task_count=30)
+    pf = evaluate_controlled_run_preflight(cfg, "WRONG-HASH", "mf-hash", 30)
+    assert pf.can_execute is False
+    assert "dataset_hash_mismatch" in pf.blockers
+
+
+def test_preflight_reports_correct_v0_6_hash_when_passing(tmp_path):
+    """When preflight passes, verify the reported hash values are v0.6.0-compatible."""
+    cfg = _config(tmp_path, task_count=30)
+    pf = evaluate_controlled_run_preflight(cfg, "ds-hash", "mf-hash", 30)
+    assert pf.can_execute is True
+    assert pf.dataset_hash == "ds-hash"
+    assert pf.manifest_hash == "mf-hash"
+
+
+def test_preflight_blocks_hash_mismatch_with_default_config(tmp_path):
+    """With real v0.6.0 config defaults, wrong hash blocks preflight."""
+    ds = _dataset(tmp_path, count=30, dataset_hash="WRONG", manifest_hash="mf-hash")
+    ready = _ready(tmp_path)
+    cfg = ControlledRunConfig(
+        dataset_path=ds,
+        readiness_summary_path=ready,
+        output_dir=tmp_path / "out_hash",
+        expected_dataset_hash="04758231d91333a3785693b05587740f27fa7b05a2d3e77c42a73fbd3184f010",
+        expected_manifest_hash="073d3982c2fe79fdf59822e6c75585d61f6274b684396d67dfcaa94b159b8519",
+        allow_overwrite=True,
+        environ={"FINITEXO_REAL_PROVIDER_EXECUTION_CONFIRM": "true", "DEEPSEEK_API_KEY": "x", "OPENAI_API_KEY": "x"},
+    )
+    pf = evaluate_controlled_run_preflight(cfg, "WRONG", "mf-hash", 30)
+    assert pf.can_execute is False
+    assert "dataset_hash_mismatch" in pf.blockers
 
 
 # ---------------------------------------------------------------------------

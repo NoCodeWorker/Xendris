@@ -47,6 +47,6 @@ class ControlledRunConfig:
     request_timeout_seconds: float = 45.0
     allow_mock_fallback: bool = False
     allow_overwrite: bool = False
-    expected_dataset_hash: str = ""
-    expected_manifest_hash: str = ""
+    expected_dataset_hash: str = "04758231d91333a3785693b05587740f27fa7b05a2d3e77c42a73fbd3184f010"
+    expected_manifest_hash: str = "073d3982c2fe79fdf59822e6c75585d61f6274b684396d67dfcaa94b159b8519"
     environ: dict[str, str] = field(default_factory=lambda: dict(os.environ))

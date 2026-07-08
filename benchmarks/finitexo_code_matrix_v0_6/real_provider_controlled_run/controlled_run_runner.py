@@ -350,7 +350,24 @@ def write_controlled_run_artifacts(run_result: dict[str, Any]) -> dict[str, Any]
     return summary
 
 
+def _load_dotenv_for_main() -> None:
+    """Load provider API keys and confirmation from frontend/.env.local if missing from process env."""
+    dotenv_path = Path("frontend/.env.local")
+    if not dotenv_path.exists():
+        return
+    for line in dotenv_path.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        key = key.strip()
+        value = value.strip().strip("\"'")
+        if key in ("DEEPSEEK_API_KEY", "OPENAI_API_KEY", "FINITEXO_REAL_PROVIDER_EXECUTION_CONFIRM"):
+            os.environ.setdefault(key, value)
+
+
 def main() -> int:
+    _load_dotenv_for_main()
     config = ControlledRunConfig()
     result = run_controlled_provider_benchmark(config)
     summary = write_controlled_run_artifacts(result)
