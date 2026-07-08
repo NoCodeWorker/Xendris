@@ -105,6 +105,47 @@ def _build_calibrated_runtime_task(task: dict[str, Any]) -> dict[str, Any]:
     return _build_wrapper_task(task)
 
 
+def _write_blocked_preflight_artifacts(
+    config: CostFrontierConfig,
+    preflight_payload: dict[str, Any],
+) -> dict[str, Any]:
+    outdir = config.output_dir
+    outdir.mkdir(parents=True, exist_ok=True)
+    _write_json(outdir / "preflight.json", preflight_payload)
+    gate = {
+        "final_decision": COST_FRONTIER_DECISIONS["BLOCKED"],
+        "preflight": preflight_payload,
+    }
+    _write_json(outdir / "gate.json", gate)
+    summary = {
+        "benchmark_name": config.benchmark_name,
+        "benchmark_version": config.benchmark_version,
+        "run_id": config.run_id,
+        "experiment_type": "cost_frontier_model_step",
+        "dataset_name": config.dataset_name,
+        "dataset_version": config.dataset_version,
+        "provider_mode": config.provider_mode,
+        "final_decision": COST_FRONTIER_DECISIONS["BLOCKED"],
+        "total_expected": config.expected_attempts,
+        "total_attempted": 0,
+        "total_completed": 0,
+        "total_failed": 0,
+        "total_cost_usd": 0.0,
+        "budget_cap_usd": config.budget_cap_usd,
+        "providers_called": False,
+        "errors_count": 0,
+        "blocked_reason": "preflight",
+    }
+    _write_json(outdir / "summary.json", summary)
+    report_text = "# Cost Frontier Model-Step Report\n\n## Run Blocked\n\n"
+    report_text += f"- **Run ID**: {config.run_id}\n"
+    report_text += f"- **Final Decision**: {COST_FRONTIER_DECISIONS['BLOCKED']}\n"
+    report_text += f"- **Blockers**: {', '.join(preflight_payload.get('blockers', []))}\n"
+    report_text += "\n*This run was blocked by preflight. No providers were called.*\n"
+    (outdir / "report.md").write_text(report_text, encoding="utf-8")
+    return summary
+
+
 def run_cost_frontier(
     config: CostFrontierConfig,
     adapter: Callable | None = None,
@@ -124,11 +165,18 @@ def run_cost_frontier(
     )
 
     if not preflight.can_execute:
+        preflight_payload = preflight.to_dict()
+        summary = _write_blocked_preflight_artifacts(config, preflight_payload)
         return {
             "config": config,
             "dataset": dataset,
-            "preflight": preflight.to_dict(),
+            "preflight": preflight_payload,
+            "summary": summary,
             "final_decision": COST_FRONTIER_DECISIONS["BLOCKED"],
+            "records": [],
+            "scored": [],
+            "traces": [],
+            "calibration_traces": [],
         }
 
     outdir = config.output_dir
@@ -480,6 +528,22 @@ def _build_summary(
         "cost_by_variant": costs_payload.get("cost_by_variant", {}),
         "aggregates": [a.to_dict() for a in agg],
         "family_lift": family_lift_data,
-        "authorized_claims": list(AUTHORIZED_CLAIMS),
+            "authorized_claims": list(AUTHORIZED_CLAIMS),
         "prohibited_claims": list(PROHIBITED_CLAIMS),
     }
+
+
+def main() -> None:
+    import os
+    suffix = os.environ.get("FINITEXO_COST_FRONTIER_RUN_ID_SUFFIX", "")
+    config = CostFrontierConfig()
+    if suffix:
+        config = config.with_run_id_suffix(suffix)
+    result = run_cost_frontier(config)
+    final = result.get("final_decision", "UNKNOWN")
+    print(f"[cost_frontier_runner] final_decision={final} run_id={config.run_id}")
+    print(f"[cost_frontier_runner] output_dir={config.output_dir}")
+
+
+if __name__ == "__main__":
+    main()

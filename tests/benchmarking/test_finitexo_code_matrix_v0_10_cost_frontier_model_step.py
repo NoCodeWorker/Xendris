@@ -9,6 +9,7 @@ import pytest
 
 from benchmarks.finitexo_code_matrix_v0_10.cost_frontier_model_step import (
     COMPLETED,
+    COST_FRONTIER_DECISIONS,
     PARTIAL,
     CostFrontierConfig,
     CostFrontierVariantSpec,
@@ -474,6 +475,139 @@ def test_runner_records_have_task_family(tmp_path):
     for r in result["records"]:
         assert "task_family" in r
         assert r["task_family"] in FAMILIES
+
+
+# ---------------------------------------------------------------------------
+# Blocked preflight artifact writing
+# ---------------------------------------------------------------------------
+
+def test_blocked_preflight_writes_artifacts(tmp_path):
+    dataset = _make_dataset(tmp_path)
+    out = tmp_path / "out_blocked"
+    cfg = CostFrontierConfig(
+        dataset_path=dataset,
+        output_dir=out,
+        expected_dataset_hash=_file_hash(dataset / "dataset_hashes.json"),
+        expected_manifest_hash=_file_hash(dataset / "dataset_manifest.json"),
+        expected_attempts=180,
+        expected_task_count=30,
+        allow_overwrite=True,
+        environ={"DEEPSEEK_API_KEY": "present", "OPENAI_API_KEY": "present"},
+    )
+    result = run_cost_frontier(cfg)
+    assert result["final_decision"] == COST_FRONTIER_DECISIONS["BLOCKED"]
+    assert (out / "preflight.json").exists()
+    assert (out / "gate.json").exists()
+    assert (out / "summary.json").exists()
+    assert (out / "report.md").exists()
+    summary = result.get("summary", {})
+    assert summary.get("total_attempted", -1) == 0
+    assert summary.get("providers_called") is False
+    assert summary.get("blocked_reason") == "preflight"
+    assert len(result.get("records", [None])) == 0
+    assert len(result.get("scored", [None])) == 0
+    assert len(result.get("traces", [None])) == 0
+
+
+def test_blocked_preflight_no_responses_or_scores(tmp_path):
+    dataset = _make_dataset(tmp_path)
+    out = tmp_path / "out_blocked2"
+    cfg = CostFrontierConfig(
+        dataset_path=dataset,
+        output_dir=out,
+        expected_dataset_hash=_file_hash(dataset / "dataset_hashes.json"),
+        expected_manifest_hash=_file_hash(dataset / "dataset_manifest.json"),
+        expected_attempts=180,
+        expected_task_count=30,
+        allow_overwrite=True,
+        environ={"DEEPSEEK_API_KEY": "present", "OPENAI_API_KEY": "present"},
+    )
+    result = run_cost_frontier(cfg)
+    assert result["final_decision"] == COST_FRONTIER_DECISIONS["BLOCKED"]
+    assert not (out / "responses.jsonl").exists()
+    assert not (out / "scores.jsonl").exists()
+    assert not (out / "runtime_traces.jsonl").exists()
+    assert not (out / "calibration_traces.jsonl").exists()
+    assert not (out / "cost_frontier.json").exists()
+    assert not (out / "costs.json").exists()
+
+
+def test_blocked_preflight_no_provider_calls(tmp_path):
+    call_log: list[str] = []
+
+    class _FakeResult:
+        raw_response_text = "stub"
+        estimated_cost_usd = 0.001
+        provider_reported_model = "stub"
+        prompt_tokens = 10
+        completion_tokens = 20
+        total_tokens = 30
+
+    def _adapter(variant, task, config):
+        call_log.append(variant.variant_name)
+        return _FakeResult()
+
+    dataset = _make_dataset(tmp_path)
+    out = tmp_path / "out_blocked3"
+    cfg = CostFrontierConfig(
+        dataset_path=dataset,
+        output_dir=out,
+        expected_dataset_hash=_file_hash(dataset / "dataset_hashes.json"),
+        expected_manifest_hash=_file_hash(dataset / "dataset_manifest.json"),
+        expected_attempts=180,
+        expected_task_count=30,
+        allow_overwrite=True,
+        environ={"DEEPSEEK_API_KEY": "present", "OPENAI_API_KEY": "present"},
+    )
+    result = run_cost_frontier(cfg, adapter=_adapter)
+    assert result["final_decision"] == COST_FRONTIER_DECISIONS["BLOCKED"]
+    assert len(call_log) == 0, f"adapter was called {len(call_log)} time(s): {call_log}"
+    assert result.get("summary", {}).get("providers_called") is False
+
+
+def test_non_empty_output_dir_not_overwritten(tmp_path):
+    dataset = _make_dataset(tmp_path)
+    out = tmp_path / "out_no_overwrite"
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "stale.txt").write_text("older run data", encoding="utf-8")
+    cfg = CostFrontierConfig(
+        dataset_path=dataset,
+        output_dir=out,
+        expected_dataset_hash=_file_hash(dataset / "dataset_hashes.json"),
+        expected_manifest_hash=_file_hash(dataset / "dataset_manifest.json"),
+        expected_attempts=180,
+        expected_task_count=30,
+        allow_overwrite=False,
+        environ={
+            "FINITEXO_REAL_PROVIDER_EXECUTION_CONFIRM": "true",
+            "DEEPSEEK_API_KEY": "present",
+            "OPENAI_API_KEY": "present",
+        },
+    )
+    pf = evaluate_cost_frontier_preflight(cfg)
+    assert pf.can_execute is False
+    assert "output_dir_not_empty_and_overwrite_not_allowed" in pf.blockers
+
+
+def test_blocked_preflight_writes_gate_with_preflight_payload(tmp_path):
+    dataset = _make_dataset(tmp_path)
+    out = tmp_path / "out_gate"
+    cfg = CostFrontierConfig(
+        dataset_path=dataset,
+        output_dir=out,
+        expected_dataset_hash=_file_hash(dataset / "dataset_hashes.json"),
+        expected_manifest_hash=_file_hash(dataset / "dataset_manifest.json"),
+        expected_attempts=180,
+        expected_task_count=30,
+        allow_overwrite=True,
+        environ={"DEEPSEEK_API_KEY": "present", "OPENAI_API_KEY": "present"},
+    )
+    result = run_cost_frontier(cfg)
+    gate = json.loads((out / "gate.json").read_text(encoding="utf-8"))
+    assert gate["final_decision"] == COST_FRONTIER_DECISIONS["BLOCKED"]
+    assert "preflight" in gate
+    assert isinstance(gate["preflight"], dict)
+    assert "blockers" in gate["preflight"]
 
 
 # ---------------------------------------------------------------------------
