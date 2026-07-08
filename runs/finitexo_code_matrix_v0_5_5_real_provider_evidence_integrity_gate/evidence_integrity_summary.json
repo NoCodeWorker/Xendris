@@ -1,0 +1,32 @@
+{
+  "dataset_hash": "a48e5da1ff9d480efea20965eea12af5b1bff2e996470ba18e6eb01fb7b3d3a4",
+  "decision": "REAL_PROVIDER_EVIDENCE_INTEGRITY_APPROVED_DIAGNOSTIC_ONLY",
+  "finding_count": 0,
+  "findings": [],
+  "frozen_task_count": 10,
+  "gate_name": "Finitexo Code Matrix v0.5.5 Real Provider Evidence Integrity Gate",
+  "manifest_hash": "6c1a0873bafbb23b7145b81d26c426cd70c3ab2025b1c3250cba9f11efa7152e",
+  "metadata_count": 20,
+  "provider_costs_usd": {
+    "deepseek": 0.0035,
+    "openai": 0.0008
+  },
+  "provider_superiority_claim_authorized": false,
+  "providers_attempted": [
+    "deepseek",
+    "openai"
+  ],
+  "providers_completed": [
+    "deepseek",
+    "openai"
+  ],
+  "responses_count": 20,
+  "scores_count": 20,
+  "source_run_dir": "runs\\finitexo_code_matrix_v0_5_4_real_provider_diagnostic_authorized",
+  "statistical_claim_authorized": false,
+  "task_attempts_attempted": 20,
+  "task_attempts_completed": 20,
+  "task_attempts_expected": 20,
+  "total_estimated_cost_usd": 0.0043,
+  "xendris_superiority_claim_authorized": false
+}

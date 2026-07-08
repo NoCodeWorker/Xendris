@@ -88,8 +88,16 @@ def write_authorized_diagnostic_artifacts(run_result: dict) -> dict[str, Any]:
     response_rows = [record.to_dict() for record in records]
     score_rows = [score.to_dict() for score in scores]
     summary = build_authorized_summary(run_result, score_rows)
+    provider_costs: dict[str, float] = defaultdict(float)
+    for record in records:
+        if record.estimated_cost_usd is not None:
+            provider_costs[record.provider_name] += record.estimated_cost_usd
     costs = {
         "total_estimated_cost_usd": summary["total_estimated_cost_usd"],
+        "provider_costs_usd": {
+            provider: round(cost, 8)
+            for provider, cost in sorted(provider_costs.items())
+        },
         "budget_decision": summary["budget_decision"],
         "budget_cap_usd": run_result["config"].budget_cap_usd,
     }

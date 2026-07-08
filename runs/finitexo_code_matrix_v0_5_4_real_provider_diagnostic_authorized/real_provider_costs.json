@@ -1,5 +1,9 @@
 {
   "budget_cap_usd": 0.5,
   "budget_decision": "WITHIN_BUDGET",
+  "provider_costs_usd": {
+    "deepseek": 0.0035,
+    "openai": 0.0008
+  },
   "total_estimated_cost_usd": 0.0043
 }
