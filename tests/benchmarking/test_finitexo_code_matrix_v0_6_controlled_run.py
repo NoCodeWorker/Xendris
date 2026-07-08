@@ -4,6 +4,8 @@ import json
 from dataclasses import replace
 from pathlib import Path
 
+import pytest
+
 from benchmarks.finitexo_code_matrix_v0_6.real_provider_controlled_run import (
     BLOCKED_BUDGET,
     BLOCKED_PREFLIGHT,
@@ -19,6 +21,7 @@ from benchmarks.finitexo_code_matrix_v0_6.real_provider_controlled_run import (
     evaluate_controlled_run_preflight,
     score_provider_responses,
     score_response,
+    validate_run_id_suffix,
     write_controlled_run_artifacts,
     run_controlled_provider_benchmark,
 )
@@ -242,6 +245,118 @@ def test_preflight_blocks_hash_mismatch_with_default_config(tmp_path):
     pf = evaluate_controlled_run_preflight(cfg, "WRONG", "mf-hash", 30)
     assert pf.can_execute is False
     assert "dataset_hash_mismatch" in pf.blockers
+
+
+# ---------------------------------------------------------------------------
+# Run ID suffix — validate_run_id_suffix
+# ---------------------------------------------------------------------------
+
+def test_suffix_accepts_valid_strings():
+    assert validate_run_id_suffix("live_20260708_01") == "live_20260708_01"
+    assert validate_run_id_suffix("test-run-42") == "test-run-42"
+    assert validate_run_id_suffix("A_B_C") == "A_B_C"
+
+
+def test_suffix_rejects_slash():
+    with pytest.raises(ValueError, match="invalid characters"):
+        validate_run_id_suffix("live/2026")
+
+
+def test_suffix_rejects_backslash():
+    with pytest.raises(ValueError, match="invalid characters"):
+        validate_run_id_suffix("live\\2026")
+
+
+def test_suffix_rejects_dot_dot():
+    with pytest.raises(ValueError, match="invalid characters"):
+        validate_run_id_suffix("..")
+
+
+def test_suffix_rejects_whitespace():
+    with pytest.raises(ValueError, match="invalid characters"):
+        validate_run_id_suffix("live 2026")
+
+
+def test_suffix_rejects_empty_string():
+    with pytest.raises(ValueError, match="must not be empty"):
+        validate_run_id_suffix("")
+
+
+# ---------------------------------------------------------------------------
+# Run ID suffix — with_run_id_suffix
+# ---------------------------------------------------------------------------
+
+def test_default_config_uses_canonical_output_dir():
+    config = ControlledRunConfig()
+    assert config.run_id == "finitexo_v0_6_0_real_provider_controlled_run_n30"
+    assert "finitexo_code_matrix_v0_6_0_real_provider_controlled_run_n30" in str(config.output_dir)
+
+
+def test_suffix_config_uses_different_output_dir():
+    config = ControlledRunConfig()
+    suffixed = config.with_run_id_suffix("live_20260708_01")
+    assert suffixed.output_dir != config.output_dir
+    assert "live_20260708_01" in str(suffixed.output_dir)
+    assert suffixed.output_dir.name == config.output_dir.name + "_live_20260708_01"
+
+
+def test_suffix_config_run_id_includes_suffix():
+    config = ControlledRunConfig()
+    suffixed = config.with_run_id_suffix("live_20260708_01")
+    assert suffixed.run_id == "finitexo_v0_6_0_real_provider_controlled_run_n30_live_20260708_01"
+
+
+def test_suffix_does_not_mutate_original_config():
+    config = ControlledRunConfig()
+    original_run_id = config.run_id
+    original_dir = config.output_dir
+    _ = config.with_run_id_suffix("some_suffix")
+    assert config.run_id == original_run_id
+    assert config.output_dir == original_dir
+
+
+# ---------------------------------------------------------------------------
+# Run ID suffix — preflight blocks canonical dir when non-empty
+# ---------------------------------------------------------------------------
+
+def test_preflight_blocks_canonical_dir_when_non_empty(tmp_path):
+    """Simulate the real situation: canonical output dir exists and is non-empty."""
+    canonical = tmp_path / "canonical_out"
+    canonical.mkdir(parents=True, exist_ok=True)
+    (canonical / "historical_artifact.json").write_text("{}", encoding="utf-8")
+    cfg = _config(tmp_path, overwrite=False)
+    cfg = replace(cfg, output_dir=canonical)
+    pf = evaluate_controlled_run_preflight(cfg, "ds-hash", "mf-hash", 30)
+    assert pf.can_execute is False
+    assert "output_dir_not_empty_and_overwrite_not_allowed" in pf.blockers
+
+
+def test_suffix_output_dir_avoids_collision(tmp_path):
+    """With a suffix, output_dir is unique and preflight passes."""
+    canonical = tmp_path / "canonical_out"
+    canonical.mkdir(parents=True, exist_ok=True)
+    (canonical / "historical_artifact.json").write_text("{}", encoding="utf-8")
+    config = ControlledRunConfig(
+        dataset_path=_dataset(tmp_path, count=30),
+        readiness_summary_path=_ready(tmp_path),
+        output_dir=canonical,
+        providers=(
+            ControlledProviderSpec("deepseek", "deepseek-v4-flash", "DEEPSEEK_API_KEY", 0.00001, "unused"),
+            ControlledProviderSpec("openai", "gpt-4.1-nano", "OPENAI_API_KEY", 0.00001, "unused"),
+        ),
+        expected_dataset_hash="ds-hash",
+        expected_manifest_hash="mf-hash",
+        allow_overwrite=False,
+        environ={
+            "FINITEXO_REAL_PROVIDER_EXECUTION_CONFIRM": "true",
+            "DEEPSEEK_API_KEY": "present",
+            "OPENAI_API_KEY": "present",
+        },
+    )
+    suffixed = config.with_run_id_suffix("live_test")
+    pf = evaluate_controlled_run_preflight(suffixed, "ds-hash", "mf-hash", 30)
+    assert pf.can_execute is True
+    assert pf.decision == "CONTROLLED_RUN_PREFLIGHT_READY"
 
 
 # ---------------------------------------------------------------------------

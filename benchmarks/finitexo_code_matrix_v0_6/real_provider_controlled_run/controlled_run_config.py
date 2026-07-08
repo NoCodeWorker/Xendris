@@ -2,9 +2,26 @@
 
 from __future__ import annotations
 
+import dataclasses
 import os
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
+
+
+SUFFIX_ALLOWED_RE = re.compile(r"^[a-zA-Z0-9_-]+$")
+
+
+def validate_run_id_suffix(suffix: str) -> str:
+    suffix = suffix.strip()
+    if not suffix:
+        raise ValueError("Run ID suffix must not be empty.")
+    if not SUFFIX_ALLOWED_RE.match(suffix):
+        raise ValueError(
+            f"Run ID suffix {suffix!r} contains invalid characters. "
+            "Only letters, numbers, underscore, and hyphen are allowed."
+        )
+    return suffix
 
 
 @dataclass(frozen=True)
@@ -50,3 +67,9 @@ class ControlledRunConfig:
     expected_dataset_hash: str = "04758231d91333a3785693b05587740f27fa7b05a2d3e77c42a73fbd3184f010"
     expected_manifest_hash: str = "073d3982c2fe79fdf59822e6c75585d61f6274b684396d67dfcaa94b159b8519"
     environ: dict[str, str] = field(default_factory=lambda: dict(os.environ))
+
+    def with_run_id_suffix(self, suffix: str) -> ControlledRunConfig:
+        valid = validate_run_id_suffix(suffix)
+        new_run_id = f"{self.run_id}_{valid}"
+        new_dir = self.output_dir.parent / f"{self.output_dir.name}_{valid}"
+        return dataclasses.replace(self, run_id=new_run_id, output_dir=new_dir)

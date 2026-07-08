@@ -1,6 +1,6 @@
 """v0.6.0 real-provider controlled run n=30."""
 
-from .controlled_run_config import ControlledProviderSpec, ControlledRunConfig
+from .controlled_run_config import ControlledProviderSpec, ControlledRunConfig, validate_run_id_suffix
 from .controlled_run_gate import ControlledRunPreflight, evaluate_controlled_run_preflight
 from .controlled_run_report import build_controlled_run_report
 from .controlled_run_runner import (
@@ -43,6 +43,7 @@ __all__ = [
     "evaluate_controlled_run_preflight",
     "main",
     "run_controlled_provider_benchmark",
+    "validate_run_id_suffix",
     "score_provider_responses",
     "score_response",
     "write_controlled_run_artifacts",

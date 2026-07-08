@@ -368,7 +368,9 @@ def _load_dotenv_for_main() -> None:
 
 def main() -> int:
     _load_dotenv_for_main()
-    config = ControlledRunConfig()
+    suffix = os.environ.get("FINITEXO_CONTROLLED_RUN_ID_SUFFIX", "").strip()
+    base_config = ControlledRunConfig()
+    config = base_config.with_run_id_suffix(suffix) if suffix else base_config
     result = run_controlled_provider_benchmark(config)
     summary = write_controlled_run_artifacts(result)
     print(summary.get("final_decision"))
